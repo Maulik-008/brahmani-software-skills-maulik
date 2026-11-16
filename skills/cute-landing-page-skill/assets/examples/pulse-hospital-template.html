@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pulse Health · Hospital and specialist care</title>
+<meta name="theme-color" content="#D32F45">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Bagel+Fat+One&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ease:cubic-bezier(0.51,0,0,0.98);
+  --ink:#1C1A2E;--mute:#5B5881;--line:#E3E2F0;--soft:#F2F1FA;--bg:#D32F45;
+  --k:1;--inv:1;
+  box-sizing:border-box;
+}
+html{scroll-behavior:smooth;scroll-padding-top:90px;-webkit-text-size-adjust:100%}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--soft);color:var(--ink);font-family:'Inter',system-ui,sans-serif;line-height:1.55;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.wrap :focus-visible,.sheet :focus-visible,.scrim :focus-visible,footer :focus-visible{outline-color:var(--ink)}
+.skip{position:fixed;left:12px;top:-60px;z-index:100;background:#fff;color:var(--ink);padding:12px 18px;border-radius:12px;font-weight:600;transition:top .2s}
+.skip:focus{top:12px}
+/*KITCSS*/
+.sheet{font-family:'Inter',system-ui,sans-serif}
+.sh-head h2{font-weight:700;letter-spacing:-0.025em}
+
+/* ---------------- nav (real pixel sizes) ---------------- */
+.nav{position:fixed;left:0;right:0;top:0;z-index:30;height:92px;pointer-events:none;color:#fff}
+.nav>*{pointer-events:auto}
+.em{position:absolute;left:max(20px,2.4vw);top:30px;height:48px;border:0;padding:0 20px 0 14px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;color:#fff;transition:background .4s,color .4s}
+.em svg{width:22px;height:22px}
+.nav.solid .em{background:#fff;color:#C4243B;box-shadow:0 8px 24px rgba(28,26,46,.16)}
+.pillnav{position:absolute;left:50%;top:28px;transform:translateX(-50%);height:60px;display:flex;align-items:center;gap:4px;padding:0 8px 0 26px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:background .4s,color .4s,box-shadow .4s;white-space:nowrap}
+.nav.solid .pillnav{background:rgba(255,255,255,.95);color:var(--ink);box-shadow:0 12px 34px rgba(28,26,46,.14)}
+.brand{font-size:23px;font-weight:700;letter-spacing:-0.03em;margin-right:22px}
+.lk{height:44px;padding:0 16px;border-radius:999px;display:flex;align-items:center;font-size:15.5px;font-weight:500;transition:background .25s}
+.lk:hover{background:rgba(255,255,255,.22)}
+.nav.solid .lk:hover{background:#F0EFF8}
+.lk.on{background:rgba(255,255,255,.3);font-weight:600}
+.nav.solid .lk.on{background:#EDEBFA}
+.bookbtn{margin-left:12px;height:46px;padding:0 24px;border-radius:999px;border:0;background:#fff;color:var(--ink);font-weight:700;font-size:15px;transition:transform .25s var(--ease),background .4s,color .4s}
+.bookbtn:hover{transform:translateY(-1px)}
+.nav.solid .bookbtn{background:var(--ink);color:#fff}
+.sbtn{position:absolute;right:max(20px,2.4vw);top:30px;width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:#fff;display:grid;place-items:center;transition:background .4s,color .4s}
+.nav.solid .sbtn{background:#fff;color:var(--ink);box-shadow:0 8px 24px rgba(28,26,46,.14)}
+.sbtn svg{width:22px;height:22px}
+.mbtn,.emi{display:none}
+@media (min-width:901px) and (max-width:1320px){
+  .em{width:48px;padding:0;justify-content:center;gap:0}
+  .em span{display:none}
+}
+@media (min-width:901px) and (max-width:1120px){
+  .pillnav{padding:0 6px 0 20px}
+  .brand{margin-right:12px;font-size:21px}
+  .lk{padding:0 11px;font-size:15px}
+  .bookbtn{margin-left:8px;padding:0 18px;font-size:14.5px}
+}
+
+/* ---------------- hero ---------------- */
+.hero{position:relative;height:100vh;height:100svh;min-height:520px;background:var(--bg);overflow:hidden;color:#fff;transition:background 900ms var(--ease)}
+.stage{position:absolute;left:50%;top:50%;width:1440px;height:900px;transform:translate(-50%,-50%) scale(var(--k))}
+.gl{position:absolute;left:380px;top:70px;width:720px;height:720px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.2),rgba(255,255,255,0) 68%)}
+.wd{position:absolute;left:0;top:210px;width:1440px;text-align:center;font-family:'Bagel Fat One',sans-serif;font-size:350px;line-height:1;letter-spacing:.01em;color:rgba(255,255,255,.14);white-space:nowrap;pointer-events:none;user-select:none;translate:calc(var(--mx,0)*-26px) calc(var(--my,0)*-14px);transition:translate .6s ease-out}
+.fl{position:absolute;left:560px;top:672px;width:400px;height:44px;border-radius:50%;background:rgba(0,0,0,.3);filter:blur(24px)}
+.ob-wrap{position:absolute;inset:0;pointer-events:none}
+.ob{pointer-events:auto;position:absolute;left:470px;top:150px;width:520px;height:540px;padding:0;border:0;background:transparent;transition:transform 1s var(--ease),opacity .8s,filter 1s var(--ease)}
+.ob img{width:100%;height:100%;object-fit:contain;display:block;filter:drop-shadow(0 8px 8px rgba(0,0,0,.22)) drop-shadow(0 46px 44px rgba(0,0,0,.32));translate:calc(var(--mx,0)*14px) calc(var(--my,0)*8px);transition:translate .5s ease-out;-webkit-user-drag:none}
+.ob[data-d="0"]{opacity:1;transform:none}
+.ob[data-d="1"]{opacity:.92;transform:translate(558px,340px) scale(.215);filter:blur(2px);cursor:pointer;z-index:5}
+.ob[data-d="2"]{opacity:0;transform:translate(640px,380px) scale(.1);pointer-events:none}
+.ob[data-d="3"]{opacity:0;transform:translate(-300px,30px) scale(.9);filter:blur(14px);pointer-events:none}
+.dx{position:absolute;z-index:2;pointer-events:none;filter:drop-shadow(0 20px 18px rgba(0,0,0,.3));translate:calc(var(--mx,0)*-20px) calc(var(--my,0)*-12px);transition:translate .6s ease-out}
+.dx1{left:392px;top:150px;width:112px;transform:rotate(-14deg)}
+.dx2{left:944px;top:560px;width:176px;transform:rotate(16deg)}
+.copy{position:absolute;left:72px;top:262px;width:400px;display:flex;flex-direction:column;gap:20px;z-index:4}
+.eb{display:flex;align-items:center;gap:14px;font-size:max(13px,calc(12px*var(--inv)));font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.eb i{width:44px;height:2px;background:#fff;display:block}
+.copy h1{margin:0;font-size:62px;line-height:1.02;font-weight:500;letter-spacing:-0.035em}
+.copy p{margin:0;font-size:max(17px,calc(15px*var(--inv)));line-height:1.6;max-width:360px}
+.ctas{display:flex;gap:12px;margin-top:6px;flex-wrap:wrap}
+.b1{height:max(54px,calc(46px*var(--inv)));padding:0 max(28px,calc(20px*var(--inv)));border-radius:999px;border:0;background:#fff;color:var(--ink);font-weight:700;font-size:max(16px,calc(14px*var(--inv)));display:flex;align-items:center;transition:transform .25s var(--ease),box-shadow .25s}
+.b1:hover{transform:translateY(-2px);box-shadow:0 12px 24px rgba(0,0,0,.2)}
+.b2{height:max(54px,calc(46px*var(--inv)));padding:0 max(26px,calc(18px*var(--inv)));border-radius:999px;border:0;background:rgba(255,255,255,.18);color:#fff;font-weight:600;font-size:max(16px,calc(14px*var(--inv)));display:flex;align-items:center;transition:background .25s}
+.b2:hover{background:rgba(255,255,255,.3)}
+.pick{position:absolute;left:1090px;top:232px;width:300px;display:flex;flex-direction:column;gap:14px;z-index:4}
+.pl2{font-size:max(13px,calc(12px*var(--inv)));font-weight:700;letter-spacing:.08em}
+.dp{height:max(50px,calc(44px*var(--inv)));width:268px;padding:0 20px 0 18px;border-radius:999px;border:0;display:flex;align-items:center;gap:12px;font-size:max(16px,calc(14px*var(--inv)));font-weight:600;text-align:left;background:rgba(255,255,255,.18);color:#fff;transition:background .4s var(--ease),color .4s}
+.dp[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.dp:hover:not([aria-pressed="true"]){background:rgba(255,255,255,.3)}
+.dp i{width:14px;height:14px;border-radius:50%;flex:none;display:block}
+.vt{display:flex;gap:8px;flex-wrap:wrap}
+.vb{height:max(44px,calc(40px*var(--inv)));padding:0 18px;border-radius:999px;border:0;font-size:max(14px,calc(13px*var(--inv)));font-weight:600;background:rgba(255,255,255,.18);color:#fff;transition:background .3s,color .3s}
+.vb[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.nxt{position:absolute;left:72px;top:704px;width:420px;border-radius:28px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);padding:18px 20px;display:flex;align-items:center;gap:16px;z-index:4}
+.av{display:flex}
+.av span{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px}
+.av span+span{margin-left:-12px;box-shadow:0 0 0 3px rgba(255,255,255,.4)}
+.nxt .tx{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.nxt .tx small{font-size:max(12px,calc(11px*var(--inv)));font-weight:700;letter-spacing:.06em}
+.nxt .tx b{font-size:max(19px,calc(16px*var(--inv)));white-space:nowrap}
+.nxt .tx span{font-size:max(13px,calc(12px*var(--inv)));overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.go{width:max(48px,calc(44px*var(--inv)));height:max(48px,calc(44px*var(--inv)));border-radius:50%;border:0;background:#fff;color:var(--ink);display:grid;place-items:center;flex:none;transition:transform .25s var(--ease)}
+.go:hover{transform:scale(1.08)}
+.go svg{width:20px;height:20px}
+.arr{position:absolute;left:0;top:786px;width:1440px;display:flex;justify-content:center;gap:14px;z-index:4}
+.cir{width:max(52px,calc(44px*var(--inv)));height:max(52px,calc(44px*var(--inv)));border-radius:50%;border:0;background:rgba(255,255,255,.22);color:#fff;display:grid;place-items:center;transition:background .25s,transform .25s var(--ease)}
+.cir:hover{background:rgba(255,255,255,.38)}.cir:active{transform:scale(.92)}
+.cir svg{width:20px;height:20px}
+.nl{position:absolute;left:1176px;top:794px;height:max(40px,calc(36px*var(--inv)));padding:0 18px;border-radius:999px;background:rgba(255,255,255,.18);display:flex;align-items:center;font-size:max(13px,calc(12px*var(--inv)));font-weight:600;z-index:4}
+.grain{position:absolute;inset:0;z-index:20;pointer-events:none;background-image:url(/*GRAIN*/);background-size:192px 192px;mix-blend-mode:overlay;opacity:.17}
+.vig{position:absolute;inset:0;z-index:19;pointer-events:none;background:radial-gradient(120% 120% at 50% 45%,rgba(0,0,0,0) 56%,rgba(0,0,0,.2) 100%)}
+.rv-s{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.rv-s.in{opacity:1;transform:none}
+
+/* ---------------- sections ---------------- */
+.wrap{max-width:1440px;margin:0 auto;padding:clamp(48px,6vw,88px) clamp(16px,3vw,40px)}
+.wrap h2{margin:0;font-size:clamp(30px,3.4vw,44px);line-height:1.05;font-weight:600;letter-spacing:-0.03em}
+.sech{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-between;margin-bottom:26px}
+.sech p{margin:6px 0 0;font-size:16px;color:var(--mute)}
+.link{font-size:15px;font-weight:600;text-decoration:underline;text-underline-offset:4px;background:none;border:0;padding:0}
+/* find bar */
+.find{margin-top:-46px;position:relative;z-index:6;padding-top:0;padding-bottom:0}
+.fbar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px;border-radius:999px;background:#fff;box-shadow:0 18px 44px rgba(40,40,90,.14)}
+.fbar label{flex:1 1 200px;display:flex;flex-direction:column;gap:2px;padding:6px 24px;position:relative}
+.fbar label.w2{flex:2 1 280px}
+.fbar label span{font-size:12px;color:var(--mute)}
+.fbar select,.fbar input{border:0;background:transparent;font-size:16px;font-weight:600;padding:0;height:28px;outline:none;color:var(--ink);width:100%}
+.fbar .sp{width:1px;height:36px;background:var(--line)}
+.fgo{width:58px;height:58px;border-radius:50%;border:0;background:var(--ink);color:#fff;display:grid;place-items:center;flex:none;transition:transform .25s var(--ease)}
+.fgo:hover{transform:scale(1.06)}
+.fgo svg{width:22px;height:22px}
+.fhelp{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 8px 0;font-size:14px;color:var(--mute)}
+.fhelp button{height:38px;padding:0 14px;border-radius:999px;border:0;background:#fff;font-size:14px;font-weight:600;transition:background .2s}
+.fhelp button:hover{background:#E9E8F6}
+/* departments */
+.dgrid{display:flex;flex-wrap:wrap;gap:20px}
+.dcard{flex:1 1 260px;min-height:400px;position:relative;overflow:hidden;border-radius:40px;color:#fff;padding:28px;display:flex;flex-direction:column;justify-content:space-between;text-align:left;border:0;transition:transform .5s var(--ease),box-shadow .5s var(--ease)}
+.dcard:hover{transform:translateY(-6px);box-shadow:0 26px 50px rgba(28,26,46,.22)}
+.dcard .t{max-width:190px;display:flex;flex-direction:column;gap:8px}
+.dcard .t small{font-size:13px;font-weight:600;letter-spacing:.06em}
+.dcard h3{margin:0;font-size:32px;line-height:1.05;font-weight:600;letter-spacing:-0.025em}
+.dcard p{margin:0;font-size:15px;line-height:1.5}
+.dcard img{position:absolute;right:-18px;bottom:30px;width:210px;height:230px;object-fit:contain;filter:drop-shadow(0 6px 6px rgba(0,0,0,.2)) drop-shadow(0 26px 22px rgba(0,0,0,.32));transition:transform .6s var(--ease)}
+.dcard:hover img{transform:scale(1.08) rotate(-3deg)}
+.dcard .ar{position:relative;width:52px;height:52px;border-radius:50%;background:#fff;color:var(--ink);display:grid;place-items:center}
+.dcard .ar svg{width:22px;height:22px}
+.cf{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;margin-top:18px;background:#fff;border-radius:28px;padding:14px 18px;box-shadow:0 12px 32px rgba(40,40,90,.08)}
+.cf input{border:0;background:transparent;height:44px;font-size:16px;outline:none;color:var(--ink);width:100%;min-width:0}
+.sug{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.sug button{height:42px;padding:0 16px;border-radius:999px;border:1.5px solid #D9D8EA;background:#fff;font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:8px;transition:background .2s}
+.sug button:hover{background:#F0EFF8}
+.sug i{width:10px;height:10px;border-radius:50%;display:block}
+/* doctors */
+.chipsr{display:flex;flex-wrap:wrap;gap:8px}
+.fc2{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-bottom:22px}
+.fc2 .fld{min-width:170px}
+.dgrid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:20px}
+.doc{background:#fff;border-radius:30px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 18px 40px rgba(40,40,90,.08);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.doc:hover{transform:translateY(-5px);box-shadow:0 26px 52px rgba(40,40,90,.14)}
+.doc .pt{position:relative;aspect-ratio:4/4.5;overflow:hidden;display:grid;place-items:center}
+.doc .pt .tg{position:absolute;z-index:2;left:14px;top:14px;height:30px;padding:0 12px;border-radius:999px;background:rgba(28,26,46,.8);color:#fff;font-size:12px;font-weight:600;display:grid;place-items:center}
+.doc .pt .ini{width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.6);display:grid;place-items:center;font-family:'Bagel Fat One',sans-serif;font-size:56px;color:var(--ink)}
+.doc .pt img.ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 14%;transition:transform .8s var(--ease)}
+.doc:hover .pt img.ph{transform:scale(1.04)}
+.ini{overflow:hidden}
+.ini img{width:100%;height:100%;object-fit:cover;object-position:50% 14%;display:block}
+.bnr{border-radius:26px;overflow:hidden;aspect-ratio:16/8;margin-bottom:20px;position:relative;background:#E7E6F5}
+.bnr img{width:100%;height:100%;object-fit:cover;display:block}
+.bnr figcaption{position:absolute;left:12px;bottom:12px;height:30px;padding:0 12px;border-radius:99px;background:rgba(28,26,46,.78);color:#fff;font-size:12.5px;font-weight:600;display:grid;place-items:center}
+.gal{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.gal .bnr{margin:0}
+@media (max-width:620px){.gal{grid-template-columns:1fr}}
+.doc .bd{padding:18px 20px 22px;display:flex;flex-direction:column;gap:5px;flex:1}
+.doc .bd b{font-size:19px}
+.doc .bd .r{font-size:14px;color:var(--mute)}
+.doc .bd .m{font-size:13px;color:var(--mute)}
+.doc .nx{margin-top:4px;font-size:13.5px;font-weight:600;display:flex;align-items:center;gap:7px}
+.doc .nx i{width:9px;height:9px;border-radius:50%;background:#2E9B5F;display:block}
+.doc .acts{display:flex;gap:8px;margin-top:auto;padding-top:14px}
+.doc .acts button{flex:1;height:46px;border-radius:999px;border:0;font-weight:600;font-size:14px;transition:transform .2s var(--ease)}
+.doc .acts button:active{transform:scale(.96)}
+.doc .acts .bk{background:var(--ink);color:#fff}
+.doc .acts .pf{background:transparent;box-shadow:inset 0 0 0 1.5px #D9D8EA}
+/* steps */
+.how{background:#fff;border-radius:44px;padding:clamp(24px,4vw,44px);display:flex;flex-wrap:wrap;gap:36px;box-shadow:0 18px 44px rgba(40,40,90,.08);align-items:center}
+.how ol{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:14px}
+.how li{display:flex;align-items:center;gap:14px;font-size:17px;font-weight:600}
+.how li span{width:40px;height:40px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-size:15px;flex:none}
+/* stories */
+.strw{position:relative}
+.strs{display:flex;gap:34px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 14px 26px;scrollbar-width:none}
+.strs::-webkit-scrollbar{display:none}
+.story{flex:none;width:min(380px,82vw);scroll-snap-align:start;background:#fff;border-radius:30px;padding:30px;box-shadow:8px 10px 0 var(--ink);display:flex;flex-direction:column;gap:16px;min-height:280px}
+.story:nth-child(odd){transform:rotate(-2deg)}.story:nth-child(even){transform:rotate(1.5deg)}
+.story .q{font-family:'Bagel Fat One',sans-serif;font-size:64px;line-height:.6;height:34px;color:#4B3F9E}
+.story p{margin:0;font-size:17px;line-height:1.6}
+.story .who{margin-top:auto;display:flex;align-items:center;gap:12px}
+.story .who span{width:44px;height:44px;border-radius:50%;background:#E7E6F5;display:grid;place-items:center;font-weight:700;font-size:13px;color:#4B3F9E}
+.arrs{display:flex;gap:10px}
+.arrs button{width:52px;height:52px;border-radius:50%;border:0;background:#fff;box-shadow:0 8px 20px rgba(40,40,90,.12);display:grid;place-items:center;transition:transform .25s var(--ease)}
+.arrs button:hover{transform:scale(1.07)}
+.arrs button svg{width:20px;height:20px}
+.tools{display:flex;flex-wrap:wrap;gap:20px;margin-top:40px}
+.tool{flex:1 1 260px;background:#fff;border-radius:30px;padding:26px;display:flex;flex-direction:column;gap:12px;text-align:left;border:0;box-shadow:0 14px 34px rgba(40,40,90,.08);transition:transform .4s var(--ease)}
+.tool:hover{transform:translateY(-4px)}
+.tool b{font-size:20px;letter-spacing:-0.01em}
+.tool span{font-size:15px;color:var(--mute);line-height:1.55}
+.tool .ic{width:52px;height:52px;border-radius:50%;background:#EDEBFA;display:grid;place-items:center}
+.tool .ic svg{width:24px;height:24px}
+/* emergency */
+.emg{margin:0 auto;max-width:1440px;padding:0 clamp(16px,3vw,40px)}
+.emg>div{position:relative;overflow:hidden;border-radius:52px;background:#D32F45;color:#fff;padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:28px;align-items:center;justify-content:space-between}
+.emg h2{font-family:'Bagel Fat One',sans-serif;font-weight:400;font-size:clamp(40px,5vw,64px);line-height:1;margin:0}
+.emg .ob2{position:relative;width:360px;max-width:100%;height:260px;flex:none}
+.emg .ob2 img{position:absolute;filter:drop-shadow(0 8px 8px rgba(0,0,0,.2)) drop-shadow(0 26px 22px rgba(0,0,0,.3))}
+footer{margin:clamp(40px,5vw,72px) clamp(12px,2vw,28px) 24px;border-radius:44px;background:var(--ink);color:#fff;padding:clamp(28px,4vw,48px)}
+footer .cols{display:flex;flex-wrap:wrap;gap:40px;justify-content:space-between}
+footer .col{flex:1 1 170px;display:flex;flex-direction:column;gap:10px;font-size:14.5px}
+footer .col a,footer .col button{color:#C9C8E8;background:none;border:0;padding:0;text-align:left;font-size:14.5px;transition:color .2s}
+footer .col a:hover,footer .col button:hover{color:#fff}
+footer .bot{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;border-top:1px solid #3A3760;padding-top:22px;margin-top:34px;font-size:13.5px;color:#C9C8E8}
+.tw{font-size:14px;color:var(--mute)}
+/* sheet extras */
+.dh{display:flex;gap:16px;align-items:center;margin-bottom:18px}
+.dh .ini{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-family:'Bagel Fat One',sans-serif;font-size:34px;flex:none}
+.stp{display:flex;gap:6px;margin-bottom:20px}
+.stp span{flex:1;height:6px;border-radius:99px;background:var(--line);transition:background .4s}
+.stp span.on{background:var(--ink)}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px}
+.slots .chip{justify-content:center;white-space:nowrap;padding:0 10px}
+.dr{display:flex;align-items:center;gap:14px;padding:14px;border:1.5px solid #D5D8E0;border-radius:20px;width:100%;text-align:left;background:#fff;transition:border-color .2s,background .2s}
+.dr[aria-pressed="true"]{border-color:var(--ink);background:var(--soft)}
+.dr .ini{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;font-family:'Bagel Fat One',sans-serif;font-size:20px;flex:none}
+.dr .tx{flex:1;min-width:0}.dr .tx b{display:block;font-size:16px}.dr .tx span{font-size:13.5px;color:var(--mute)}
+.warn{display:flex;gap:10px;padding:14px 16px;border-radius:16px;background:#FFF1F2;color:#7A1424;font-size:14px;line-height:1.5}
+.sumbox{background:var(--soft);border-radius:20px;padding:16px 18px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.sumbox div{display:flex;justify-content:space-between;gap:12px}
+.sumbox div span:first-child{color:var(--mute)}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;line-height:1.5}
+.chk input{width:22px;height:22px;min-height:0;accent-color:#15161A;margin-top:2px;flex:none}
+
+/* ---------------- compact / mobile ---------------- */
+@media (max-width:900px),(max-height:560px){
+  .hero{height:auto;min-height:100svh;padding:96px 0 40px}
+  .stage{position:relative;left:auto;top:auto;transform:none;width:100%;height:auto;display:flex;flex-direction:column;gap:18px;padding:0 20px}
+  .gl{left:50%;top:-10px;transform:translateX(-50%);width:380px;height:380px}
+  .wd{left:0;top:70px;font-size:124px;width:100%}
+  .fl{display:none}
+  .copy,.pick,.nxt,.arr,.nl{position:static;width:auto}
+  .copy{order:1;gap:14px}
+  .copy h1{font-size:46px}
+  .ob-wrap{order:2;position:relative;inset:auto;height:340px;margin:0 -20px}
+  .ob{left:50%;top:0;width:300px;height:330px;margin-left:-150px}
+  .ob[data-d="1"]{transform:translate(110px,150px) scale(.26)}
+  .dx1{left:8%;top:14px;width:58px}.dx2{left:auto;right:5%;top:238px;width:92px}
+  .pick{order:3}.dp{width:100%}
+  .nxt{order:4;width:auto}
+  .arr{order:5;justify-content:center}
+  .nl{display:none}
+  .pillnav{left:12px;right:12px;transform:none;width:auto;top:14px;height:58px;padding:0 6px 0 20px;justify-content:space-between}
+  .pillnav .lk,.sbtn,.em{display:none}
+  .mbtn,.emi{display:grid}
+  .mbtn,.emi{width:46px;height:46px;border-radius:50%;border:0;background:rgba(255,255,255,.2);color:inherit;place-items:center}
+  .emi{background:#D32F45;color:#fff}
+  .nav.solid .mbtn{background:#EDEBFA}
+  .brand{margin:0 auto 0 0}
+  .bookbtn{margin-left:6px;padding:0 18px;height:44px;font-size:14px}
+  .find{margin-top:-30px}
+  .fbar{border-radius:30px;padding:10px}
+  .fbar .sp{display:none}
+  .fgo{width:100%;border-radius:999px}
+  .how{border-radius:34px}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ob,.wd,.dx,.ob img,.rv-s,.hero{transition-duration:.01s!important}
+  .rv-s{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="nav" id="nav">
+  <button class="em" id="emBtn" type="button" aria-label="Emergency contact"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg><span>Emergency · <b id="emPhone">112</b></span></button>
+  <nav class="pillnav" aria-label="Main">
+    <a class="brand" href="#top" id="brand">Pulse</a>
+    <a class="lk" href="#departments" data-s="departments">Departments</a>
+    <a class="lk" href="#doctors" data-s="doctors">Doctors</a>
+    <a class="lk" href="#patients" data-s="patients">Patients</a>
+    <a class="lk" href="#about" data-page="about">About</a>
+    <a class="lk" href="#contact" data-page="contact">Contact</a>
+    <button class="emi" id="emBtn2" type="button" aria-label="Emergency contact"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
+    <button class="bookbtn" id="bookTop" type="button">Book appointment</button>
+    <button class="mbtn" id="menuBtn" type="button" aria-label="Open menu"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </nav>
+  <button class="sbtn" id="searchBtn" type="button" aria-label="Find a doctor"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+</header>
+
+<main id="main">
+<section class="hero" id="top" aria-label="Departments">
+  <div class="stage" id="stage">
+    <div class="ob-wrap" id="obwrap">
+      <div class="gl"></div>
+      <div class="wd" id="word" aria-hidden="true">HEART</div>
+      <div class="fl"></div>
+      <img class="dx dx1" data-img="cross" alt="" draggable="false">
+      <img class="dx dx2" data-img="pill" alt="" draggable="false">
+    </div>
+    <div class="copy">
+      <div class="eb"><i></i><span id="eb">Cardiology</span></div>
+      <h1 id="h1">Hearts in good hands.</h1>
+      <p id="hp">From first check-up to complex surgery, our heart team plans every step with you.</p>
+      <div class="ctas"><button class="b1" id="heroBook" type="button">Book appointment</button><button class="b2" id="heroFind" type="button">Find a doctor</button></div>
+    </div>
+    <div class="pick" role="group" aria-label="Choose a department and visit type">
+      <div class="pl2" id="lblD">SELECT DEPARTMENT</div>
+      <div id="dpicks" style="display:flex;flex-direction:column;gap:14px" aria-labelledby="lblD"></div>
+      <div class="pl2" style="margin-top:16px" id="lblV">VISIT TYPE</div>
+      <div class="vt" id="vpicks" role="group" aria-labelledby="lblV"></div>
+    </div>
+    <div class="nxt">
+      <div class="av" id="nxav" aria-hidden="true"></div>
+      <div class="tx"><small>NEXT AVAILABLE</small><b id="nxt1">Today</b><span id="nxt2">Dr.</span></div>
+      <button class="go" id="nxgo" type="button" aria-label="Book this slot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="arr">
+      <button class="cir" id="hPrev" type="button" aria-label="Previous department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+      <button class="cir" id="hNext" type="button" aria-label="Next department"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+    </div>
+    <div class="nl" id="nl">Next · Neurology</div>
+  </div>
+  <div class="vig" aria-hidden="true"></div><div class="grain" aria-hidden="true"></div>
+</section>
+
+<section class="wrap find" id="find" aria-label="Find a doctor">
+  <form class="fbar" id="fform" role="search">
+    <label><span>Department</span><select id="fDept"></select></label>
+    <span class="sp" aria-hidden="true"></span>
+    <label class="w2"><span>Doctor or condition</span><input id="fQ" type="text" placeholder="Search by name or symptom" autocomplete="off"></label>
+    <span class="sp" aria-hidden="true"></span>
+    <label><span>When</span><select id="fWhen"><option value="any">Any day</option><option value="today">Today</option><option value="week">This week</option></select></label>
+    <button class="fgo" type="submit" aria-label="Search doctors"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-4-4"/></svg></button>
+  </form>
+  <div class="fhelp"><span>Popular:</span><button type="button" data-do="quick" data-v="chest pain">Chest pain</button><button type="button" data-do="quick" data-v="headache">Headache</button><button type="button" data-do="quick" data-v="child fever">Child fever</button><button type="button" data-do="quick" data-v="knee pain">Knee pain</button></div>
+</section>
+
+<section class="wrap" id="departments" aria-labelledby="hDep">
+  <div class="sech rv-s"><div><h2 id="hDep">Departments</h2><p>Four specialist centres under one roof.</p></div></div>
+  <div class="dgrid rv-s" id="dgrid"></div>
+  <div class="cf rv-s" role="search"><label for="cond" class="sr">Search a condition or symptom</label><input id="cond" type="text" placeholder="Not sure where to go? Type a symptom or condition" autocomplete="off"><button class="btn" id="condGo" type="button" style="min-height:50px;padding:0 28px">Find</button></div>
+  <div class="sug rv-s" id="sug" aria-live="polite"></div>
+</section>
+
+<section class="wrap" id="doctors" aria-labelledby="hDoc">
+  <div class="sech rv-s"><div><h2 id="hDoc">Meet our doctors</h2><p id="docCount">8 specialists</p></div></div>
+  <div class="fc2 rv-s">
+    <div class="fld"><span id="lcd">Department</span><div class="chipsr" id="dchips" role="group" aria-labelledby="lcd"></div></div>
+  </div>
+  <div class="fc2 rv-s">
+    <div class="fld"><label for="dLang">Language</label><select id="dLang"></select></div>
+    <div class="fld"><label for="dAvail">Availability</label><select id="dAvail"><option value="any">Any time</option><option value="today">Available today</option><option value="week">Available this week</option></select></div>
+    <div class="fld"><label for="dSort">Sort by</label><select id="dSort"><option value="soonest">Soonest available</option><option value="name">Name</option><option value="exp">Most experience</option></select></div>
+    <button class="btn sec" type="button" id="dReset">Clear filters</button>
+  </div>
+  <div class="dgrid2" id="docgrid" aria-live="polite"></div>
+</section>
+
+<section class="wrap" id="how" aria-labelledby="hHow">
+  <div class="how rv-s">
+    <div style="flex:1 1 280px;display:flex;flex-direction:column;gap:20px">
+      <h2 id="hHow">Book in three steps</h2>
+      <ol><li><span>1</span>Choose a department</li><li><span>2</span>Pick a doctor</li><li><span>3</span>Choose a time</li></ol>
+      <div><button class="btn" id="howBook" type="button" style="min-height:56px;padding:0 30px;font-size:16px">Start booking</button></div>
+    </div>
+    <div style="flex:1 1 320px;display:flex;flex-direction:column;gap:12px">
+      <figure class="bnr" style="margin:0 0 4px"><img id="howImg" alt="A doctor and patient in a consultation room (illustrative)" loading="lazy"><figcaption>Consultation room</figcaption></figure>
+      <div class="sumbox"><div><span>Confirmation</span><span>Instant, on screen</span></div><div><span>Changes</span><span>Cancel or reschedule any time</span></div><div><span>Visit types</span><span>In person, video or home</span></div></div>
+      <p class="tw" style="margin:0">This demo stores your bookings in this browser only. No data is sent anywhere.</p>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="patients" aria-labelledby="hPat">
+  <div class="sech rv-s"><div><h2 id="hPat">Stories from our patients</h2><p>Sample stories. Replace with real ones before launch.</p></div><div class="arrs"><button type="button" id="sPrev" aria-label="Previous stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button><button type="button" id="sNext" aria-label="Next stories"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div></div>
+  <div class="strw rv-s"><div class="strs" id="strs" tabindex="0" aria-label="Patient stories"></div></div>
+  <div class="tools rv-s">
+    <button class="tool" type="button" data-do="book"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M9 3v4M15 3v4"/></svg></span><b>Book an appointment</b><span>Choose your doctor and a time that suits you.</span></button>
+    <button class="tool" type="button" data-do="manage"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg></span><b>Manage an appointment</b><span>Look up, cancel or reschedule with your reference.</span></button>
+    <button class="tool" type="button" data-do="visit"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 11l8-7 8 7v9H4z"/><path d="M10 20v-6h4v6"/></svg></span><b>Plan your visit</b><span>Hours, what to bring, parking and accessibility.</span></button>
+  </div>
+</section>
+
+<div class="emg" id="emergency"><div class="rv-s">
+  <div style="display:flex;flex-direction:column;gap:14px;max-width:560px;position:relative">
+    <span style="font-size:13px;font-weight:700;letter-spacing:.08em">EMERGENCY, 24 HOURS</span>
+    <h2>Emergency care, day and night.</h2>
+    <p style="margin:0;font-size:17px;line-height:1.6">Do not wait. Call or come straight to the emergency entrance.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px"><a href="#" id="emCall" style="height:58px;padding:0 30px;border-radius:999px;background:#fff;color:#8E1427;display:flex;align-items:center;font-weight:700;font-size:18px">Call 112</a><button type="button" data-do="visit" style="height:58px;padding:0 28px;border-radius:999px;border:0;background:rgba(255,255,255,.2);color:#fff;font-weight:600;font-size:16px">Get directions</button></div>
+  </div>
+  <div class="ob2"><img data-img="cross" alt="" style="left:30px;top:0;width:200px;transform:rotate(-10deg)"><img data-img="pill" alt="" style="left:150px;top:96px;width:220px;transform:rotate(12deg)"></div>
+</div></div>
+</main>
+
+<footer id="footer">
+  <div class="cols">
+    <div class="col" style="flex:1.4 1 260px"><b style="font-size:28px;letter-spacing:-.03em">Pulse</b><span style="color:#C9C8E8;max-width:290px;line-height:1.6">Specialist hospital care for adults and children, from first visit to full recovery.</span></div>
+    <div class="col"><b>Patients</b><button type="button" data-do="book">Book appointment</button><button type="button" data-do="manage">Manage appointment</button><button type="button" data-do="visit">Plan your visit</button></div>
+    <div class="col"><b>Departments</b><button type="button" data-do="dept" data-v="cardiology">Cardiology</button><button type="button" data-do="dept" data-v="neurology">Neurology</button><button type="button" data-do="dept" data-v="paediatrics">Paediatrics</button><button type="button" data-do="dept" data-v="orthopaedics">Orthopaedics</button></div>
+    <div class="col"><b>Contact</b><span style="color:#C9C8E8" id="fAddr"></span><span style="color:#C9C8E8" id="fPhone"></span><span style="color:#C9C8E8" id="fMail"></span></div>
+  </div>
+  <div class="bot"><span id="copy">© Pulse Health</span><span>Privacy · Terms · Accessibility</span><a href="#top" style="text-decoration:underline">Back to top</a></div>
+</footer>
+
+<div class="scrim" id="scrim">
+  <div class="sheet page" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sh-title" tabindex="-1">
+    <div class="sh-head"><div><h2 id="sh-title"></h2><p id="sh-sub"></p></div><button class="sh-x" id="sh-x" type="button" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div>
+    <div class="sh-body" id="sh-body"></div>
+    <div class="sh-foot" id="sh-foot" hidden></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"><span id="toast-t"></span><button type="button" id="toast-a"></button></div>
+
+<script>
+/*KITJS*/
+(function(){
+'use strict';
+var $=Kit.$,$$=Kit.$$,esc=Kit.esc,toast=Kit.toast;
+var IMG=/*IMGS*/{};
+var PH=/*PHOTOS*/{};
+var CFG={name:'Pulse Health',phone:'+1 (555) 010-0100',emergency:'112',email:'care@pulsehealth.example',address:'100 Health Avenue, Your City',year:new Date().getFullYear()};
+/* ---------- data (sample content: replace with real data) ---------- */
+var DEPTS=[
+ {id:'cardiology',short:'Heart health, rhythm and surgery',name:'Cardiology',bg:'#D32F45',dot:'#FF7388',word:'HEART',img:'heart',tint:'#FFC9D0',title:'Hearts in good hands.',blurb:'From first check-up to complex surgery, our heart team plans every step with you.',
+  desc:'Prevention, diagnosis and treatment of heart and circulation problems, from routine check-ups to complex procedures.',
+  services:['Heart check-ups and ECG','Echocardiography','Stress testing','Rhythm and pacemaker care','Cardiac catheterisation','Cardiac rehabilitation'],conds:['Chest pain','High blood pressure','Palpitations','Heart failure','Coronary artery disease','Heart valve problems'],expect:'Most first visits include a conversation, an ECG and a simple plan. Bring a list of your medicines.'},
+ {id:'neurology',short:'Brain, spine and nerves',name:'Neurology',bg:'#5B3FD1',dot:'#B7A2FF',word:'BRAIN',img:'neuron',tint:'#D9CFFF',title:'Clear minds, calm care.',blurb:'Brain, spine and nerve specialists with clear answers and personal care.',
+  desc:'Care for conditions of the brain, spinal cord and nerves, with time to listen and explain.',
+  services:['Headache and migraine clinic','Epilepsy care','Stroke assessment','EEG and nerve studies','Movement disorder clinic','Memory assessment'],conds:['Migraine','Seizures','Stroke','Numbness or tingling','Dizziness','Memory loss'],expect:'Expect a detailed history and a neurological exam. Bring any scans and a diary of symptoms if you have one.'},
+ {id:'paediatrics',short:'Care for newborns to teens',name:'Paediatrics',bg:'#0B8277',dot:'#FFD04A',word:'KIDS',img:'bear',tint:'#BFEBDD',title:'Little patients, big care.',blurb:'Gentle, child-first care from newborn to teen, with parents beside every bed.',
+  desc:'Child-first care from newborn to teenager, in a calm space where parents are always welcome.',
+  services:['Newborn and baby checks','Childhood vaccinations','Growth and development','Asthma and allergy care','Child fever clinic','Adolescent health'],conds:['Fever in a child','Vaccinations','Newborn care','Asthma','Allergies','Growth concerns'],expect:'Visits are paced around your child. Bring their health record and a favourite toy or snack.'},
+ {id:'orthopaedics',short:'Bones, joints and sport',name:'Orthopaedics',bg:'#1F6FEB',dot:'#9CC3FF',word:'BONES',img:'knee',tint:'#C7DDFF',title:'Move without limits.',blurb:'Bone, joint and muscle care that gets you moving again, safely and sooner.',
+  desc:'Bone, joint and muscle care that gets you moving again, from physiotherapy to joint replacement.',
+  services:['Joint pain clinic','Sports injury clinic','Fracture care','Joint replacement','Spine clinic','Physiotherapy and rehab'],conds:['Knee pain','Back pain','Fractures','Sports injuries','Shoulder pain','Hip problems'],expect:'You may have an exam and imaging on the day. Wear loose clothing and bring any previous scans.'}
+];
+var DOCS=[
+ {id:'okafor',name:'Dr. Amara Okafor',dept:'cardiology',role:'Interventional cardiologist',years:14,langs:['English','Igbo'],days:[1,2,3,4,5],times:['09:00','09:30','10:30','11:00','14:00','15:30'],bio:'Focuses on heart attacks, stents and coronary disease. Explains every option before any procedure.'},
+ {id:'weiss',name:'Dr. Daniel Weiss',dept:'cardiology',role:'Cardiac electrophysiologist',years:11,langs:['English','German'],days:[1,3,4,5,6],times:['08:30','09:30','11:00','13:30','15:00','16:30'],bio:'Treats heart rhythm problems, from palpitations to pacemakers and ablation.'},
+ {id:'raman',name:'Dr. Priya Raman',dept:'neurology',role:'Stroke and epilepsy specialist',years:12,langs:['English','Tamil','Hindi'],days:[1,2,3,4,5],times:['09:00','10:00','11:30','14:00','15:00','16:00'],bio:'Cares for people after stroke and with epilepsy, with a focus on clear plans and fewer surprises.'},
+ {id:'moreau',name:'Dr. Lucas Moreau',dept:'neurology',role:'Movement disorder specialist',years:9,langs:['English','French'],days:[2,3,4,5,6],times:['08:30','09:30','10:30','13:00','14:30','16:00'],bio:'Works with Parkinson disease, tremor and movement conditions, alongside physiotherapy teams.'},
+ {id:'kobayashi',name:'Dr. Hana Kobayashi',dept:'paediatrics',role:'General paediatrician',years:10,langs:['English','Japanese'],days:[1,2,3,4,5,6],times:['08:30','09:00','10:00','11:00','14:00','15:30'],bio:'Looks after babies, children and teens, with time for parents’ questions.'},
+ {id:'adeyemi',name:'Dr. Samuel Adeyemi',dept:'paediatrics',role:'Neonatologist',years:13,langs:['English','Yoruba'],days:[1,2,4,5],times:['09:00','10:30','11:30','13:30','15:00','16:00'],bio:'Specialises in newborn care, from feeding and growth to premature babies.'},
+ {id:'petrova',name:'Dr. Elena Petrova',dept:'orthopaedics',role:'Joint replacement surgeon',years:15,langs:['English','Russian','Bulgarian'],days:[1,2,3,4],times:['08:00','09:00','10:30','13:00','14:30','16:00'],bio:'Hip and knee replacement, with a focus on guided recovery and getting home sooner.'},
+ {id:'reid',name:'Dr. Marcus Reid',dept:'orthopaedics',role:'Sports medicine physician',years:8,langs:['English','Spanish'],days:[1,2,3,5,6],times:['08:30','09:30','11:00','12:30','14:00','15:30'],bio:'Treats sport and training injuries, with a plan to get you back to what you love.'}
+];
+var CONDS=[['chest pain','cardiology'],['palpitations','cardiology'],['high blood pressure','cardiology'],['shortness of breath','cardiology'],['heart attack','cardiology'],['headache','neurology'],['migraine','neurology'],['seizure','neurology'],['stroke','neurology'],['numbness','neurology'],['dizziness','neurology'],['memory loss','neurology'],['child fever','paediatrics'],['fever in child','paediatrics'],['vaccination','paediatrics'],['newborn','paediatrics'],['baby','paediatrics'],['asthma in kids','paediatrics'],['growth','paediatrics'],['knee pain','orthopaedics'],['back pain','orthopaedics'],['fracture','orthopaedics'],['sports injury','orthopaedics'],['shoulder pain','orthopaedics'],['hip pain','orthopaedics'],['joint replacement','orthopaedics']];
+var STORIES=[
+ ['Sample story','"I was nervous about my heart test, but the team explained every step. I was home the same afternoon."','AB','A. B.','Cardiology'],
+ ['Sample story','"The migraine clinic finally gave me a plan that works. I wish I had come years ago."','MR','M. R.','Neurology'],
+ ['Sample story','"Our daughter was calm the whole visit. The doctor spoke to her, not just to us."','JT','J. T.','Paediatrics'],
+ ['Sample story','"New knee, new life. I walked the next morning and I am back on my bike."','LK','L. K.','Orthopaedics'],
+ ['Sample story','"Booking online took a minute and the reminder made it easy to arrive on time."','SN','S. N.','Cardiology']
+];
+DOCS.forEach(function(d){d.photo=PH.tall[d.id]||null;d.photo2=PH.sq[d.id]||d.photo;});
+DEPTS.forEach(function(d){d.banner=PH.banner[d.id]||null;});
+function face(d,sq){var s=sq?d.photo2:d.photo;return s?'<img src="'+s+'" alt="" draggable="false">':ini(d.name);}
+function dept(id){for(var i=0;i<DEPTS.length;i++)if(DEPTS[i].id===id)return DEPTS[i];}
+function doc(id){for(var i=0;i<DOCS.length;i++)if(DOCS[i].id===id)return DOCS[i];}
+function ini(n){var p=n.replace('Dr. ','').split(' ');return (p[0][0]+(p[1]?p[1][0]:'')).toUpperCase();}
+var ARROW='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+var CHK='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+/* ---------- state ---------- */
+var st={appts:[]};
+try{var raw=localStorage.getItem('pulse_v1');if(raw){var o=JSON.parse(raw);if(o&&Array.isArray(o.appts))st.appts=o.appts.filter(function(a){return a&&typeof a.ref==='string'&&doc(a.doc)&&typeof a.date==='string'&&typeof a.time==='string';}).slice(0,30);}}catch(e){}
+function save(){try{localStorage.setItem('pulse_v1',JSON.stringify({appts:st.appts}));}catch(e){}}
+var ui={hero:0,visit:'in-person',docs:{dept:'all',q:'',when:'any',lang:'any',avail:'any',sort:'soonest'},bk:null,doc:'okafor',dept:'cardiology',sent:null,mg:{ref:'',email:'',found:null,err:''},cond:''};
+var VISITS=[['in-person','In person'],['video','Video call'],['home','Home visit']];
+/* ---------- time helpers ---------- */
+function pad(n){return (n<10?'0':'')+n;}
+function iso(d){return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());}
+function addDays(i){var d=new Date();d.setHours(12,0,0,0);d.setDate(d.getDate()+i);return d;}
+function hash(s){var h=7;for(var i=0;i<s.length;i++)h=(h*31+s.charCodeAt(i))>>>0;return h;}
+function fmtTime(t){var p=t.split(':'),h=+p[0],ap=h>=12?'PM':'AM';h=h%12||12;return h+':'+p[1]+' '+ap;}
+function dayLabel(isoS,long){var d=new Date(isoS+'T12:00:00'),t=iso(addDays(0)),tm=iso(addDays(1));if(isoS===t)return 'Today';if(isoS===tm)return 'Tomorrow';return d.toLocaleDateString([],{weekday:long?'long':'short',month:'short',day:'numeric'});}
+function isBooked(id,d,t){return st.appts.some(function(a){return a.doc===id&&a.date===d&&a.time===t&&a.status==='confirmed';});}
+function slotsFor(d,isoS){
+  var dt=new Date(isoS+'T12:00:00');if(d.days.indexOf(dt.getDay())<0)return [];
+  var today=isoS===iso(addDays(0)),now=new Date();
+  return d.times.map(function(t){var b=hash(d.id+isoS+t)%4===0||isBooked(d.id,isoS,t);if(today){var p=t.split(':'),tt=new Date();tt.setHours(+p[0],+p[1],0,0);if(tt<=new Date(now.getTime()+30*60000))b=true;}return {t:t,booked:b};});
+}
+function nextSlot(d){for(var i=0;i<14;i++){var s=iso(addDays(i)),sl=slotsFor(d,s).filter(function(x){return !x.booked;});if(sl.length)return {iso:s,t:sl[0].t,days:i};}return null;}
+function nextForDept(id){var best=null;DOCS.forEach(function(d){if(d.dept!==id)return;var n=nextSlot(d);if(n&&(!best||n.days<best.n.days||(n.days===best.n.days&&n.t<best.n.t)))best={n:n,d:d};});return best;}
+function nextLabel(n){return n?dayLabel(n.iso)+' · '+fmtTime(n.t):'No slots soon';}
+/* ---------- images ---------- */
+$$('[data-img]').forEach(function(el){el.src=IMG[el.dataset.img];});
+$('#emPhone').textContent=CFG.emergency;$('#emCall').textContent='Call '+CFG.emergency;$('#emCall').href='#';
+$('#fAddr').textContent=CFG.address;$('#fPhone').textContent=CFG.phone;$('#fMail').textContent=CFG.email;$('#copy').textContent='© '+CFG.year+' '+CFG.name;
+/* ---------- fit hero ---------- */
+var root=document.documentElement,hero=$('#top'),compact=window.matchMedia('(max-width:900px),(max-height:560px)');
+function fit(){
+  if(compact.matches){root.style.setProperty('--k',1);root.style.setProperty('--inv',1);return;}
+  var w=hero.clientWidth,h=hero.clientHeight,k=Math.min(w/1440,h/900);
+  root.style.setProperty('--k',k.toFixed(5));root.style.setProperty('--inv',(1/k).toFixed(4));
+}
+fit();window.addEventListener('resize',fit);window.addEventListener('orientationchange',fit);if(compact.addEventListener)compact.addEventListener('change',fit);
+/* ---------- hero ---------- */
+var obwrap=$('#obwrap'),obs=[];
+DEPTS.forEach(function(d,i){var b=document.createElement('button');b.className='ob';b.type='button';b.dataset.d=i;b.setAttribute('aria-label',d.name);b.innerHTML='<img src="'+IMG[d.img]+'" alt="" draggable="false">';b.addEventListener('click',function(){if(b.dataset.d==='1')heroGo(1);});obwrap.appendChild(b);obs.push(b);});
+$('#dpicks').innerHTML=DEPTS.map(function(d,i){return '<button class="dp" type="button" data-hd="'+i+'" aria-pressed="false"><i style="background:'+d.dot+'"></i>'+d.name+'</button>';}).join('');
+$('#vpicks').innerHTML=VISITS.map(function(v){return '<button class="vb" type="button" data-hv="'+v[0]+'" aria-pressed="false">'+v[1]+'</button>';}).join('');
+function paintHero(){
+  var n=DEPTS.length,i=ui.hero,d=DEPTS[i],nx=DEPTS[(i+1)%n];
+  obs.forEach(function(b,k){var s=(k-i+n)%n;b.dataset.d=s;b.tabIndex=s===1?0:-1;b.setAttribute('aria-hidden',s>1);});
+  hero.style.setProperty('--bg',d.bg);hero.style.background=d.bg;
+  var m=$('meta[name=theme-color]');if(m)m.setAttribute('content',d.bg);
+  $('#word').textContent=d.word;$('#eb').textContent=d.name;$('#h1').textContent=d.title;$('#hp').textContent=d.blurb;$('#nl').textContent='Next · '+nx.name;
+  $$('.dp').forEach(function(b,k){b.setAttribute('aria-pressed',k===i);});
+  $$('.vb').forEach(function(b){b.setAttribute('aria-pressed',b.dataset.hv===ui.visit);});
+  var nf=nextForDept(d.id);$('#nxt1').textContent=nf?nextLabel(nf.n):'No slots soon';$('#nxt2').textContent=nf?nf.d.name+' · '+d.name:d.name;
+  var docs=DOCS.filter(function(x){return x.dept===d.id;});
+  $('#nxav').innerHTML=docs.slice(0,2).map(function(x,k){return '<span class="ini" style="background:'+(k?'#1C1A2E':'#fff')+';color:'+(k?'#fff':'#1C1A2E')+'">'+face(x,true)+'</span>';}).join('');
+}
+function heroGo(dd){ui.hero=(ui.hero+dd+DEPTS.length)%DEPTS.length;paintHero();heroTimer();}
+$('#hPrev').addEventListener('click',function(){heroGo(-1);});$('#hNext').addEventListener('click',function(){heroGo(1);});
+$('#dpicks').addEventListener('click',function(e){var b=e.target.closest('[data-hd]');if(b){ui.hero=+b.dataset.hd;paintHero();heroTimer();}});
+$('#vpicks').addEventListener('click',function(e){var b=e.target.closest('[data-hv]');if(b){ui.visit=b.dataset.hv;paintHero();}});
+$('#heroBook').addEventListener('click',function(){openBook({dept:DEPTS[ui.hero].id,visit:ui.visit});});
+$('#heroFind').addEventListener('click',function(){ui.docs.dept=DEPTS[ui.hero].id;renderDocs();syncFind();scrollTo_('doctors');});
+$('#nxgo').addEventListener('click',function(){var nf=nextForDept(DEPTS[ui.hero].id);if(nf)openBook({dept:DEPTS[ui.hero].id,doc:nf.d.id,date:nf.n.iso,time:nf.n.t,visit:ui.visit});else openBook({dept:DEPTS[ui.hero].id});});
+var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches,ht=null,hover=false;
+function heroTimer(){clearTimeout(ht);if(reduce)return;ht=setTimeout(function(){var r=hero.getBoundingClientRect();var vis=r.bottom>200;if(!hover&&vis&&!Kit.isOpen()&&!document.hidden)heroGo(1);else heroTimer();},7000);}
+hero.addEventListener('mouseenter',function(){hover=true;});hero.addEventListener('mouseleave',function(){hover=false;hero.style.setProperty('--mx',0);hero.style.setProperty('--my',0);});
+hero.addEventListener('focusin',function(){hover=true;});hero.addEventListener('focusout',function(){hover=false;});
+hero.addEventListener('pointermove',function(e){if(e.pointerType==='touch'||reduce||compact.matches)return;var r=hero.getBoundingClientRect();hero.style.setProperty('--mx',(((e.clientX-r.left)/r.width)*2-1).toFixed(3));hero.style.setProperty('--my',(((e.clientY-r.top)/r.height)*2-1).toFixed(3));});
+var tx=null;hero.addEventListener('touchstart',function(e){tx=e.touches[0].clientX;},{passive:true});hero.addEventListener('touchend',function(e){if(tx===null)return;var dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>50)heroGo(dx<0?1:-1);tx=null;},{passive:true});
+paintHero();heroTimer();document.addEventListener('visibilitychange',heroTimer);
+function scrollTo_(id){var el=document.getElementById(id);if(el)el.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});}
+/* ---------- nav behaviour ---------- */
+var nav=$('#nav'),links=$$('.lk[data-s]'),secs=['departments','doctors','patients'].map(function(id){return document.getElementById(id);});
+function onScroll(){
+  var y=scrollY,hh=hero.offsetHeight;nav.classList.toggle('solid',y>hh-150);
+  var cur='';secs.forEach(function(s){if(s.getBoundingClientRect().top<innerHeight*0.45)cur=s.id;});
+  links.forEach(function(a){a.classList.toggle('on',a.dataset.s===cur);if(a.dataset.s===cur)a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});
+}
+window.addEventListener('scroll',onScroll,{passive:true});window.addEventListener('resize',onScroll);onScroll();
+$$('.lk[data-s],#brand').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var h=a.getAttribute('href').slice(1);scrollTo_(h==='top'?'top':h);});});
+$$('.lk[data-page]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();Kit.open(a.dataset.page);});});
+$('#bookTop').addEventListener('click',function(){openBook({});});
+$('#searchBtn').addEventListener('click',function(){scrollTo_('find');setTimeout(function(){$('#fQ').focus({preventScroll:true});},500);});
+$('#menuBtn').addEventListener('click',function(){Kit.open('menu');});
+$('#emBtn').addEventListener('click',function(){Kit.open('contact');});$('#emBtn2').addEventListener('click',function(){Kit.open('contact');});
+$('#emCall').addEventListener('click',function(e){e.preventDefault();Kit.open('contact');});
+if('IntersectionObserver' in window){var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target);}});},{threshold:.12});$$('.rv-s').forEach(function(el){io.observe(el);});}else{$$('.rv-s').forEach(function(el){el.classList.add('in');});}
+/* ---------- find bar ---------- */
+$('#fDept').innerHTML='<option value="all">All departments</option>'+DEPTS.map(function(d){return '<option value="'+d.id+'">'+d.name+'</option>';}).join('');
+function syncFind(){$('#fDept').value=ui.docs.dept;$('#fQ').value=ui.docs.q;$('#fWhen').value=ui.docs.when;}
+function matchCond(q){q=q.toLowerCase().trim();if(!q)return null;for(var i=0;i<CONDS.length;i++)if(CONDS[i][0].indexOf(q)>-1||q.indexOf(CONDS[i][0])>-1)return CONDS[i][1];return null;}
+$('#fform').addEventListener('submit',function(e){
+  e.preventDefault();ui.docs.dept=$('#fDept').value;ui.docs.q=$('#fQ').value.trim();ui.docs.when=$('#fWhen').value;
+  var m=matchCond(ui.docs.q);if(m&&ui.docs.dept==='all'){ui.docs.dept=m;}
+  ui.docs.avail=ui.docs.when;$('#dAvail').value=ui.docs.avail;renderDocs();syncFind();scrollTo_('doctors');
+});
+document.addEventListener('click',function(e){
+  var b=e.target.closest('[data-do]');if(!b)return;var a=b.dataset.do,v=b.dataset.v,id=b.dataset.id;
+  if(a==='quick'){$('#fQ').value=v;var m=matchCond(v);ui.docs.q=v;ui.docs.dept=m||'all';ui.docs.when='any';ui.docs.avail='any';$('#dAvail').value='any';renderDocs();syncFind();scrollTo_('doctors');}
+  else if(a==='book')openBook({});
+  else if(a==='book-doc'){var d=doc(id);openBook({dept:d.dept,doc:d.id});}
+  else if(a==='profile'){ui.doc=id;Kit.open('doctor');}
+  else if(a==='dept'){ui.dept=v;Kit.open('dept');}
+  else if(a==='manage'){ui.mg={ref:'',email:'',found:null,err:''};Kit.open('manage');}
+  else if(a==='visit')Kit.open('visit');
+  else if(a==='dchip'){ui.docs.dept=v;renderDocs();syncFind();}
+});
+/* ---------- departments section ---------- */
+$('#dgrid').innerHTML=DEPTS.map(function(d,i){return '<button class="dcard" type="button" data-do="dept" data-v="'+d.id+'" style="background:'+d.bg+'" aria-label="Open '+d.name+'"><div class="t"><small>'+DOCS.filter(function(x){return x.dept===d.id;}).length+' DOCTORS</small><h3>'+d.name+'</h3><p>'+d.short+'.</p></div><img src="'+IMG[d.img]+'" alt="" draggable="false"><span class="ar">'+ARROW+'</span></button>';}).join('');
+function renderSug(){
+  var q=$('#cond').value.toLowerCase().trim(),out=[];
+  CONDS.forEach(function(c){if(!q||c[0].indexOf(q)>-1)out.push(c);});
+  var list=out.slice(0,q?8:10);
+  if(q&&!list.length){$('#sug').innerHTML='<span class="tw">No match yet. Try “chest pain”, “headache”, “child fever” or “knee pain”, or <button class="link" type="button" data-do="book">book a general visit</button>.</span>';return;}
+  $('#sug').innerHTML=list.map(function(c){var d=dept(c[1]);return '<button type="button" data-do="dept" data-v="'+d.id+'"><i style="background:'+d.bg+'"></i>'+c[0].charAt(0).toUpperCase()+c[0].slice(1)+' · '+d.name+'</button>';}).join('');
+}
+$('#cond').addEventListener('input',renderSug);
+$('#condGo').addEventListener('click',function(){var m=matchCond($('#cond').value);if(m){ui.dept=m;Kit.open('dept');}else{renderSug();toast('Try a symptom like “headache”');}});
+$('#cond').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('#condGo').click();}});
+renderSug();
+/* ---------- doctors section ---------- */
+var langs=[];DOCS.forEach(function(d){d.langs.forEach(function(l){if(langs.indexOf(l)<0)langs.push(l);});});langs.sort();
+$('#dLang').innerHTML='<option value="any">Any language</option>'+langs.map(function(l){return '<option>'+l+'</option>';}).join('');
+function docCard(d){
+  var dp=dept(d.dept),n=nextSlot(d);
+  return '<article class="doc"><div class="pt" style="background:'+dp.tint+'"><span class="tg">'+dp.name+'</span>'+(d.photo?'<img class="ph" src="'+d.photo+'" alt="Portrait of '+esc(d.name)+' (illustrative)" loading="lazy">':'<div class="ini" aria-hidden="true">'+ini(d.name)+'</div>')+'</div><div class="bd"><b>'+d.name+'</b><span class="r">'+d.role+'</span><span class="m">'+d.years+' years · '+d.langs.join(', ')+'</span><span class="nx"><i></i>'+(n?'Next · '+nextLabel(n):'No slots soon')+'</span><div class="acts"><button class="bk" type="button" data-do="book-doc" data-id="'+d.id+'">Book</button><button class="pf" type="button" data-do="profile" data-id="'+d.id+'" aria-label="View profile of '+esc(d.name)+'">Profile</button></div></div></article>';
+}
+function renderDocs(){
+  var f=ui.docs,list=DOCS.slice();
+  if(f.dept!=='all')list=list.filter(function(d){return d.dept===f.dept;});
+  if(f.q){var q=f.q.toLowerCase(),m=matchCond(q);list=list.filter(function(d){return d.name.toLowerCase().indexOf(q)>-1||d.role.toLowerCase().indexOf(q)>-1||dept(d.dept).name.toLowerCase().indexOf(q)>-1||(m&&d.dept===m);});}
+  if(f.lang!=='any')list=list.filter(function(d){return d.langs.indexOf(f.lang)>-1;});
+  if(f.avail!=='any')list=list.filter(function(d){var n=nextSlot(d);return n&&(f.avail==='today'?n.days===0:n.days<=6);});
+  var nm={};DOCS.forEach(function(d){nm[d.id]=nextSlot(d);});
+  if(f.sort==='name')list.sort(function(a,b){return a.name.localeCompare(b.name);});else if(f.sort==='exp')list.sort(function(a,b){return b.years-a.years;});else list.sort(function(a,b){var x=nm[a.id],y=nm[b.id];if(!x)return 1;if(!y)return -1;return x.days-y.days||(x.t<y.t?-1:1);});
+  $('#docCount').textContent=list.length+' of '+DOCS.length+' specialists shown';
+  $('#dchips').innerHTML=[['all','All']].concat(DEPTS.map(function(d){return [d.id,d.name];})).map(function(c){return '<button class="chip" type="button" data-do="dchip" data-v="'+c[0]+'" aria-pressed="'+(f.dept===c[0])+'">'+c[1]+'</button>';}).join('');
+  $('#docgrid').innerHTML=list.length?list.map(docCard).join(''):'<div class="ok" style="grid-column:1/-1;background:#fff;border-radius:30px"><b style="font-size:18px">No doctors match those filters</b><span class="muted">Try another department, language or day.</span><button class="btn" type="button" id="dReset2">Clear filters</button></div>';
+  var r2=$('#dReset2');if(r2)r2.addEventListener('click',resetDocs);
+}
+function resetDocs(){ui.docs={dept:'all',q:'',when:'any',lang:'any',avail:'any',sort:'soonest'};$('#dLang').value='any';$('#dAvail').value='any';$('#dSort').value='soonest';syncFind();renderDocs();}
+$('#dLang').addEventListener('change',function(){ui.docs.lang=this.value;renderDocs();});
+$('#dAvail').addEventListener('change',function(){ui.docs.avail=this.value;renderDocs();});
+$('#dSort').addEventListener('change',function(){ui.docs.sort=this.value;renderDocs();});
+$('#dReset').addEventListener('click',resetDocs);
+renderDocs();
+/* ---------- booking section + stories ---------- */
+$('#howImg').src=PH.banner.cardiology;
+$('#howBook').addEventListener('click',function(){openBook({});});
+$('#strs').innerHTML=STORIES.map(function(s){return '<figure class="story" style="margin:0"><div class="q" aria-hidden="true">“</div><p>'+s[1]+'</p><figcaption class="who"><span>'+s[2]+'</span><div style="display:flex;flex-direction:column"><b style="font-size:15px">'+s[3]+'</b><span style="font-size:13px;color:var(--mute);background:none;width:auto;height:auto;display:block;font-weight:500">'+s[4]+' · '+s[0]+'</span></div></figcaption></figure>';}).join('');
+function stStep(){return $('#strs').querySelector('.story').getBoundingClientRect().width+34;}
+$('#sPrev').addEventListener('click',function(){$('#strs').scrollBy({left:-stStep(),behavior:reduce?'auto':'smooth'});});
+$('#sNext').addEventListener('click',function(){$('#strs').scrollBy({left:stStep(),behavior:reduce?'auto':'smooth'});});
+/* ================= BOOKING ================= */
+function openBook(o){
+  var d=o.doc?doc(o.doc):null;
+  ui.bk={step:1,dept:o.dept||(d?d.dept:null),doc:o.doc||null,date:o.date||null,time:o.time||null,visit:o.visit||ui.visit,name:'',email:'',phone:'',reason:'',consent:false,replace:o.replace||null,done:null};
+  if(o.date&&o.time&&o.doc)ui.bk.step=4;else if(o.doc)ui.bk.step=3;else if(o.dept)ui.bk.step=2;
+  if(ui.bk.step===3&&!ui.bk.date){var n=nextSlot(doc(ui.bk.doc));if(n){ui.bk.date=n.iso;}}
+  Kit.open('book');
+}
+function docsOf(dpt){return DOCS.filter(function(d){return d.dept===dpt;});}
+function dateChips(d){
+  var out=[];for(var i=0;i<7;i++){var s=iso(addDays(i)),free=slotsFor(d,s).filter(function(x){return !x.booked;}).length;out.push({iso:s,free:free});}return out;
+}
+var STEPS=['Department','Doctor','Time','Details'];
+function bookHtml(){
+  var b=ui.bk;
+  if(b.done){var a=b.done,d=doc(a.doc),dp=dept(a.dept);
+    return '<div class="ok"><div class="c">'+CHK+'</div><h3 class="t" style="font-size:26px;margin:0">'+(b.replace?'Appointment rescheduled':'Appointment confirmed')+'</h3><p class="muted" style="margin:0;max-width:44ch">Thanks '+esc(a.name.split(' ')[0])+'. Your reference is <b>'+a.ref+'</b>. Keep it to manage your appointment.</p></div><div class="sumbox"><div><span>Doctor</span><span>'+d.name+'</span></div><div><span>Department</span><span>'+dp.name+'</span></div><div><span>When</span><span>'+dayLabel(a.date,true)+' · '+fmtTime(a.time)+'</span></div><div><span>Visit</span><span>'+visitName(a.visit)+'</span></div></div><h4 style="margin:22px 0 8px;font-size:16px">What to bring</h4><ul style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;color:#3A3D47"><li>Photo ID and your insurance details</li><li>A list of your current medicines</li><li>Any previous reports or scans</li></ul><p class="note" style="margin-top:16px">'+esc(dp.expect)+'</p><p class="note">Demo booking: stored in this browser only.</p>';}
+  var s=b.step,h='<div class="stp" aria-hidden="true">'+STEPS.map(function(x,i){return '<span class="'+(i<s?'on':'')+'"></span>';}).join('')+'</div><p class="small muted" style="margin:0 0 14px">Step '+s+' of 4 · '+STEPS[s-1]+'</p>';
+  if(s===1){
+    h+='<h3 class="t" style="font-size:22px">Which department?</h3><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:22px">'+DEPTS.map(function(d){return '<button class="dr" type="button" data-act="bdept" data-v="'+d.id+'" aria-pressed="'+(b.dept===d.id)+'"><span class="ini" style="background:'+d.tint+'"><span style="width:16px;height:16px;border-radius:50%;background:'+d.bg+';display:block"></span></span><span class="tx"><b>'+d.name+'</b><span>'+d.short+'</span></span></button>';}).join('')+'</div><h3 class="t" style="font-size:18px">How would you like to be seen?</h3><div class="chips" role="group" aria-label="Visit type">'+VISITS.map(function(v){return '<button class="chip" type="button" data-act="bvisit" data-v="'+v[0]+'" aria-pressed="'+(b.visit===v[0])+'">'+v[1]+'</button>';}).join('')+'</div><div class="warn" style="margin-top:22px"><span aria-hidden="true">!</span><span>For an emergency, do not book online. Call <b>'+CFG.emergency+'</b> or come to the emergency entrance.</span></div><p class="err" id="e-b1" role="alert"></p>';
+  }else if(s===2){
+    var ds=docsOf(b.dept);
+    h+='<h3 class="t" style="font-size:22px">Choose a doctor</h3><div style="display:flex;flex-direction:column;gap:10px">'+'<button class="dr" type="button" data-act="bdoc" data-v="any" aria-pressed="'+(b.doc==='any')+'"><span class="ini" style="background:#EDEBFA;font-family:inherit;font-weight:700;font-size:15px">Any</span><span class="tx"><b>First available doctor</b><span>We will pick the soonest slot in '+dept(b.dept).name+'</span></span></button>'+ds.map(function(d){var n=nextSlot(d);return '<button class="dr" type="button" data-act="bdoc" data-v="'+d.id+'" aria-pressed="'+(b.doc===d.id)+'"><span class="ini" style="background:'+dept(d.dept).tint+'">'+face(d,true)+'</span><span class="tx"><b>'+d.name+'</b><span>'+d.role+' · Next '+nextLabel(n)+'</span></span></button>';}).join('')+'</div><p class="err" id="e-b2" role="alert"></p>';
+  }else if(s===3){
+    var dd=b.doc==='any'?null:doc(b.doc),pool=dd?[dd]:docsOf(b.dept);
+    var dates=[];for(var i=0;i<7;i++){var iso_=iso(addDays(i)),free=0;pool.forEach(function(x){free+=slotsFor(x,iso_).filter(function(z){return !z.booked;}).length;});dates.push({iso:iso_,free:free});}
+    if(!b.date||!dates.some(function(x){return x.iso===b.date&&x.free>0;})){var f1=dates.filter(function(x){return x.free>0;})[0];b.date=f1?f1.iso:null;}
+    var times=[];if(b.date){var seen={};pool.forEach(function(x){slotsFor(x,b.date).forEach(function(z){if(z.booked)return;if(!seen[z.t]){seen[z.t]=x.id;times.push({t:z.t,doc:x.id});}});});times.sort(function(p,q){return p.t<q.t?-1:1;});}
+    h+='<h3 class="t" style="font-size:22px">Pick a day and time</h3><p class="muted small" style="margin:-4px 0 12px">'+(dd?dd.name:'First available doctor in '+dept(b.dept).name)+'</p><div class="chips" role="group" aria-label="Day" style="margin-bottom:20px">'+dates.map(function(x){return '<button class="chip" type="button" data-act="bdate" data-v="'+x.iso+'" aria-pressed="'+(b.date===x.iso)+'"'+(x.free?'':' disabled')+'>'+dayLabel(x.iso)+'</button>';}).join('')+'</div>'+(times.length?'<div class="slots" role="group" aria-label="Time">'+times.map(function(x){return '<button class="chip" type="button" data-act="btime" data-v="'+x.t+'" data-id="'+x.doc+'" aria-pressed="'+(b.time===x.t)+'">'+fmtTime(x.t)+'</button>';}).join('')+'</div>':'<p class="muted">No free times on this day. Try another day.</p>')+'<p class="err" id="e-b3" role="alert"></p>';
+  }else{
+    var d4=doc(b.doc),dp4=dept(b.dept);
+    h+='<div class="sumbox" style="margin-bottom:20px"><div><span>Doctor</span><span>'+d4.name+'</span></div><div><span>Department</span><span>'+dp4.name+'</span></div><div><span>When</span><span>'+dayLabel(b.date,true)+' · '+fmtTime(b.time)+'</span></div><div><span>Visit</span><span>'+visitName(b.visit)+'</span></div></div><form id="bform" novalidate><div class="fld"><label for="b-name">Full name</label><input id="b-name" type="text" autocomplete="name" value="'+esc(b.name)+'"><p class="err" id="eb-name"></p></div><div class="fld"><label for="b-email">Email</label><input id="b-email" type="email" autocomplete="email" value="'+esc(b.email)+'"><p class="err" id="eb-email"></p></div><div class="fld"><label for="b-phone">Phone</label><input id="b-phone" type="text" inputmode="tel" autocomplete="tel" value="'+esc(b.phone)+'"><p class="err" id="eb-phone"></p></div><div class="fld"><label for="b-reason">Reason for visit</label><textarea id="b-reason" maxlength="300" style="min-height:96px">'+esc(b.reason)+'</textarea><p class="err" id="eb-reason"></p></div><label class="chk"><input id="b-consent" type="checkbox"'+(b.consent?' checked':'')+'><span>I understand this is not for emergencies and agree to be contacted about this appointment.</span></label><p class="err" id="eb-consent" role="alert"></p></form>';
+  }
+  return h;
+}
+function visitName(v){for(var i=0;i<VISITS.length;i++)if(VISITS[i][0]===v)return VISITS[i][1];return v;}
+function bookFoot(){
+  var b=ui.bk;if(b.done)return '<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" style="flex:1" data-act="bclose">Done</button><button class="btn sec" type="button" data-act="bagain">Book another</button></div>';
+  return '<div style="display:flex;gap:10px"><button class="btn sec" type="button" data-act="bback"'+(b.step===1||(b.step===4&&false)?' hidden':'')+'>Back</button><button class="btn" type="button" style="flex:1" data-act="bnext">'+(b.step===4?(b.replace?'Confirm new time':'Confirm appointment'):'Continue')+'</button></div>';
+}
+function bookNext(){
+  var b=ui.bk,s=b.step;
+  if(s===1){if(!b.dept){Kit.setErr('e-b1','Choose a department to continue.');return;}b.doc=null;b.step=2;}
+  else if(s===2){if(!b.doc){Kit.setErr('e-b2','Choose a doctor, or pick the first available one.');return;}
+    if(b.doc==='any'){/* resolve at step 3 */}b.step=3;}
+  else if(s===3){if(!b.date||!b.time){Kit.setErr('e-b3','Choose a day and a time.');return;}if(b.doc==='any'){b.doc=b._pick||b.doc;}b.step=4;}
+  else if(s===4){
+    var nm=$('#b-name'),em=$('#b-email'),ph=$('#b-phone'),rs=$('#b-reason'),cn=$('#b-consent');
+    b.name=nm.value.trim();b.email=em.value.trim();b.phone=ph.value.trim();b.reason=rs.value.trim();b.consent=cn.checked;
+    var bad=null;
+    function chk(el,id,ok,msg){Kit.setErr(id,ok?'':msg,el);if(!ok&&!bad)bad=el;}
+    chk(nm,'eb-name',b.name.length>=2,'Enter your full name.');
+    chk(em,'eb-email',/^\S+@\S+\.\S+$/.test(b.email),'Enter a valid email address, like name@example.com.');
+    chk(ph,'eb-phone',b.phone.replace(/\D/g,'').length>=7,'Enter a phone number with at least 7 digits.');
+    chk(rs,'eb-reason',b.reason.length>=5,'Tell us briefly why you are coming.');
+    chk(cn,'eb-consent',b.consent,'Please confirm to continue.');
+    if(bad){bad.focus();return;}
+    if(isBooked(b.doc,b.date,b.time)){toast('Sorry, that time was just taken. Pick another.');b.step=3;b.time=null;Kit.render(false);return;}
+    if(b.replace){st.appts.forEach(function(a){if(a.ref===b.replace)a.status='rescheduled';});}
+    var ref=b.replace||('PH-'+(10000+Math.floor(Math.random()*90000)));
+    var rec={ref:ref,doc:b.doc,dept:b.dept,date:b.date,time:b.time,visit:b.visit,name:b.name,email:b.email,phone:b.phone,reason:b.reason,status:'confirmed',created:Date.now()};
+    st.appts=st.appts.filter(function(a){return a.ref!==ref;});st.appts.unshift(rec);st.appts=st.appts.slice(0,30);save();b.done=rec;renderDocs();paintHero();
+  }
+  Kit.render(false);
+}
+/* ================= PAGES ================= */
+function pillHtml(a){return a.map(function(t){return '<span class="pl">'+esc(t)+'</span>';}).join('');}
+var PAGES={
+ book:{title:function(){return ui.bk&&ui.bk.done?'Booked':(ui.bk&&ui.bk.replace?'Reschedule':'Book appointment');},drawer:true,sub:function(){return '';},html:bookHtml,foot:bookFoot},
+ doctor:{title:function(){return doc(ui.doc).name;},drawer:true,sub:function(){return doc(ui.doc).role;},html:function(){
+  var d=doc(ui.doc),dp=dept(d.dept),days=[];for(var i=0;i<5;i++){var s=iso(addDays(i)),free=slotsFor(d,s).filter(function(x){return !x.booked;}).length;days.push([dayLabel(s),free]);}
+  return '<div class="dh"><div class="ini" style="background:'+dp.tint+'">'+face(d,true)+'</div><div><b style="font-size:20px">'+d.name+'</b><div class="muted small">'+dp.name+' · '+d.years+' years</div><div class="muted small">'+d.langs.join(', ')+'</div></div></div><p style="margin:0 0 18px">'+esc(d.bio)+'</p><h4 style="margin:0 0 8px;font-size:15px">Conditions treated</h4><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:22px">'+pillHtml(dp.conds)+'</div><h4 style="margin:0 0 10px;font-size:15px">Availability this week</h4><div class="sumbox">'+days.map(function(x){return '<div><span>'+x[0]+'</span><span>'+(x[1]?x[1]+' open times':'Fully booked')+'</span></div>';}).join('')+'</div><p class="note" style="margin-top:14px">Sample profile and illustrative portrait. Replace with the doctor’s real details and photo.</p>';},
+  foot:function(){var d=doc(ui.doc);return '<button class="btn full" type="button" data-act="bookdoc" data-id="'+d.id+'">Book with '+d.name.replace('Dr. ','Dr. ')+'</button>';}},
+ dept:{title:function(){return dept(ui.dept).name;},sub:function(){return 'Specialist centre';},html:function(){
+  var d=dept(ui.dept),ds=docsOf(d.id),nf=nextForDept(d.id);
+  return (d.banner?'<figure class="bnr" style="margin:0 0 22px"><img src="'+d.banner+'" alt="'+d.name+' at Pulse Health (illustrative)"><figcaption>'+(d.id==='neurology'?'Imaging suite':'Consultation room')+'</figcaption></figure>':'')+'<div class="cols2"><div><div style="border-radius:28px;background:'+d.bg+';padding:24px;display:grid;place-items:center;margin-bottom:18px"><img src="'+IMG[d.img]+'" alt="" style="width:220px;height:240px;object-fit:contain;filter:drop-shadow(0 8px 8px rgba(0,0,0,.2)) drop-shadow(0 30px 26px rgba(0,0,0,.32))"></div><div class="sumbox"><div><span>Next available</span><span>'+(nf?nextLabel(nf.n):'No slots soon')+'</span></div><div><span>Doctors</span><span>'+ds.length+'</span></div></div></div><div><p style="margin:0 0 18px;font-size:17px;line-height:1.6">'+esc(d.desc)+'</p><h4 style="margin:0 0 8px;font-size:15px">Services</h4><ul style="margin:0 0 18px;padding-left:20px;display:flex;flex-direction:column;gap:5px;color:#3A3D47">'+d.services.map(function(s){return '<li>'+s+'</li>';}).join('')+'</ul><h4 style="margin:0 0 8px;font-size:15px">Common reasons to visit</h4><div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px">'+pillHtml(d.conds)+'</div><div class="warm" style="padding:16px 18px"><b>What to expect</b><div class="small muted" style="margin-top:4px">'+esc(d.expect)+'</div></div></div></div><h3 class="t" style="margin-top:28px">Our doctors</h3><div style="display:flex;flex-direction:column;gap:10px">'+ds.map(function(x){var n=nextSlot(x);return '<div class="dr" style="cursor:default"><span class="ini" style="background:'+d.tint+'">'+face(x,true)+'</span><span class="tx"><b>'+x.name+'</b><span>'+x.role+' · Next '+nextLabel(n)+'</span></span><button class="btn sm" type="button" data-act="bookdoc" data-id="'+x.id+'">Book</button></div>';}).join('')+'</div>';},
+  foot:function(){return '<button class="btn full" type="button" data-act="bookdept" data-id="'+ui.dept+'">Book in '+dept(ui.dept).name+'</button>';}},
+ manage:{title:'Manage appointment',drawer:true,sub:function(){return '';},html:function(){
+  var m=ui.mg;
+  var list=st.appts.filter(function(a){return a.status==='confirmed';});
+  var f=m.found;
+  var h='';
+  if(f){var d=doc(f.doc),dp=dept(f.dept);
+    h+='<div class="sumbox" style="margin-bottom:16px"><div><span>Reference</span><span>'+f.ref+'</span></div><div><span>Status</span><span>'+(f.status==='confirmed'?'Confirmed':f.status==='cancelled'?'Cancelled':'Rescheduled')+'</span></div><div><span>Doctor</span><span>'+d.name+'</span></div><div><span>Department</span><span>'+dp.name+'</span></div><div><span>When</span><span>'+dayLabel(f.date,true)+' · '+fmtTime(f.time)+'</span></div><div><span>Visit</span><span>'+visitName(f.visit)+'</span></div></div>'+(f.status==='confirmed'?'<div style="display:flex;gap:10px;flex-wrap:wrap"><button class="btn" type="button" data-act="mresched" data-id="'+f.ref+'">Reschedule</button><button class="btn sec" type="button" data-act="mcancel" data-id="'+f.ref+'">Cancel appointment</button></div>':'<p class="muted">This appointment is no longer active.</p>')+'<hr style="border:0;border-top:1px solid var(--line);margin:24px 0">';
+  }
+  h+='<form id="mform" novalidate><h3 class="t" style="font-size:20px">Find your appointment</h3><div class="fld"><label for="m-ref">Reference</label><input id="m-ref" type="text" placeholder="PH-12345" value="'+esc(m.ref)+'" autocomplete="off"></div><div class="fld"><label for="m-email">Email used when booking</label><input id="m-email" type="email" value="'+esc(m.email)+'" autocomplete="email"></div><p class="err" id="e-m" role="alert">'+esc(m.err)+'</p><button class="btn" type="submit">Look up</button></form>';
+  if(list.length)h+='<h3 class="t" style="margin-top:28px;font-size:18px">On this device</h3>'+list.map(function(a){var d=doc(a.doc);return '<div class="line"><div class="mid"><b>'+d.name+'</b><span class="muted small">'+dayLabel(a.date)+' · '+fmtTime(a.time)+' · '+a.ref+'</span></div><button class="btn sec sm" type="button" data-act="mopen" data-id="'+a.ref+'">Open</button></div>';}).join('');
+  return h;}},
+ about:{title:'About Pulse Health',sub:function(){return 'Specialist care, close to home';},html:function(){
+  return '<div class="cols2"><div><h3 class="t" style="font-size:24px">Care that moves with you</h3><p style="margin:0 0 14px;max-width:58ch">Pulse Health brings four specialist centres together: heart, brain and nerves, children, and bones and joints. One campus, one booking system, and teams who talk to each other.</p><p class="muted" style="max-width:58ch">Every visit starts with time to listen. We explain your options in plain words, agree a plan with you, and follow it through to recovery.</p><div style="display:flex;gap:10px;margin-top:20px;flex-wrap:wrap"><button class="btn" type="button" data-act="aboutbook">Book appointment</button><button class="btn sec" type="button" data-act="go" data-v="contact">Contact us</button></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="stat"><b>4</b><span>specialist centres</span></div><div class="stat"><b>24 h</b><span>emergency care</span></div><div class="stat"><b>3</b><span>ways to be seen</span></div><div class="stat"><b>1</b><span>booking system</span></div></div></div><section style="margin-top:34px"><h3 class="t">Inside Pulse</h3><div class="gal"><figure class="bnr" style="margin:0"><img src="'+PH.banner.neurology+'" alt="Imaging suite (illustrative)" loading="lazy"><figcaption>Imaging suite</figcaption></figure><figure class="bnr" style="margin:0"><img src="'+PH.banner.cardiology+'" alt="Consultation room (illustrative)" loading="lazy"><figcaption>Consultation room</figcaption></figure></div></section><section style="margin-top:34px"><h3 class="t">How we work</h3><details open><summary>Clear answers</summary><div>We explain what we find and what it means, and we write it down for you.</div></details><details><summary>Joined-up teams</summary><div>Doctors, nurses and therapists share one plan, so you never repeat your story.</div></details><details><summary>Family first</summary><div>Parents and relatives are welcome beside patients, especially in paediatrics.</div></details></section><p class="note" style="margin-top:18px">Sample text. Replace with your hospital’s real story and numbers.</p>';}},
+ contact:{title:'Contact us',sub:function(){return 'Questions, feedback and emergencies';},html:function(){
+  if(ui.sent)return '<div class="ok"><div class="c">'+CHK+'</div><h3 class="t" style="font-size:24px;margin:0">Message sent</h3><p class="muted" style="margin:0;max-width:46ch">Thanks '+esc(ui.sent.name)+'. Your reference is <b>'+ui.sent.ref+'</b>. We will reply to '+esc(ui.sent.email)+' within one working day.</p><div style="display:flex;gap:10px;flex-wrap:wrap;justify-content:center"><button class="btn" type="button" data-act="again">Send another</button><button class="btn sec" type="button" data-act="close">Close</button></div><p class="note">Demo form: nothing is sent anywhere.</p></div>';
+  var d=new Date(),day=d.getDay(),hr=d.getHours()+d.getMinutes()/60,open=day>=1&&day<=6&&hr>=8&&hr<19;
+  return '<div class="warn" style="margin-bottom:20px"><span aria-hidden="true">!</span><span>In an emergency, call <b>'+CFG.emergency+'</b> or go to the emergency entrance. Do not use this form.</span></div><div class="cols2"><form id="cform" novalidate><div class="fld"><label for="c-name">Full name</label><input id="c-name" type="text" autocomplete="name"><p class="err" id="e-name"></p></div><div class="fld"><label for="c-email">Email</label><input id="c-email" type="email" autocomplete="email"><p class="err" id="e-email"></p></div><div class="fld"><label for="c-topic">What is this about?</label><select id="c-topic"><option value="">Choose a topic</option><option>Appointments</option><option>Test results</option><option>Billing and insurance</option><option>Feedback</option><option>Something else</option></select><p class="err" id="e-topic"></p></div><div class="fld"><label for="c-msg">Message</label><textarea id="c-msg" maxlength="500"></textarea><div style="display:flex;justify-content:space-between"><p class="err" id="e-msg"></p><span class="note" id="c-count">0 / 500</span></div></div><button class="btn" type="submit">Send message</button></form><aside><div class="warm" style="margin-bottom:18px"><div class="small muted">Outpatient hours</div><div style="font-weight:600;font-size:17px;margin:2px 0 6px">Mon–Sat, 8 am–7 pm</div><div class="stk '+(open?'':'out')+'" style="font-size:14.5px"><i></i>'+(open?'Open now (your local time)':'Closed now (your local time)')+'</div><div class="small muted" style="margin-top:8px">Emergency care is open 24 hours.</div></div><dl class="kv" style="grid-template-columns:90px 1fr;margin-bottom:22px"><dt>Address</dt><dd>'+esc(CFG.address)+'</dd><dt>Phone</dt><dd>'+esc(CFG.phone)+'</dd><dt>Email</dt><dd>'+esc(CFG.email)+'</dd></dl><h3 class="t">Quick answers</h3><details><summary>How do I get my test results?</summary><div>Results are shared by your doctor, usually within a few working days.</div></details><details><summary>Can I bring someone with me?</summary><div>Yes. One companion is welcome at every visit.</div></details><details><summary>Do you accept my insurance?</summary><div>Contact us with your provider name and we will confirm before your visit.</div></details></aside></div>';
+ },after:function(){var m=$('#c-msg'),c=$('#c-count');if(m)m.addEventListener('input',function(){c.textContent=m.value.length+' / 500';});}},
+ visit:{title:'Plan your visit',sub:function(){return 'Hours, what to bring and getting here';},html:function(){
+  return '<div class="cols2"><div><h3 class="t">Opening hours</h3><div class="sumbox" style="margin-bottom:22px"><div><span>Outpatient clinics</span><span>Mon–Sat, 8 am–7 pm</span></div><div><span>Emergency</span><span>24 hours</span></div><div><span>Visiting</span><span>Daily, 2 pm–8 pm</span></div></div><h3 class="t">What to bring</h3><ul style="margin:0 0 22px;padding-left:20px;display:flex;flex-direction:column;gap:6px;color:#3A3D47"><li>Photo ID and insurance details</li><li>A list of your medicines</li><li>Previous reports, scans or referral letters</li><li>For children: their health record</li></ul></div><div><h3 class="t">Getting here</h3><dl class="kv" style="grid-template-columns:110px 1fr;margin-bottom:22px"><dt>Address</dt><dd>'+esc(CFG.address)+'</dd><dt>Parking</dt><dd>Visitor car park at the main entrance</dd><dt>Public transport</dt><dd>Bus stop outside the main entrance</dd><dt>Accessibility</dt><dd>Step-free entrances, lifts and accessible toilets on every floor</dd></dl><div class="warn"><span aria-hidden="true">!</span><span>Emergency entrance is on the east side, open 24 hours. Call <b>'+CFG.emergency+'</b>.</span></div></div></div><p class="note" style="margin-top:18px">Sample details. Replace with your hospital’s real information.</p>';}},
+ menu:{title:'Menu',drawer:true,sub:function(){return '';},html:function(){
+  var it=[['scroll','departments','Departments'],['scroll','doctors','Doctors'],['scroll','patients','Patients'],['go','about','About'],['go','contact','Contact'],['go','visit','Plan your visit'],['go','manage','Manage appointment']];
+  return '<nav class="menulist" aria-label="Pages">'+it.map(function(x){return '<a href="#" data-act="'+x[0]+'" data-v="'+x[1]+'">'+x[2]+'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></a>';}).join('')+'</nav><button class="btn full" type="button" style="margin-top:22px" data-act="menubook">Book appointment</button><div class="warn" style="margin-top:16px"><span aria-hidden="true">!</span><span>Emergency? Call <b>'+CFG.emergency+'</b>.</span></div>';}}
+};
+Kit.cfg.pages=PAGES;Kit.cfg.inert=['#nav','#main','footer'];Kit.cfg.linkSel='.lk[data-page]';Kit.cfg.hash=true;
+Kit.cfg.beforeOpen=function(name,already){if(name==='contact'&&!already)ui.sent=null;};
+Kit.cfg.onClose=function(){heroTimer();};
+Kit.cfg.act={
+ bdept:function(b){ui.bk.dept=b.dataset.v;Kit.render(true);},
+ bvisit:function(b){ui.bk.visit=b.dataset.v;ui.visit=b.dataset.v;Kit.render(true);},
+ bdoc:function(b){ui.bk.doc=b.dataset.v;ui.bk.date=null;ui.bk.time=null;Kit.render(true);},
+ bdate:function(b){ui.bk.date=b.dataset.v;ui.bk.time=null;Kit.render(true);},
+ btime:function(b){ui.bk.time=b.dataset.v;if(ui.bk.doc==='any')ui.bk._pick=b.dataset.id;Kit.render(true);},
+ bnext:function(){bookNext();},
+ bback:function(){var s=ui.bk.step;if(s>1){ui.bk.step=s-1;if(s-1===2&&ui.bk.doc&&ui.bk.doc!=='any'){}Kit.render(false);}},
+ bclose:function(){Kit.close();},
+ bagain:function(){openBook({});},
+ bookdoc:function(b){var d=doc(b.dataset.id);Kit.close();setTimeout(function(){openBook({dept:d.dept,doc:d.id});},260);},
+ bookdept:function(b){Kit.close();setTimeout(function(){openBook({dept:b.dataset.id});},260);},
+ aboutbook:function(){Kit.close();setTimeout(function(){openBook({});},260);},
+ menubook:function(){Kit.close();setTimeout(function(){openBook({});},260);},
+ go:function(b){Kit.open(b.dataset.v);},
+ scroll:function(b){Kit.close();var id=b.dataset.v;setTimeout(function(){scrollTo_(id);},220);},
+ close:function(){Kit.close();},
+ again:function(){ui.sent=null;Kit.render(false);},
+ mopen:function(b){var a=st.appts.filter(function(x){return x.ref===b.dataset.id;})[0];ui.mg.found=a||null;ui.mg.err='';Kit.render(false);},
+ mcancel:function(b){st.appts.forEach(function(a){if(a.ref===b.dataset.id)a.status='cancelled';});save();var a=st.appts.filter(function(x){return x.ref===b.dataset.id;})[0];ui.mg.found=a;renderDocs();paintHero();toast('Appointment '+b.dataset.id+' cancelled');Kit.render(false);},
+ mresched:function(b){var a=st.appts.filter(function(x){return x.ref===b.dataset.id;})[0];if(!a)return;var d=doc(a.doc);Kit.close();setTimeout(function(){openBook({dept:a.dept,doc:a.doc,visit:a.visit,replace:a.ref});ui.bk.name=a.name;ui.bk.email=a.email;ui.bk.phone=a.phone;ui.bk.reason=a.reason;ui.bk.consent=true;ui.bk.step=3;var n=nextSlot(d);ui.bk.date=n?n.iso:null;ui.bk.time=null;Kit.render(false);},260);}
+};
+Kit.cfg.on.input=function(e){var t=e.target,b=ui.bk;if(!b)return;var map={'b-name':'name','b-email':'email','b-phone':'phone','b-reason':'reason'};if(map[t.id])b[map[t.id]]=t.value;if(t.id==='b-consent')b.consent=t.checked;};
+Kit.cfg.on.change=function(e){var t=e.target;if(t.id==='b-consent'&&ui.bk)ui.bk.consent=t.checked;};
+function reqErr(id,ok,msg,el,bad){Kit.setErr(id,ok?'':msg,el);if(!ok&&!bad.el)bad.el=el;}
+Kit.cfg.on.submit=function(e){
+  var f=e.target,bad={el:null};
+  if(f.id==='cform'){
+    var nm=$('#c-name'),em=$('#c-email'),tp=$('#c-topic'),ms=$('#c-msg');
+    reqErr('e-name',nm.value.trim().length>=2,'Enter your name.',nm,bad);
+    reqErr('e-email',/^\S+@\S+\.\S+$/.test(em.value.trim()),'Enter a valid email address, like name@example.com.',em,bad);
+    reqErr('e-topic',!!tp.value,'Choose a topic.',tp,bad);
+    reqErr('e-msg',ms.value.trim().length>=10,'Write at least 10 characters so we can help.',ms,bad);
+    if(bad.el){bad.el.focus();return;}
+    ui.sent={name:nm.value.trim().split(' ')[0],email:em.value.trim(),ref:'PC-'+(1000+Math.floor(Math.random()*9000))};Kit.render(false);
+  }else if(f.id==='mform'){
+    var r=$('#m-ref'),m=$('#m-email');ui.mg.ref=r.value.trim();ui.mg.email=m.value.trim();
+    var a=st.appts.filter(function(x){return x.ref.toLowerCase()===ui.mg.ref.toLowerCase()&&x.email.toLowerCase()===ui.mg.email.toLowerCase();})[0];
+    if(!a){ui.mg.found=null;ui.mg.err='We could not find that reference with that email. Check both and try again.';Kit.render(false);return;}
+    ui.mg.found=a;ui.mg.err='';Kit.render(false);
+  }else if(f.id==='bform'){bookNext();}
+};
+Kit.init();
+})();
+</script>
+</body>
+</html>

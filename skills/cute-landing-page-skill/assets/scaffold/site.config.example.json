@@ -1,0 +1,54 @@
+{
+  "meta": {"slug": "brew-scoop", "title": "Brew & Scoop · Coffee and ice cream, Ahmedabad", "description": "Slow-brewed coffee and small-batch ice cream in Ahmedabad.", "refPrefix": "BS"},
+  "brand": {"name": "Brew & Scoop", "short": "Brew & Scoop", "tagline": "Slow-brewed coffee and small-batch ice cream. Open late."},
+  "currency": "₹", "locale": "en-IN",
+  "theme": {"ink": "#2A1710", "soft": "#F8F1E7", "mute": "#6B5648", "line": "#E7DACB", "tint": "#F1E4D3", "tint2": "#F6ECDD", "accent": "#C93A67",
+            "fontDisplay": "Bagel Fat One", "fontBody": "Inter", "googleFonts": "family=Inter:wght@400;500;600;700&family=Bagel+Fat+One"},
+  "contact": {"phone": "+91 98000 00000", "whatsapp": "919800000000", "email": "hello@brewandscoop.example", "address": "[Your street], Ahmedabad", "mapsUrl": "",
+              "chip": {"type": "open"}, "hours": [{"label": "Every day", "days": [0,1,2,3,4,5,6], "open": "08:00", "close": "24:00"}]},
+  "nav": {"cta": "Order now", "ctaDo": "scroll:items", "links": [{"label": "Menu", "type": "scroll", "target": "worlds"}, {"label": "All items", "type": "scroll", "target": "items"}, {"label": "Stories", "type": "scroll", "target": "stories"}, {"label": "About", "type": "page", "target": "about"}, {"label": "Visit", "type": "page", "target": "contact"}]},
+  "hero": {"pickLabel": "SELECT YOUR MOOD", "primary": {"label": "Order now", "do": "scroll:items"}, "secondary": {"label": "See the menu", "do": "scroll:worlds"}, "card": {"label": "TODAY'S PICK"},
+           "pick2": {"label": "HOW", "options": ["Dine in", "Takeaway", "Delivery"]}},
+  "worlds": [
+    {"id": "coffee", "name": "Coffee", "word": "COFFEE", "bg": "#5A3320", "dot": "#E9B88A", "tint": "#F3DCC8", "img": "cup", "title": "Brewed slow, poured with care.", "blurb": "Single-origin beans, roasted in small batches and pulled fresh all day.", "short": "Espresso, lattes and filter."},
+    {"id": "icecream", "name": "Ice cream", "word": "SCOOP", "bg": "#C93A67", "dot": "#FFC0D3", "tint": "#FFD9E4", "img": "cone", "title": "Small-batch scoops, big smiles.", "blurb": "Churned every morning with real fruit, nuts and Belgian chocolate.", "short": "Scoops, sundaes and kulfi."},
+    {"id": "cold", "name": "Cold and shakes", "word": "CHILL", "bg": "#0F7B78", "dot": "#8EE3D6", "tint": "#CFF3EE", "img": "coldcup", "title": "Cool down, Ahmedabad.", "blurb": "Iced coffees, frappes and thick shakes for the hot afternoons.", "short": "Iced coffee, frappes, shakes."}
+  ],
+  "decor": ["bean", "cone"],
+  "text": {"worldsTitle": "The menu", "worldsSub": "Three little worlds, one cafe.", "itemsTitle": "Everything we make", "findWorld": "Collection", "findText": "Search the menu", "findTag": "Filter", "findPlaceholder": "Try latte, mango or brownie", "countNoun": "items", "popular": ["latte", "mango", "brownie", "cold coffee"], "storiesTitle": "Regulars say", "storiesSub": "Sample stories. Replace with real ones before launch."},
+  "tagLabels": {"hot": "Hot", "cold": "Cold", "chocolate": "Chocolate", "fruity": "Fruity", "sundae": "Sundae", "eggless": "Eggless"},
+  "items": [
+    {"id": "filter", "world": "coffee", "name": "Classic Filter Coffee", "desc": "Frothy South Indian style filter coffee in a steel tumbler.", "price": 120, "tags": ["hot", "eggless", "bestseller"], "options": [{"name": "Size", "choices": [["Regular", 0], ["Large", 40]]}]},
+    {"id": "cappuccino", "world": "coffee", "name": "Cappuccino", "desc": "Double espresso with velvety steamed milk and dense foam.", "price": 160, "tags": ["hot"], "options": [{"name": "Size", "choices": [["Regular", 0], ["Large", 40]]}, {"name": "Extra shot", "choices": [["No", 0], ["Yes", 40]]}]},
+    {"id": "hazelnut", "world": "coffee", "name": "Hazelnut Latte", "desc": "Smooth latte with roasted hazelnut syrup and a foam heart.", "price": 190, "tags": ["hot", "bestseller"], "options": [{"name": "Size", "choices": [["Regular", 0], ["Large", 40]]}]},
+    {"id": "mocha", "world": "coffee", "name": "Dark Mocha", "desc": "Espresso, dark chocolate and steamed milk, finished with cocoa.", "price": 200, "tags": ["hot", "chocolate"]},
+    {"id": "espresso", "world": "coffee", "name": "Espresso", "desc": "A short, strong shot with a golden crema.", "price": 110, "tags": ["hot"]},
+    {"id": "choc", "world": "icecream", "name": "Belgian Chocolate Scoop", "desc": "Deep, bittersweet and made with real Belgian chocolate.", "price": 130, "tags": ["chocolate", "eggless", "bestseller"], "options": [{"name": "Serving", "choices": [["Cup", 0], ["Waffle cone", 30]]}]},
+    {"id": "mango", "world": "icecream", "name": "Alphonso Mango Scoop", "desc": "Made with ripe Alphonso pulp when the season is right.", "price": 140, "tags": ["fruity", "eggless"], "options": [{"name": "Serving", "choices": [["Cup", 0], ["Waffle cone", 30]]}]},
+    {"id": "pistachio", "world": "icecream", "name": "Pistachio Kulfi Scoop", "desc": "Slow-cooked milk, cardamom and roasted pistachio.", "price": 150, "tags": ["eggless"]},
+    {"id": "biscoff", "world": "icecream", "name": "Biscoff Sundae", "desc": "Vanilla scoops, caramel biscuit crumble and warm Biscoff sauce.", "price": 260, "tags": ["sundae"]},
+    {"id": "brownie", "world": "icecream", "name": "Sizzling Brownie", "desc": "Hot walnut brownie, vanilla ice cream and chocolate sauce.", "price": 290, "tags": ["sundae", "chocolate", "bestseller"]},
+    {"id": "americano", "world": "cold", "name": "Iced Americano", "desc": "Double espresso over ice with chilled water. Clean and bright.", "price": 150, "tags": ["cold"]},
+    {"id": "frappe", "world": "cold", "name": "Cold Coffee Frappe", "desc": "Thick, blended cold coffee topped with whipped cream.", "price": 190, "tags": ["cold", "bestseller"], "options": [{"name": "Size", "choices": [["Regular", 0], ["Large", 40]]}]},
+    {"id": "affogato", "world": "cold", "name": "Affogato", "desc": "A scoop of vanilla drowned in a fresh hot espresso shot.", "price": 220, "tags": ["cold", "hot"]},
+    {"id": "mangoshake", "world": "cold", "name": "Mango Shake", "desc": "Thick mango shake with a scoop of ice cream on top.", "price": 170, "tags": ["cold", "fruity"]}
+  ],
+  "action": {"mode": "cart", "label": "Order now", "cart": {"fulfil": ["Dine in", "Takeaway", "Delivery"], "deliveryFee": 40, "freeOver": 500, "taxPct": 5}},
+  "how": {"title": "Order in three steps", "steps": ["Pick your favourites from the menu", "Choose size and extras, then add to cart", "Place the order and confirm on WhatsApp"], "cta": "Start ordering", "do": "scroll:items", "facts": [["Pick up", "Ready in about 10 minutes"], ["Delivery", "Free over ₹500"], ["Payment", "Pay when you collect"]], "note": "Sample details. Replace with your real policies."},
+  "stories": [
+    {"name": "Riya P.", "role": "Regular · sample story", "text": "The hazelnut latte is the reason I stop by every evening after work."},
+    {"name": "Karan S.", "role": "Weekend visitor · sample story", "text": "Alphonso scoop in May is unbeatable. We always order two rounds."},
+    {"name": "Meera D.", "role": "Student · sample story", "text": "Great place to study late, and the cold coffee frappe keeps me going."},
+    {"name": "Aman J.", "role": "Family visit · sample story", "text": "The brownie sundae disappears in minutes. The kids ask to come back."}
+  ],
+  "tools": [
+    {"title": "Order for pickup", "text": "Choose your items and collect in minutes.", "do": "scroll:items", "icon": "<path d=\"M6 8h12l-1 12H7L6 8z\"/><path d=\"M9 8V6a3 3 0 0 1 6 0v2\"/>"},
+    {"title": "Our story", "text": "Small batches, honest ingredients.", "do": "page:about", "icon": "<path d=\"M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.5A4 4 0 0 1 19 10c0 5.5-7 10-7 10z\"/>"},
+    {"title": "Hours and directions", "text": "We are open late, every day.", "do": "page:contact", "icon": "<path d=\"M12 8v4l3 2\"/><circle cx=\"12\" cy=\"12\" r=\"9\"/>"}
+  ],
+  "band": {"eyebrow": "OPEN LATE", "title": "Late-night scoops, till midnight.", "text": "After dinner, after the movie, after everything. We are here.", "bg": "#C93A67", "ink": "#ffffff", "buttons": [{"label": "Order now", "do": "scroll:items"}, {"label": "Get directions", "do": "page:contact"}], "decor": ["cone", "bean"]},
+  "about": {"title": "About Brew & Scoop", "sub": "A small cafe with big flavours", "heading": "Coffee and ice cream, made slowly", "paragraphs": ["We roast, brew and churn in small batches so everything tastes fresh.", "Come for a coffee, stay for a scoop. Sample text: replace with your real story."], "values": [{"title": "Small batches", "text": "Made fresh every morning."}, {"title": "Real ingredients", "text": "Fruit, nuts and real chocolate."}, {"title": "Open late", "text": "Every day until midnight."}], "note": "Sample content. Replace before launch."},
+  "faqs": [{"q": "Is everything vegetarian?", "a": "Sample answer: replace with your real policy."}, {"q": "Do you take reservations?", "a": "Sample answer: replace with your real policy."}],
+  "footer": {"cols": [{"title": "Order", "links": [{"label": "Menu", "do": "scroll:worlds"}, {"label": "All items", "do": "scroll:items"}, {"label": "Cart", "do": "cart"}]}, {"title": "Cafe", "links": [{"label": "About", "do": "page:about"}, {"label": "Visit us", "do": "page:contact"}]}], "small": "Privacy · Terms"},
+  "images": {"cup": "images/cup.png", "cone": "images/cone.png", "coldcup": "images/coldcup.png", "bean": "images/bean.png"}
+}
