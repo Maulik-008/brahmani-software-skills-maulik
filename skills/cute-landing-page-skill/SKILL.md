@@ -1,9 +1,9 @@
 ---
-name: signature-site-studio
+name: cute-landing-page-skill
 description: Design and build a unique, modern, interactive website for any business from a one-line topic. Turns "cafe in Ahmedabad, coffee and ice cream" (or a clinic, salon, gym, shop, restaurant, studio, school, real-estate firm, NGO) into a finished single-file site with colour worlds, realistic 3D-rendered hero objects, glass nav, slow weighty motion, working filters, cart or booking forms, mobile layout, automated QA, publishing, and a Canva image-prompt pack. Also redesigns existing sites in the same style. Use this skill whenever the user asks to design, redesign, build, or "make a good/unique/modern" website, landing page, web design, brand site, or website concept for a business, or asks for a design canvas of website concepts, hero images for a site, or image prompts for a website, even if they never say "skill".
 ---
 
-# Signature Site Studio
+# Cute Landing Page Skill
 
 Builds websites with a distinct signature: **one colour world at a time, a single realistic hero object, type used as a shape, pills and glass, slow weighty motion, and real tools instead of brochure sections.** The taste was distilled from four reference sites and many rounds of feedback (the full story is in `references/01-design-dna.md`).
 
