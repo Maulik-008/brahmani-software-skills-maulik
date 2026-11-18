@@ -18,10 +18,24 @@ const setText = (sel, t) => { const e = $(sel); if (e) e.textContent = t || ''; 
 const digits = s => String(s || '').replace(/\D/g, '');
 const money = n => fmt(n);
 
+
+/* ---------- placeholder art for worlds without an image (abstract emblems) ---------- */
+(function () {
+  const shapes = [(c, b) => '<circle cx="100" cy="100" r="74" fill="' + c + '"/><circle cx="100" cy="100" r="40" fill="' + b + '"/>', (c, b) => '<rect x="36" y="36" width="128" height="128" rx="38" fill="' + c + '" transform="rotate(14 100 100)"/><circle cx="100" cy="100" r="30" fill="' + b + '"/>', (c, b) => '<path d="M100 28 L172 152 H28 Z" fill="' + c + '" stroke="' + c + '" stroke-width="20" stroke-linejoin="round"/><circle cx="100" cy="114" r="24" fill="' + b + '"/>', (c, b) => '<circle cx="70" cy="100" r="46" fill="' + c + '"/><circle cx="130" cy="100" r="46" fill="' + b + '"/>'];
+  W.forEach((w, i) => { if (!w.img || !IM[w.img]) { const k = '__ph' + i; IM[k] = 'data:image/svg+xml;utf8,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">' + shapes[i % shapes.length](w.dot || '#ffffff', w.tint || '#eeeeee') + '</svg>'); w.img = k; } });
+})();
+
 /* ---------- state ---------- */
 const st = { cart: [], orders: [] };
 try { const raw = JSON.parse(localStorage.getItem('sig_' + SLUG) || '{}'); if (Array.isArray(raw.cart)) st.cart = raw.cart.filter(l => l && item(l.id) && l.qty > 0).slice(0, 60); if (Array.isArray(raw.orders)) st.orders = raw.orders.slice(0, 10); } catch (e) {}
 const save = () => { try { localStorage.setItem('sig_' + SLUG, JSON.stringify({ cart: st.cart, orders: st.orders })); } catch (e) {} };
+function lumHex(hex) { const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim()); if (!m) return 1; const c = [0, 2, 4].map(i => parseInt(m[1].slice(i, i + 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4)); return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; }
+/* text colour for a white button: the band colour when it passes 4.5:1 on white, else near-black */
+function readableOnWhite(hex) {
+  const m = /^#?([0-9a-f]{6})$/i.exec(String(hex).trim()); if (!m) return '#15161A';
+  const c = [0, 2, 4].map(i => parseInt(m[1].slice(i, i + 2), 16) / 255).map(v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+  const L = 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2]; return 1.05 / (L + 0.05) >= 4.5 ? '#' + m[1] : '#15161A';
+}
 const ui = { hero: 0, p2: 0, f: { world: 'all', q: '', tag: 'any', sort: 'featured' }, sel: null, co: { step: 'cart', fulfil: '', name: '', phone: '', addr: '', note: '', done: null, err: '' }, form: { vals: {}, done: null }, sent: null };
 
 /* ---------- opening hours ---------- */
@@ -42,7 +56,7 @@ function openState() {
 
 /* ---------- static text ---------- */
 document.title = (C.meta && C.meta.title) || C.brand.name;
-$('#brand').textContent = C.brand.short || C.brand.name;
+$('#brand').textContent = C.brand.short || C.brand.name; $('#brand').dataset.i = (C.brand.short || C.brand.name).charAt(0);
 setText('#copy', '© ' + new Date().getFullYear() + ' ' + C.brand.name); setText('#fsmall', (C.footer && C.footer.small) || '');
 setText('#lblD', (C.hero && C.hero.pickLabel) || 'SELECT'); setText('#hW', T.worldsTitle || T.worlds); setText('#hWp', T.worldsSub || ''); setText('#hI', T.itemsTitle || T.items);
 setText('#fl1', T.findWorld || 'Collection'); setText('#fl2', T.findText || 'Search'); setText('#fl3', T.findTag || 'Filter'); $('#fQ').placeholder = T.findPlaceholder || 'Search by name';
@@ -52,7 +66,10 @@ $('#cartBtn').hidden = AC.mode !== 'cart';
 
 /* ---------- navigation ---------- */
 const NAV = (C.nav && C.nav.links) || [];
-$('#navLinks').innerHTML = NAV.map(l => l.type === 'page' ? '<a class="lk" href="#' + l.target + '" data-page="' + l.target + '">' + esc(l.label) + '</a>' : '<a class="lk" href="#' + l.target + '" data-s="' + l.target + '">' + esc(l.label) + '</a>').join('');
+const NSTYLE = (C.nav && C.nav.style) || 'pill', PRESET = (C.theme && C.theme.preset) || 'world';
+$('#nav').dataset.style = NSTYLE; document.body.dataset.nav = NSTYLE; document.body.dataset.preset = PRESET;
+const DEFICON = ['home', 'list', 'star', 'user', 'map', 'phone'];
+$('#navLinks').innerHTML = NAV.map((l, i) => NSTYLE === 'rail' ? '<a class="lk" title="' + esc(l.label) + '" href="#' + l.target + '" ' + (l.type === 'page' ? 'data-page' : 'data-s') + '="' + l.target + '">' + Blocks.ic(l.icon || DEFICON[i % 6], 22) + '<span>' + esc(l.label) + '</span></a>' : l.type === 'page' ? '<a class="lk" href="#' + l.target + '" data-page="' + l.target + '">' + esc(l.label) + '</a>' : '<a class="lk" href="#' + l.target + '" data-s="' + l.target + '">' + esc(l.label) + '</a>').join('');
 const chipCfg = CT.chip || { type: 'open' };
 function paintChip() {
   const b = $('#chipBtn'), b2 = $('#chipBtn2');
@@ -63,11 +80,24 @@ function paintChip() {
 }
 paintChip(); setInterval(paintChip, 60000);
 
+/* ---------- hero (layout switch) ---------- */
+const HL = (C.hero && C.hero.layout) || 'stage';
+const root = document.documentElement, compact = matchMedia('(max-width:900px),(max-height:560px)');
+const H = C.hero || {};
+let hero = $('#top'), navLight = false;
+let paintHero = () => {}, heroTimer = () => {}, heroGo = () => {};
+function actDo(spec) { /* data-do style actions: scroll:id | page:name | item:id | form | cart | world:id */
+  const [a, v] = String(spec).split(':');
+  if (a === 'scroll') scrollTo_(v); else if (a === 'page') Kit.open(v); else if (a === 'item') openItem(v); else if (a === 'form') Kit.open('form'); else if (a === 'cart') Kit.open('cart');
+  else if (a === 'world') { ui.f.world = v; renderItems(); syncFind(); scrollTo_('items'); } else if (a === 'contact') Kit.open('contact');
+}
+function scrollTo_(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
+$('#ctaTop').addEventListener('click', () => actDo((C.nav && C.nav.ctaDo) || (AC.mode === 'cart' ? 'scroll:items' : AC.mode === 'form' ? 'form' : 'contact')));
+Blocks.init({ C, IM, W, ITEMS, esc, fmt, ui, reduce, world, openState, actDo, scrollTo_, openItem, whatsappLink: s => whatsappLink(s), renderItems: () => renderItems(), syncFind: () => syncFind() });
+if (HL === 'stage') {
 /* ---------- hero ---------- */
-const hero = $('#top'), root = document.documentElement, compact = matchMedia('(max-width:900px),(max-height:560px)');
 function fit() { if (compact.matches) { root.style.setProperty('--k', 1); root.style.setProperty('--inv', 1); return; } const w = hero.clientWidth, h = hero.clientHeight, k = Math.min(w / 1440, h / 900); root.style.setProperty('--k', k.toFixed(5)); root.style.setProperty('--inv', (1 / k).toFixed(4)); }
 fit(); addEventListener('resize', fit); addEventListener('orientationchange', fit); if (compact.addEventListener) compact.addEventListener('change', fit);
-const H = C.hero || {};
 const obwrap = $('#obwrap'), obs = [];
 if (C.decor && C.decor[0]) $('#dx1').src = IM[C.decor[0]]; else $('#dx1').remove();
 if (C.decor && C.decor[1]) $('#dx2').src = IM[C.decor[1]]; else $('#dx2').remove();
@@ -75,10 +105,10 @@ W.forEach((w, i) => { const b = document.createElement('button'); b.className = 
 $('#dpicks').innerHTML = W.map((w, i) => '<button class="dp" type="button" data-hd="' + i + '" aria-pressed="false"><i style="background:' + (w.dot || '#fff') + '"></i>' + esc(w.name) + '</button>').join('');
 if (H.pick2) { $('#pick2wrap').hidden = false; setText('#lblV', H.pick2.label); $('#vpicks').innerHTML = H.pick2.options.map((o, i) => '<button class="vb" type="button" data-hv="' + i + '" aria-pressed="false">' + esc(o) + '</button>').join(''); }
 const featured = w => ITEMS.find(i => i.world === w.id && (i.tags || []).includes('bestseller')) || ITEMS.find(i => i.world === w.id);
-function paintHero() {
+paintHero = function () {
   const n = W.length, i = ui.hero, w = W[i], nx = W[(i + 1) % n]; if (!w) return;
   obs.forEach((b, k) => { const s = (k - i + n) % n; b.dataset.d = s; b.tabIndex = s === 1 ? 0 : -1; b.setAttribute('aria-hidden', s > 1); });
-  hero.style.setProperty('--bg', w.bg); hero.style.background = w.bg; hero.style.color = w.ink || '#fff';
+  hero.style.setProperty('--bg', w.bg); hero.style.background = w.bg; hero.style.color = w.ink || '#fff'; { const li = lumHex(w.ink || '#ffffff') > 0.5; document.documentElement.style.setProperty('--pill', li ? 'rgba(0,0,0,.24)' : 'rgba(255,255,255,.42)'); document.documentElement.style.setProperty('--pill-h', li ? 'rgba(0,0,0,.36)' : 'rgba(255,255,255,.58)'); }
   const m = $('meta[name=theme-color]'); if (m) m.setAttribute('content', w.bg);
   setText('#word', w.word || w.name.toUpperCase()); setText('#eb', w.name); setText('#h1', w.title); setText('#hp', w.blurb); setText('#nl', 'Next · ' + nx.name);
   $$('.dp').forEach((b, k) => b.setAttribute('aria-pressed', k === i)); $$('.vb').forEach(b => b.setAttribute('aria-pressed', +b.dataset.hv === ui.p2));
@@ -88,29 +118,27 @@ function paintHero() {
   $('#nxgo').dataset.id = f ? f.id : '';
 }
 let ht = null, hover = false;
-function heroGo(d) { ui.hero = (ui.hero + d + W.length) % W.length; paintHero(); heroTimer(); }
-function heroTimer() { clearTimeout(ht); if (reduce || W.length < 2) return; ht = setTimeout(() => { const vis = hero.getBoundingClientRect().bottom > 200; if (!hover && vis && !Kit.isOpen() && !document.hidden) heroGo(1); else heroTimer(); }, 7000); }
+heroGo = function (d) { ui.hero = (ui.hero + d + W.length) % W.length; paintHero(); heroTimer(); }
+heroTimer = function () { clearTimeout(ht); if (reduce || ui.paused || W.length < 2) return; ht = setTimeout(() => { const vis = hero.getBoundingClientRect().bottom > 200; if (!hover && vis && !Kit.isOpen() && !document.hidden) heroGo(1); else heroTimer(); }, 7000); }
+$('#hPause').addEventListener('click', e => { ui.paused = !ui.paused; e.currentTarget.setAttribute('aria-pressed', ui.paused); e.currentTarget.setAttribute('aria-label', ui.paused ? 'Resume autoplay' : 'Pause autoplay'); heroTimer(); }); if (reduce) $('#hPause').hidden = true;
 $('#hPrev').addEventListener('click', () => heroGo(-1)); $('#hNext').addEventListener('click', () => heroGo(1));
 $('#dpicks').addEventListener('click', e => { const b = e.target.closest('[data-hd]'); if (b) { ui.hero = +b.dataset.hd; paintHero(); heroTimer(); } });
 $('#vpicks').addEventListener('click', e => { const b = e.target.closest('[data-hv]'); if (b) { ui.p2 = +b.dataset.hv; paintHero(); } });
 $('#nxgo').addEventListener('click', e => { const id = e.currentTarget.dataset.id; if (id) openItem(id); });
-function actDo(spec) { /* data-do style actions: scroll:id | page:name | item:id | form | cart | world:id */
-  const [a, v] = String(spec).split(':');
-  if (a === 'scroll') scrollTo_(v); else if (a === 'page') Kit.open(v); else if (a === 'item') openItem(v); else if (a === 'form') Kit.open('form'); else if (a === 'cart') Kit.open('cart');
-  else if (a === 'world') { ui.f.world = v; renderItems(); syncFind(); scrollTo_('items'); } else if (a === 'contact') Kit.open('contact');
-}
 $('#heroP').textContent = (H.primary && H.primary.label) || 'Explore'; $('#heroP').addEventListener('click', () => actDo((H.primary && H.primary.do) || 'scroll:items'));
 $('#heroS').textContent = (H.secondary && H.secondary.label) || 'Learn more'; $('#heroS').addEventListener('click', () => actDo((H.secondary && H.secondary.do) || 'page:about'));
-$('#ctaTop').addEventListener('click', () => actDo((C.nav && C.nav.ctaDo) || (AC.mode === 'cart' ? 'scroll:items' : AC.mode === 'form' ? 'form' : 'contact')));
 hero.addEventListener('mouseenter', () => { hover = true; }); hero.addEventListener('mouseleave', () => { hover = false; hero.style.setProperty('--mx', 0); hero.style.setProperty('--my', 0); });
 hero.addEventListener('focusin', () => { hover = true; }); hero.addEventListener('focusout', () => { hover = false; });
 hero.addEventListener('pointermove', e => { if (e.pointerType === 'touch' || reduce || compact.matches) return; const r = hero.getBoundingClientRect(); hero.style.setProperty('--mx', (((e.clientX - r.left) / r.width) * 2 - 1).toFixed(3)); hero.style.setProperty('--my', (((e.clientY - r.top) / r.height) * 2 - 1).toFixed(3)); });
 let tx = null; hero.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true }); hero.addEventListener('touchend', e => { if (tx === null) return; const dx = e.changedTouches[0].clientX - tx; if (Math.abs(dx) > 50) heroGo(dx < 0 ? 1 : -1); tx = null; }, { passive: true });
-function scrollTo_(id) { const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' }); }
 
+}
+else {
+  const el = Blocks.mountHero(HL, C.hero || {}); if (el) { hero = el; navLight = el.dataset.tone === 'light'; if (C.hero && C.hero.nav) navLight = C.hero.nav === 'light'; }
+}
 /* ---------- scroll behaviour ---------- */
 const nav = $('#nav'), spyIds = NAV.filter(l => l.type !== 'page').map(l => l.target), spyEls = spyIds.map(id => document.getElementById(id)).filter(Boolean);
-function onScroll() { const y = scrollY, hh = hero.offsetHeight; nav.classList.toggle('solid', y > hh - 150); let cur = ''; spyEls.forEach(s => { if (s.offsetParent !== null && s.getBoundingClientRect().top < innerHeight * 0.45) cur = s.id; }); $$('.lk[data-s]').forEach(a => { a.classList.toggle('on', a.dataset.s === cur); if (a.dataset.s === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); }
+function onScroll() { const y = scrollY, hh = hero.offsetHeight; nav.classList.toggle('solid', navLight || y > hh - 150); let cur = ''; spyEls.forEach(s => { if (s.offsetParent !== null && s.getBoundingClientRect().top < innerHeight * 0.45) cur = s.id; }); $$('.lk[data-s]').forEach(a => { a.classList.toggle('on', a.dataset.s === cur); if (a.dataset.s === cur) a.setAttribute('aria-current', 'true'); else a.removeAttribute('aria-current'); }); }
 addEventListener('scroll', onScroll, { passive: true }); addEventListener('resize', onScroll); onScroll();
 $$('.lk[data-s],#brand').forEach(a => a.addEventListener('click', e => { e.preventDefault(); scrollTo_(a.getAttribute('href').slice(1)); }));
 $$('.lk[data-page]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); Kit.open(a.dataset.page); }));
@@ -126,7 +154,7 @@ const tagLabel = t => (C.tagLabels && C.tagLabels[t]) || t.charAt(0).toUpperCase
 const optTags = '<option value="any">Any</option>' + TAGS.map(t => '<option value="' + esc(t) + '">' + esc(tagLabel(t)) + '</option>').join('');
 $('#fTag').innerHTML = optTags; $('#iTag').innerHTML = optTags;
 $('#fWorld').innerHTML = '<option value="all">All</option>' + W.map(w => '<option value="' + w.id + '">' + esc(w.name) + '</option>').join('');
-$('#dgrid').innerHTML = W.map(w => '<button class="dcard" type="button" data-do="world:' + w.id + '" style="background:' + w.bg + ';color:' + (w.ink || '#fff') + '" aria-label="Open ' + esc(w.name) + '"><div class="t"><small>' + ITEMS.filter(i => i.world === w.id).length + ' ' + esc(T.countNoun || 'ITEMS').toUpperCase() + '</small><h3>' + esc(w.name) + '</h3><p>' + esc(w.short || w.blurb) + '</p></div><img src="' + IM[w.img] + '" alt="" draggable="false"><span class="ar">' + ARROW + '</span></button>').join('');
+$('#dgrid').innerHTML = W.map(w => '<button class="dcard" type="button" data-do="world:' + w.id + '" style="background:' + w.bg + ';color:' + (w.ink || '#fff') + '" aria-label="Open ' + esc(w.name) + '"><div class="t"><small>' + (ITEMS.filter(i => i.world === w.id).length ? ITEMS.filter(i => i.world === w.id).length + ' ' + esc(T.countNoun || 'ITEMS').toUpperCase() : esc((w.word || '').toUpperCase())) + '</small><h3>' + esc(w.name) + '</h3><p>' + esc(w.short || w.blurb) + '</p></div><img src="' + IM[w.img] + '" alt="" draggable="false"><span class="ar">' + ARROW + '</span></button>').join('');
 $('#fhelp').innerHTML = (T.popular && T.popular.length ? '<span>Popular:</span>' + T.popular.map(p => '<button type="button" data-do="quick:' + esc(p) + '">' + esc(p) + '</button>').join('') : '');
 function syncFind() { $('#fWorld').value = ui.f.world; $('#fQ').value = ui.f.q; $('#fTag').value = ui.f.tag; $('#iTag').value = ui.f.tag; $('#iSort').value = ui.f.sort; }
 function itemCard(it, idx) {
@@ -145,7 +173,7 @@ function renderItems() {
   if (f.sort === 'low') list.sort((a, b) => a.price - b.price); else if (f.sort === 'high') list.sort((a, b) => b.price - a.price); else if (f.sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
   setText('#iCount', list.length + ' of ' + ITEMS.length + ' shown');
   $('#wchips').innerHTML = [['all', 'All']].concat(W.map(w => [w.id, w.name])).map(c => '<button class="chip" type="button" data-do="wchip:' + c[0] + '" aria-pressed="' + (f.world === c[0]) + '">' + esc(c[1]) + '</button>').join('');
-  $('#igrid').innerHTML = list.length ? list.map(itemCard).join('') : '<div class="ok" style="grid-column:1/-1;background:#fff;border-radius:30px"><b style="font-size:18px">Nothing matches those filters</b><span class="muted">Try another collection or clear the filters.</span><button class="btn" type="button" id="iReset2">Clear filters</button></div>';
+  $('#igrid').innerHTML = list.length ? list.map(itemCard).join('') : '<div class="ok" style="grid-column:1/-1;background:var(--card);border-radius:30px"><b style="font-size:18px">' + (f.q ? 'No results for “' + esc(f.q) + '”' : 'Nothing matches those filters') + '</b><span class="muted">Try another collection, or clear the filters.</span><button class="btn" type="button" id="iReset2">Clear filters</button></div>';
   const r2 = $('#iReset2'); if (r2) r2.addEventListener('click', resetItems);
 }
 function resetItems() { ui.f = { world: 'all', q: '', tag: 'any', sort: 'featured' }; syncFind(); renderItems(); }
@@ -231,7 +259,7 @@ function submitForm() {
   const rows = []; let bad = null;
   (FORM.fields || []).forEach(f => {
     const el = $('#f-' + f.id); let v = f.type === 'chips' ? (ui.form.vals[f.id] || '') : (el ? el.value.trim() : ''); ui.form.vals[f.id] = v;
-    let msg = ''; if (f.required && !v) msg = 'This field is required.'; else if (v && f.type === 'email' && !/^\S+@\S+\.\S+$/.test(v)) msg = 'Enter a valid email address.'; else if (v && f.type === 'tel' && digits(v).length < 7) msg = 'Enter a phone number with at least 7 digits.'; else if (v && f.type === 'date' && v < today()) msg = 'Choose today or a later date.';
+    let msg = ''; if (f.required && !v) msg = 'Fill in this field.'; else if (v && f.type === 'email' && !/^\S+@\S+\.\S+$/.test(v)) msg = 'Enter a valid email address.'; else if (v && f.type === 'tel' && digits(v).length < 7) msg = 'Enter a phone number with at least 7 digits.'; else if (v && f.type === 'date' && v < today()) msg = 'Choose today or a later date.';
     Kit.setErr('e-f-' + f.id, msg, el); if (msg && !bad) bad = el || $('#sh-body'); if (v) rows.push([f.label, v]);
   });
   if (bad) { if (bad.focus) bad.focus(); return; }
@@ -299,11 +327,11 @@ if ((C.tools || []).length || S.length) $('#stories').hidden = false;
 const HW = C.how; if (HW) { $('#how').hidden = false; setText('#hHow', HW.title); $('#howList').innerHTML = (HW.steps || []).map((s, i) => '<li><span>' + (i + 1) + '</span>' + esc(s) + '</li>').join(''); setText('#howBtn', HW.cta || 'Start'); $('#howBtn').addEventListener('click', () => actDo(HW.do || 'scroll:items'));
   $('#howSide').innerHTML = (HW.image && IM[HW.image] ? '<figure class="bnr" style="margin:0 0 4px"><img src="' + IM[HW.image] + '" alt="' + esc(HW.imageAlt || '') + '" loading="lazy"><figcaption>' + esc(HW.imageCaption || '') + '</figcaption></figure>' : '') + ((HW.facts || []).length ? '<div class="sumbox">' + HW.facts.map(f => '<div><span>' + esc(f[0]) + '</span><span>' + esc(f[1]) + '</span></div>').join('') + '</div>' : '') + (HW.note ? '<p class="tw" style="margin:0">' + esc(HW.note) + '</p>' : ''); }
 const B = C.band; if (B) { $('#band').hidden = false; const bi = $('#bandIn'); bi.style.background = B.bg || '#1C1A2E'; bi.style.color = B.ink || '#fff';
-  bi.innerHTML = '<div style="display:flex;flex-direction:column;gap:14px;max-width:560px;position:relative"><span style="font-size:13px;font-weight:700;letter-spacing:.08em">' + esc(B.eyebrow || '') + '</span><h2>' + esc(B.title) + '</h2><p style="margin:0;font-size:17px;line-height:1.6">' + esc(B.text || '') + '</p><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">' + (B.buttons || []).map((b, i) => '<button type="button" data-do="' + esc(b.do) + '" style="height:58px;padding:0 28px;border-radius:999px;border:0;font-weight:700;font-size:17px;' + (i ? 'background:rgba(255,255,255,.2);color:inherit' : 'background:#fff;color:' + (B.bg || '#1C1A2E')) + '">' + esc(b.label) + '</button>').join('') + '</div></div>' + ((B.decor || []).length ? '<div class="ob2">' + B.decor.map((k, i) => '<img src="' + IM[k] + '" alt="" style="' + (i ? 'left:150px;top:110px;height:120px;width:auto;transform:rotate(12deg)' : 'left:20px;top:6px;height:236px;width:auto;transform:rotate(-8deg)') + '">').join('') + '</div>' : ''); }
+  bi.innerHTML = '<div style="display:flex;flex-direction:column;gap:14px;max-width:560px;position:relative"><span style="font-size:13px;font-weight:700;letter-spacing:.08em">' + esc(B.eyebrow || '') + '</span><h2>' + esc(B.title) + '</h2><p style="margin:0;font-size:17px;line-height:1.6">' + esc(B.text || '') + '</p><div style="display:flex;flex-wrap:wrap;gap:12px;margin-top:8px">' + (B.buttons || []).map((b, i) => '<button type="button" data-do="' + esc(b.do) + '" style="height:58px;padding:0 28px;border-radius:999px;border:0;font-weight:700;font-size:17px;' + (i ? (lumHex(B.ink || '#ffffff') > 0.5 ? 'background:rgba(0,0,0,.24);color:inherit' : 'background:rgba(255,255,255,.5);color:inherit') : 'background:#fff;color:' + readableOnWhite(B.bg || '#1C1A2E')) + '">' + esc(b.label) + '</button>').join('') + '</div></div>' + ((B.decor || []).length ? '<div class="ob2">' + B.decor.map((k, i) => '<img src="' + IM[k] + '" alt="" style="' + (i ? 'left:150px;top:110px;height:120px;width:auto;transform:rotate(12deg)' : 'left:20px;top:6px;height:236px;width:auto;transform:rotate(-8deg)') + '">').join('') + '</div>' : ''); }
 const F = C.footer || {};
 $('#fcols').innerHTML = '<div class="col" style="flex:1.4 1 260px"><b style="font-size:28px;letter-spacing:-.03em">' + esc(C.brand.name) + '</b><span style="color:#C9C8E8;max-width:290px;line-height:1.6">' + esc(C.brand.tagline || '') + '</span></div>' + (F.cols || []).map(c => '<div class="col"><b>' + esc(c.title) + '</b>' + c.links.map(l => '<button type="button" data-do="' + esc(l.do) + '">' + esc(l.label) + '</button>').join('') + '</div>').join('') + '<div class="col"><b>Find us</b>' + (CT.address ? '<span style="color:#C9C8E8">' + esc(CT.address) + '</span>' : '') + (CT.phone ? '<span style="color:#C9C8E8">' + esc(CT.phone) + '</span>' : '') + (CT.email ? '<span style="color:#C9C8E8">' + esc(CT.email) + '</span>' : '') + '</div>';
 
 /* ---------- init ---------- */
-syncFind(); renderItems(); paintHero(); paintCart(); heroTimer(); document.addEventListener('visibilitychange', heroTimer); reveal(); onScroll();
+syncFind(); renderItems(); paintHero(); paintCart(); heroTimer(); document.addEventListener('visibilitychange', heroTimer); Blocks.layout(); reveal(); onScroll();
 Kit.init();
 })();

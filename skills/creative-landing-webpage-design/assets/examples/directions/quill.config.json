@@ -1,0 +1,467 @@
+{
+ "meta": {
+  "slug": "quillwork",
+  "title": "Quillwork · Automations for clinics",
+  "description": "Automations that remove clinic admin.",
+  "refPrefix": "QW"
+ },
+ "brand": {
+  "name": "Quillwork",
+  "short": "Quillwork",
+  "tagline": "Automations that give clinic teams their afternoons back."
+ },
+ "currency": "$",
+ "locale": "en-US",
+ "theme": {
+  "preset": "noir"
+ },
+ "contact": {
+  "phone": "+00 00000 00000",
+  "whatsapp": "910000000000",
+  "email": "hello@example.com",
+  "address": "[Your address]",
+  "mapsUrl": "",
+  "chip": {
+   "type": "text",
+   "label": "Free 20-minute demo"
+  },
+  "hours": []
+ },
+ "nav": {
+  "style": "bar",
+  "cta": "Book a demo",
+  "ctaDo": "form",
+  "links": [
+   {
+    "label": "Examples",
+    "type": "scroll",
+    "target": "examples"
+   },
+   {
+    "label": "How it works",
+    "type": "scroll",
+    "target": "process"
+   },
+   {
+    "label": "Estimate",
+    "type": "scroll",
+    "target": "estimate"
+   },
+   {
+    "label": "Plans",
+    "type": "scroll",
+    "target": "plans"
+   },
+   {
+    "label": "FAQ",
+    "type": "scroll",
+    "target": "faq"
+   }
+  ]
+ },
+ "hero": {
+  "layout": "demo",
+  "title": "Stop doing the same admin by hand.",
+  "sub": "Watch a clinic task turn into an automatic workflow. Then find out which of your own tasks are worth automating.",
+  "primary": {
+   "label": "See examples",
+   "do": "scroll:examples"
+  },
+  "secondary": {
+   "label": "Book a demo",
+   "do": "form"
+  },
+  "nav": "dark",
+  "demo": {
+   "eyebrow": "For clinic teams",
+   "title": "Appointment reminders",
+   "status": "Running",
+   "done": "Complete",
+   "note": "Example with sample data.",
+   "speed": 850,
+   "word": "auto",
+   "proof": "Sample workflow shown. Replace with your real examples.",
+   "steps": [
+    {
+     "icon": "bolt",
+     "title": "Every day at 4 pm",
+     "sub": "Run started 16:00"
+    },
+    {
+     "icon": "download",
+     "title": "Read tomorrow’s schedule",
+     "sub": "4 rows read"
+    },
+    {
+     "icon": "branch",
+     "title": "Still booked?"
+    },
+    {
+     "icon": "branch",
+     "title": "Consent: opted out of texts?"
+    },
+    {
+     "icon": "shuffle",
+     "title": "Build the reminder text"
+    },
+    {
+     "icon": "send",
+     "title": "Send the reminder"
+    },
+    {
+     "icon": "database",
+     "title": "Log the send"
+    },
+    {
+     "icon": "bell",
+     "title": "Alert the owner on failures"
+    }
+   ]
+  }
+ },
+ "worlds": [
+  {
+   "id": "front",
+   "name": "Front desk",
+   "bg": "#1B1A21",
+   "dot": "#C8F169",
+   "tint": "#26252D",
+   "short": "Reminders and intake"
+  },
+  {
+   "id": "back",
+   "name": "Back office",
+   "bg": "#1B1A21",
+   "dot": "#8EC5FF",
+   "tint": "#26252D",
+   "short": "Billing and recalls"
+  }
+ ],
+ "items": [],
+ "action": {
+  "mode": "form",
+  "label": "Book a demo",
+  "form": {
+   "title": "Book a demo",
+   "intro": "Tell us about your clinic and the tasks that eat your time.",
+   "submitLabel": "Request a demo",
+   "successTitle": "Request received",
+   "success": "We will reply with a time within one working day.",
+   "fields": [
+    {
+     "id": "name",
+     "label": "Your name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "id": "email",
+     "label": "Work email",
+     "type": "email",
+     "required": true
+    },
+    {
+     "id": "clinic",
+     "label": "Clinic name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "id": "tasks",
+     "label": "Biggest time sink",
+     "type": "chips",
+     "options": [
+      "Reminders",
+      "Intake",
+      "Recalls",
+      "Reviews"
+     ],
+     "required": true
+    },
+    {
+     "id": "note",
+     "label": "Anything else?",
+     "type": "textarea"
+    }
+   ]
+  }
+ },
+ "page": {
+  "order": [
+   {
+    "block": "marquee",
+    "id": "ticker",
+    "style": "small",
+    "items": [
+     "Appointment reminders",
+     "Intake forms",
+     "Recall lists",
+     "Review requests",
+     "Referral letters",
+     "Invoice nudges"
+    ],
+    "speed": 46
+   },
+   {
+    "block": "bento",
+    "id": "examples",
+    "title": "Examples clinics start with",
+    "sub": "Small, boring tasks that quietly eat the week.",
+    "tiles": [
+     {
+      "type": "icon",
+      "icon": "bell",
+      "title": "Reminders",
+      "text": "Fewer no-shows without phone tag.",
+      "span": [
+       2,
+       1
+      ]
+     },
+     {
+      "type": "icon",
+      "icon": "mail",
+      "title": "Intake forms",
+      "text": "Collected before the visit, filed automatically."
+     },
+     {
+      "type": "icon",
+      "icon": "calendar",
+      "title": "Recalls",
+      "text": "Patients who are due get a nudge."
+     },
+     {
+      "type": "quote",
+      "text": "We stopped chasing forms on Mondays.",
+      "name": "Clinic manager, sample quote",
+      "span": [
+       2,
+       1
+      ]
+     },
+     {
+      "type": "icon",
+      "icon": "star",
+      "title": "Reviews",
+      "text": "A polite request after happy visits."
+     },
+     {
+      "type": "cta",
+      "label": "Find what fits my clinic",
+      "eyebrow": "Next",
+      "do": "scroll:estimate",
+      "bg": "#C8F169",
+      "ink": "#0D0D10"
+     }
+    ]
+   },
+   {
+    "block": "story",
+    "id": "process",
+    "title": "From idea to running",
+    "chapters": [
+     {
+      "kicker": "Connect",
+      "title": "Point it at your schedule",
+      "text": "Connect the tools you already use. Nothing to install on patient devices.",
+      "big": "Connect",
+      "bg": "#1B1A21"
+     },
+     {
+      "kicker": "Choose",
+      "title": "Pick the tasks that hurt",
+      "text": "Start with one workflow. We help you choose the one with the biggest win.",
+      "big": "Choose",
+      "bg": "#26252D"
+     },
+     {
+      "kicker": "Run",
+      "title": "Let it run, and watch",
+      "text": "Every run is logged, and failures alert the owner. You stay in control.",
+      "big": "Run",
+      "bg": "#1F2A12"
+     }
+    ]
+   },
+   {
+    "block": "estimator",
+    "id": "estimate",
+    "title": "What could you get back?",
+    "sub": "Sample math. Your demo will use your real numbers.",
+    "resultLabel": "Hours back each month",
+    "suffix": " h",
+    "prefix": "",
+    "base": 0,
+    "note": "Sample estimate, not a guarantee.",
+    "cta": {
+     "label": "Book a demo",
+     "do": "form"
+    },
+    "fields": [
+     {
+      "id": "appts",
+      "label": "Appointments per week",
+      "type": "range",
+      "min": 20,
+      "max": 400,
+      "step": 10,
+      "value": 120,
+      "unit": "/week",
+      "rate": 0.22
+     },
+     {
+      "id": "tasks",
+      "label": "Tasks to automate",
+      "type": "select",
+      "options": [
+       [
+        "Reminders only",
+        6
+       ],
+       [
+        "Reminders and intake",
+        14
+       ],
+       [
+        "Everything above",
+        26
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "block": "compare",
+    "id": "plans",
+    "mode": "table",
+    "title": "Plans",
+    "sub": "Sample plan names and features.",
+    "cols": [
+     "Starter",
+     "Clinic",
+     "Group"
+    ],
+    "hl": 1,
+    "rows": [
+     [
+      "Automations",
+      "5",
+      "20",
+      "Unlimited"
+     ],
+     [
+      "Reminders and recalls",
+      true,
+      true,
+      true
+     ],
+     [
+      "Intake forms",
+      false,
+      true,
+      true
+     ],
+     [
+      "Multi-location",
+      false,
+      false,
+      true
+     ],
+     [
+      "Priority support",
+      false,
+      true,
+      true
+     ]
+    ]
+   },
+   {
+    "block": "faq",
+    "id": "faq",
+    "title": "Questions",
+    "items": [
+     {
+      "q": "Do you store patient data?",
+      "a": "Sample answer: replace with your real data policy."
+     },
+     {
+      "q": "How long does setup take?",
+      "a": "Sample answer: replace with your real timeline."
+     },
+     {
+      "q": "Can we try one workflow first?",
+      "a": "Sample answer: replace with your real offer."
+     }
+    ]
+   },
+   "band"
+  ]
+ },
+ "band": {
+  "eyebrow": "READY WHEN YOU ARE",
+  "title": "Give your team their afternoons back.",
+  "text": "A short call, one workflow, no commitment.",
+  "bg": "#C8F169",
+  "ink": "#0D0D10",
+  "buttons": [
+   {
+    "label": "Book a demo",
+    "do": "form"
+   },
+   {
+    "label": "Contact us",
+    "do": "page:contact"
+   }
+  ]
+ },
+ "about": {
+  "title": "About Quillwork",
+  "sub": "Sample page",
+  "heading": "Boring tasks, handled",
+  "paragraphs": [
+   "Sample text. Replace with your story."
+  ],
+  "values": [
+   {
+    "title": "Plain language",
+    "text": "No jargon."
+   },
+   {
+    "title": "You stay in control",
+    "text": "Every run is visible."
+   }
+  ]
+ },
+ "footer": {
+  "cols": [
+   {
+    "title": "Product",
+    "links": [
+     {
+      "label": "Examples",
+      "do": "scroll:examples"
+     },
+     {
+      "label": "Plans",
+      "do": "scroll:plans"
+     }
+    ]
+   },
+   {
+    "title": "Company",
+    "links": [
+     {
+      "label": "About",
+      "do": "page:about"
+     },
+     {
+      "label": "Contact",
+      "do": "page:contact"
+     }
+    ]
+   }
+  ],
+  "small": "Privacy · Terms"
+ },
+ "images": {}
+}

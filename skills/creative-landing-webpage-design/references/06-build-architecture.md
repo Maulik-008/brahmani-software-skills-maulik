@@ -1,6 +1,6 @@
 # 06 · Build architecture and config reference
 
-Contents: how the pieces fit · quick start commands · full config reference · extending the scaffold · the sheet kit API · publishing constraints · editing after publish · bug catalogue (lessons) · performance and accessibility.
+Contents: how the pieces fit · layouts, presets and blocks (v2) · quick start commands · full config reference · extending the scaffold · the sheet kit API · publishing constraints · editing after publish · bug catalogue (lessons) · performance and accessibility.
 
 ## How the pieces fit
 
@@ -16,6 +16,47 @@ scripts/test_site.py site.html ─► pass/fail list + screenshots in qa/
 - `assets/kit/kit.css` and `kit.js` provide sheets (drawer and page), toast, focus trap, inert handling, hash routing, validation helpers.
 - `build_site.py` validates (missing images, unknown worlds, contrast of world colours), compresses images, injects theme variables and Google Fonts, and writes the file.
 - `assets/examples/pulse-hospital-template.html` is the full hospital site (slot booking, doctors, department sheets, manage appointment). Copy its logic when a project needs slot booking.
+
+## Layouts, presets and blocks (v2)
+
+The scaffold now supports ten directions. Choose with `scripts/direction.py` (see `02-concept-engine.md` section 0), then set these keys.
+
+| Key | Values and options |
+| --- | --- |
+| `theme.preset` | `world` (default), `paper`, `noir`, `brutal`, `glass`, `sticker`, `luxe`. A preset sets colour variables, fonts and a block of CSS; explicit `theme` keys override it |
+| `nav.style` | `pill`, `bar`, `rail`. `rail` uses `nav.links[].icon` (names: home, list, star, user, map, phone, heart, calendar, clock, search, bag, mail, bolt, bell, spark) |
+| `hero.layout` | `stage` (default), `editorial`, `frame`, `demo`, `bento` |
+| `hero.nav` | `light` or `dark`: whether the nav is solid from the start (default: light for editorial and bento) |
+| `hero.editorial` | `lines` (array of lines; each part is a string, `{"em":"text"}` for an italic accent, or `{"img":"key","world":"id"}` for an inline image chip), `eyebrow`, `corner`, `sub`, `art` (up to 3 image keys) |
+| `hero.frame` | `image` (key of a photo or still life), `bg`, `tint`, `eyebrow`, `side` (`label`, `title`, `text`), `search:false` to hide the search pill |
+| `hero.demo` | `eyebrow`, `title`, `status`, `done`, `note`, `speed` (ms), `word` (ghost word), `proof`, `steps[]` (`icon`, `title`, `sub`) |
+| `hero.bento.tiles[]` | `type` = `headline`, `world`, `image`, `status`, `cta`, `stat`, `quote`, `text`, `icon`; `span:[cols,rows]` on a 4-column grid; `bg`, `ink` |
+| `page.order` | Ordered list of section ids (`find`, `worlds`, `items`, `how`, `stories`, `band`) and block specs. Sections not listed are hidden |
+
+Block specs (`{"block": type, "id": "...", "title": "...", "sub": "..."}` plus):
+
+| Block | Options |
+| --- | --- |
+| `marquee` | `items` (strings and `{"img":key}`), `style:"small"`, `speed` (seconds), `bg`, `ink` |
+| `bento` | `tiles[]` (same tile types as the hero) |
+| `story` | `chapters[]`: `kicker`, `title`, `text`, `img`, `big` (large background word), `bg` |
+| `compare` | `mode:"table"` with `cols`, `rows` (values may be `true`/`false`), `hl` (highlighted column); or slider with `before` and `after` (`img`, `label`, `bg`) |
+| `estimator` | `fields[]` (`type:"range"` with `min`, `max`, `step`, `value`, `unit`, `rate`; or `type:"select"` with `options:[[label, amount]]`), `base`, `prefix`, `suffix`, `resultLabel`, `note`, `cta:{label,do}` |
+| `gallery` | `items[]`: `img`, `caption`, `bg`, `w`, `cover:true` for photos |
+| `faq` | `items[]`: `q`, `a` |
+| `schedule` | `classes[]`: `day` (0 = Sunday), `time`, `name`, `level`, `teacher`; `cta`, `do` |
+| `reviews` | `items[]`: `text`, `name`, `role`; `speed` |
+| `team` | `people[]`: `name`, `role`, `img`, `bg`, `bio` |
+| `stats` | `items[]`: `value`, `label` (only real numbers) |
+| `map` | `pins[]`: `name`, `note`, `x`, `y` (percent) |
+
+Worlds without an image get an abstract emblem automatically, so image-free sites (software, services) work. Existing images are referenced by key; photos (`jpg`) can be used for `frame.image`, `team`, `gallery` and item `img`. To add a new block, add a renderer to `assets/scaffold/blocks.js` and styles to `blocks.css`.
+
+Helper scripts added for v2: `direction.py` (propose a direction), `sameness_check.py` (compare two configs), `compose_scene.py` (still-life backdrops from rendered objects), `scenes_misc.py` (gym objects). Example configs of four directions are in `assets/examples/directions/`.
+
+### Craft defaults the scaffold now applies (do not undo them)
+
+Ring shadows (`--shadow-ring`) on chips, 44 px touch targets, `scale .96` press feedback, `text-wrap` balance and pretty, tabular numerals on prices and counters, 1 px neutral outlines on photographs (`--img-outline`), `overflow-wrap: anywhere` on card text, pause buttons on the stage hero and marquees, reduced-motion handling, `<html lang>` from `meta.lang` (default `en`), and per-world pill veils (`--pill`, `--pill-h`) that keep hero controls readable. The frame hero samples its image and switches between dark glass with white text and frosted white glass with dark text (`data-glass="light"`). The closing band chooses a readable button colour. Set `meta.lang` for non-English sites (for example `"hi"`, `"gu"`).
 
 ## Quick start
 

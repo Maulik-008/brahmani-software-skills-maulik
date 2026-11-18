@@ -6,11 +6,12 @@ Contents: the build loop · design-first flow · gates · testing commands · wh
 
 ## The build loop
 
-1. Concept one-pager (`02`). Decide worlds, objects, tool, variation axes.
+0. **Direction** (`02` section 0): run `scripts/direction.py`, avoid the previous site's direction, save the card as `direction.json`.
+1. Concept one-pager (`02`). Decide worlds or sections, imagery language, tool, extra efforts and the surprise.
 2. Render or collect imagery (`04`). View every image on the world colour.
 3. Write `site.config.json`. Content is specific, short, and honest.
 4. `build_site.py`. Fix every warning (contrast, missing images).
-5. `test_site.py`. Fix every failure.
+5. `test_site.py`, then `sameness_check.py previous.json new.json`. Fix every failure.
 6. **Look at the screenshots** in `qa/`: hero for every world, items, sheets, mobile. Fix what looks wrong. Rebuild. Retest.
 7. Publish (Artifact tool, same `url` for updates) or save to outputs. Write the prompt pack if photography is needed.
 8. Hand off in the template below.
@@ -39,7 +40,7 @@ If the user says "design first", "don't build the HTML yet", or "show me 3 conce
 
 **Performance gate.** Output under 14 MB (typically under 2 MB). Fonts are Google Fonts only.
 
-**Uniqueness gate.** Put this site next to the previous one. If a stranger could swap their logos, change a variation axis (display face, corner style, texture, motion, hero layout) or the whole world logic.
+**Uniqueness gate.** `sameness_check.py` passes (similarity at most 0.55) against every earlier site in the conversation. Put this site next to the previous one: if a stranger could swap their logos, change the direction (preset and hero layout first). The site carries at least three extra efforts and the surprise from `10-domain-creativity.md`, implemented for real.
 
 ## Testing commands
 
@@ -59,6 +60,8 @@ The script exits non-zero on any failure and prints the failed checks. It writes
 - Cards have varied rotations or photos, not a wall of the same image. If every item shows the same world object, tell the user per-item photos or renders would lift the page (and offer them).
 - Sheets are not cut off; the footer button is visible; error text is readable.
 - Mobile: brand, cart and menu fit in the nav; the hero stacks cleanly; the grid is two columns for product catalogues.
+- Per hero layout: **editorial**: headline fits without clipping and image chips sit on the baseline, art tiles do not touch the buttons; **frame**: text card readable over the image, search pill fits on phones; **demo**: the card replays and stops at Complete; **bento**: no empty grid cells, tiles stack in two columns on phones; **stage**: object grounded, decor clear of the next card.
+- Per block: marquee moves and pauses on hover; story visual swaps and the progress bar fills; estimator updates live; schedule days switch; compare slider moves with keyboard arrows; map pins highlight the list row.
 
 ## Honesty rules
 
@@ -88,3 +91,10 @@ One question: <the choice that matters most next>.
 - "Make it more unique": change two variation axes and the hero object; do not just recolour.
 - "Prompts for Canva": produce the prompt pack (`08`).
 - Small edits: Artifact `edit` action. Big edits: rebuild and republish to the same URL.
+
+
+## Interface audit (automatic, part of `test_site.py`)
+
+`test_site.py` now ends with `audit.py` and prints a verdict: **Block** (any HIGH), **Needs changes** (any MEDIUM or LOW), **Approve** (none). It checks: accessible names, image alt, `lang`, zoom lock, landmarks and skip link, a 70-stop keyboard walk for visible focus, measured text and icon contrast against what is actually painted behind each element (pixel-measured over images), contrast in every hero world, 320 px and 200 % zoom reflow, reduced motion, pause controls, target sizes, `transition: all`, 16 px inputs, and with `--stress` long unbreakable strings. Fix every HIGH before showing anything; fix MEDIUM and LOW unless there is a stated reason. Rules and fixes: `11` to `14`.
+
+Limits to state in the handoff: dimmed inactive states (for example not-yet-run steps in the demo hero) are not audited; contrast measured from pixels uses the 10th and 90th percentile background; fonts that fail to load in the sandbox are not verified; a human still needs to look at the screenshots, because the audit cannot judge taste.

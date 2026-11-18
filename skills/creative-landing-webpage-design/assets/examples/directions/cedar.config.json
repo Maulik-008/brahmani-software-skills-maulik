@@ -1,0 +1,374 @@
+{
+ "meta": {
+  "slug": "cedar",
+  "title": "Cedar Row Health",
+  "description": "Specialist clinic.",
+  "refPrefix": "CR"
+ },
+ "brand": {
+  "name": "Cedar Row Health",
+  "short": "Cedar Row",
+  "tagline": "Specialist care, calmly delivered."
+ },
+ "currency": "$",
+ "locale": "en-US",
+ "theme": {
+  "preset": "glass"
+ },
+ "contact": {
+  "phone": "+00 00000 00000",
+  "whatsapp": "910000000000",
+  "email": "hello@example.com",
+  "address": "[Your address]",
+  "mapsUrl": "",
+  "chip": {
+   "type": "open"
+  },
+  "hours": [
+   {
+    "label": "Mon to Fri",
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "open": "08:00",
+    "close": "18:00"
+   },
+   {
+    "label": "Saturday",
+    "days": [
+     6
+    ],
+    "open": "09:00",
+    "close": "13:00"
+   }
+  ]
+ },
+ "nav": {
+  "style": "rail",
+  "cta": "Book",
+  "ctaDo": "form",
+  "links": [
+   {
+    "label": "Home",
+    "type": "scroll",
+    "target": "top",
+    "icon": "home"
+   },
+   {
+    "label": "Departments",
+    "type": "scroll",
+    "target": "worlds",
+    "icon": "heart"
+   },
+   {
+    "label": "Doctors",
+    "type": "scroll",
+    "target": "doctors",
+    "icon": "user"
+   },
+   {
+    "label": "Find us",
+    "type": "scroll",
+    "target": "where",
+    "icon": "map"
+   },
+   {
+    "label": "Contact",
+    "type": "page",
+    "target": "contact",
+    "icon": "phone"
+   }
+  ]
+ },
+ "hero": {
+  "layout": "frame",
+  "title": "Care that feels calm.",
+  "sub": "Heart, brain and joint specialists in one quiet building, with time to listen.",
+  "primary": {
+   "label": "Request an appointment",
+   "do": "form"
+  },
+  "secondary": {
+   "label": "Meet the doctors",
+   "do": "scroll:doctors"
+  },
+  "frame": {
+   "image": "still",
+   "eyebrow": "Specialist clinic",
+   "tint": "rgba(28,26,46,.10)",
+   "side": {
+    "label": "THIS WEEK",
+    "title": "Morning clinics open",
+    "text": "Same-week appointments are often available. Sample text."
+   }
+  }
+ },
+ "text": {
+  "worldsTitle": "Departments",
+  "worldsSub": "Three specialist centres, one calm waiting room.",
+  "findWorld": "Department",
+  "findText": "Search",
+  "findPlaceholder": "Try heart or migraine",
+  "countNoun": "services"
+ },
+ "worlds": [
+  {
+   "id": "cardio",
+   "name": "Cardiology",
+   "word": "HEART",
+   "bg": "#C03A4F",
+   "dot": "#FF8FA0",
+   "tint": "#FBD3DA",
+   "img": "heart",
+   "title": "Hearts in good hands",
+   "blurb": "Prevention, diagnosis and treatment.",
+   "short": "Heart health and rhythm."
+  },
+  {
+   "id": "neuro",
+   "name": "Neurology",
+   "word": "BRAIN",
+   "bg": "#5B3FD1",
+   "dot": "#B7A2FF",
+   "tint": "#DDD3FF",
+   "img": "neuron",
+   "title": "Clear minds",
+   "blurb": "Brain, spine and nerves.",
+   "short": "Brain and nerves."
+  },
+  {
+   "id": "ortho",
+   "name": "Orthopaedics",
+   "word": "JOINTS",
+   "bg": "#1F6FEB",
+   "dot": "#9CC3FF",
+   "tint": "#D1E2FF",
+   "img": "knee",
+   "title": "Move freely",
+   "blurb": "Bone, joint and muscle care.",
+   "short": "Joints and sport."
+  }
+ ],
+ "items": [],
+ "action": {
+  "mode": "form",
+  "label": "Book",
+  "form": {
+   "title": "Request an appointment",
+   "intro": "In an emergency, call your local emergency number. Do not use this form.",
+   "submitLabel": "Request appointment",
+   "successTitle": "Request received",
+   "success": "We will call you to confirm a time.",
+   "fields": [
+    {
+     "id": "name",
+     "label": "Full name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "id": "phone",
+     "label": "Phone",
+     "type": "tel",
+     "required": true
+    },
+    {
+     "id": "dept",
+     "label": "Department",
+     "type": "chips",
+     "options": [
+      "Cardiology",
+      "Neurology",
+      "Orthopaedics"
+     ],
+     "required": true
+    },
+    {
+     "id": "date",
+     "label": "Preferred date",
+     "type": "date",
+     "required": true
+    },
+    {
+     "id": "note",
+     "label": "Reason for visit",
+     "type": "textarea"
+    }
+   ]
+  }
+ },
+ "page": {
+  "order": [
+   "worlds",
+   {
+    "block": "team",
+    "id": "doctors",
+    "title": "Meet the doctors",
+    "sub": "Illustrative portraits and sample bios. Replace with your real team.",
+    "people": [
+     {
+      "name": "Dr. Amara Okafor",
+      "role": "Interventional cardiology",
+      "img": "okafor",
+      "bg": "#FBD3DA",
+      "bio": "Sample bio."
+     },
+     {
+      "name": "Dr. Priya Raman",
+      "role": "Stroke and epilepsy",
+      "img": "raman",
+      "bg": "#DDD3FF",
+      "bio": "Sample bio."
+     },
+     {
+      "name": "Dr. Elena Petrova",
+      "role": "Joint replacement",
+      "img": "petrova",
+      "bg": "#D1E2FF",
+      "bio": "Sample bio."
+     },
+     {
+      "name": "Dr. Daniel Weiss",
+      "role": "Cardiac rhythm",
+      "img": "weiss",
+      "bg": "#FBD3DA",
+      "bio": "Sample bio."
+     }
+    ]
+   },
+   {
+    "block": "map",
+    "id": "where",
+    "title": "Where to find us",
+    "sub": "Stylised map. Replace with your real locations.",
+    "pins": [
+     {
+      "name": "Cedar Row Main",
+      "x": 46,
+      "y": 42,
+      "note": "Cardiology and neurology"
+     },
+     {
+      "name": "Riverside Clinic",
+      "x": 72,
+      "y": 64,
+      "note": "Orthopaedics and rehab"
+     },
+     {
+      "name": "Parkview Drop-in",
+      "x": 24,
+      "y": 68,
+      "note": "Morning walk-in clinic"
+     }
+    ]
+   },
+   {
+    "block": "faq",
+    "id": "faq",
+    "title": "Good to know",
+    "items": [
+     {
+      "q": "Do I need a referral?",
+      "a": "Sample answer: replace with your real policy."
+     },
+     {
+      "q": "Which insurance do you accept?",
+      "a": "Sample answer: replace with your real list."
+     },
+     {
+      "q": "What should I bring?",
+      "a": "Sample answer: replace with your real list."
+     }
+    ]
+   },
+   "band"
+  ]
+ },
+ "band": {
+  "eyebrow": "WE ARE HERE",
+  "title": "Book a calm appointment.",
+  "text": "Tell us what you need. We will take it from there.",
+  "bg": "#4B3F9E",
+  "ink": "#FFFFFF",
+  "buttons": [
+   {
+    "label": "Request appointment",
+    "do": "form"
+   },
+   {
+    "label": "Contact",
+    "do": "page:contact"
+   }
+  ]
+ },
+ "about": {
+  "title": "About Cedar Row",
+  "sub": "Sample page",
+  "heading": "Unhurried care",
+  "paragraphs": [
+   "Sample text. Replace with your story."
+  ],
+  "values": [
+   {
+    "title": "Time to listen",
+    "text": "Longer visits."
+   },
+   {
+    "title": "One building",
+    "text": "Specialists together."
+   }
+  ]
+ },
+ "footer": {
+  "cols": [
+   {
+    "title": "Care",
+    "links": [
+     {
+      "label": "Departments",
+      "do": "scroll:worlds"
+     },
+     {
+      "label": "Doctors",
+      "do": "scroll:doctors"
+     }
+    ]
+   }
+  ],
+  "small": "Privacy · Terms"
+ },
+ "images": {
+  "heart": "images/heart.png",
+  "neuron": "images/neuron.png",
+  "knee": "images/knee.png",
+  "still": {
+   "path": "images/still.jpg",
+   "max": 1920,
+   "q": 80
+  },
+  "okafor": {
+   "path": "images/okafor.jpg",
+   "max": 480,
+   "q": 80
+  },
+  "raman": {
+   "path": "images/raman.jpg",
+   "max": 480,
+   "q": 80
+  },
+  "petrova": {
+   "path": "images/petrova.jpg",
+   "max": 480,
+   "q": 80
+  },
+  "weiss": {
+   "path": "images/weiss.jpg",
+   "max": 480,
+   "q": 80
+  }
+ }
+}

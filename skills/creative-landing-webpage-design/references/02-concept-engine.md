@@ -2,7 +2,24 @@
 
 The user may give only a topic ("cafe in Ahmedabad, coffee and ice cream are the main things"). Turn it into a specific, memorable concept by working through the steps below. Do the thinking first; write the config second. Keep the user-facing summary short.
 
-Contents: 1 read the topic · 2 local and cultural lens · 3 find the worlds · 4 choose hero objects · 5 signature interaction · 6 structure · 7 voice and copy · 8 variation axes · 9 diverge, then converge · 10 concept one-pager.
+Contents: 0 choose a direction · 1 read the topic · 2 local and cultural lens · 3 find the worlds · 4 choose hero objects · 5 signature interaction · 6 structure · 7 voice and copy · 8 variation axes · 9 diverge, then converge · 10 concept one-pager.
+
+## 0. Choose a direction first (anti-sameness)
+
+Before designing anything, decide the *direction* so the site does not collapse into the last one.
+
+```bash
+python scripts/direction.py "<the user's topic>" --avoid-file <previous site>/direction.json --json <new site>/direction.json
+```
+
+It maps the topic to domains and returns an archetype (preset, hero layout, nav style, block list, imagery language, motion personality, type pair, accent, corners), plus the domain's **extra efforts** and one **surprise**. Use `--seed N` to re-roll, `--list` to see all ten archetypes, `--avoid preset:world,hero:stage` to exclude. If this is the first site in the conversation, there is nothing to avoid, but the original sunlit-worlds look is still penalised so it is not the automatic answer.
+
+Rules:
+
+1. The new site must differ from the previous one on **preset and hero layout** at minimum (`scripts/sameness_check.py old.json new.json` must pass).
+2. You may override the engine, but only for a reason you can state in one sentence (for example, "the user's reference sites are all saturated product worlds").
+3. Implement at least **three extra efforts** and **the surprise** for real. They are what make the site better for its users, not just different (`10-domain-creativity.md`).
+4. Keep the direction card (the JSON) next to the config and mention the direction in your concept one-pager.
 
 ## 1. Read the topic
 
@@ -78,7 +95,7 @@ Default order: hero with worlds, find bar overlapping the hero, collections grid
 
 ## 8. Variation axes (so no two sites look alike)
 
-Pick one option per axis on purpose and write the choice in the concept one-pager.
+The direction engine (section 0) fixes the big axes (preset, hero layout, nav style, block list). The table below lists the secondary choices you still make by hand. Write every choice in the concept one-pager.
 
 | Axis | Options |
 | --- | --- |
@@ -90,12 +107,13 @@ Pick one option per axis on purpose and write the choice in the concept one-page
 | Texture | Grain 0.17 (default), heavy 0.3, none (`theme.grain`) |
 | Motion | Weighty 1.2 to 1.6 s (default), snappy 0.6 s for sport and nightlife |
 | Card voice | Tilted sticker cards with hard shadows, clean soft shadows, flat outlines |
-| Hero layout | Object stage (default), split with photo card, full-bleed tinted photo with frosted cards, typographic marquee. Non-default layouts need CSS changes; see `06-build-architecture.md` |
-| Nav | Top pill (default), vertical rail, bottom dock on mobile |
+| Hero layout | `stage`, `editorial`, `frame`, `demo`, `bento` (all built in; see `09-pattern-library.md`) |
+| Nav | `pill`, `bar`, `rail` (built in); a bottom tab bar is a custom extension |
+| Preset | `world`, `paper`, `noir`, `brutal`, `glass`, `sticker`, `luxe` |
 
 ## 9. Diverge, then converge
 
-Before choosing, sketch three genuinely different directions in your head (10 seconds each): different world logic, different hero objects, different interaction. For the Ahmedabad cafe example:
+The direction engine already gave you a visual direction. Now sketch three genuinely different *concepts* in your head (10 seconds each): different world logic, different hero objects or imagery language, different interaction. Pair the best concept with the engine's direction (or with one of its `runnersUp` if the concept fits it better). For the Ahmedabad cafe example:
 
 - **A. Brew & Scoop.** Three product worlds (Coffee, Ice cream, Cold and shakes), cup, cone and iced cup as heroes, cart with WhatsApp checkout.
 - **B. Midnight Scoop.** Worlds are times of day (Morning brew, Afternoon chill, Late-night scoop) that follow the clock; dark mode at night; open-now chip is the star.

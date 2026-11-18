@@ -62,3 +62,8 @@ All secondary pages are sheets from `kit.js`: a desktop page sheet (centred) or 
 ## What not to animate
 
 Do not animate `width`, `height`, `top`, `left` or box shadows on large areas. Animate `transform`, `opacity`, `filter` and the CSS `translate` property. Keep blur filters on small objects only.
+
+
+## Small-motion rules (from `11-interface-craft.md`)
+
+The signature curve is for brand moments. Everything small follows these: press feedback `scale: .96` (150 ms, ease-out, never below .95); interactive state changes use transitions (they retarget mid-flight), keyframes only for one-shot sequences; staged entrances stagger about 100 ms with opacity, 12 px rise and 4 px blur over about 400 ms; exits are shorter and softer (150 ms, 12 px); icon swaps cross-fade with scale .25 to 1, blur 4 px to 0, bounce 0; no custom animation on high-frequency interactions; motion is never the only feedback; moving content longer than 5 s has a visible pause control; `prefers-reduced-motion` removes movement. The scaffold ships the pause buttons and the reduced-motion handling; keep them when you customise.

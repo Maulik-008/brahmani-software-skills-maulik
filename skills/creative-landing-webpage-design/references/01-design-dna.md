@@ -1,5 +1,7 @@
 # 01 · Design DNA
 
+> **Read this first.** The "eight signature moves" below come from the four reference sites and are a **toolkit, not a template**. After the first builds, real feedback showed that sites made with only these moves (colour field, hero object, ghost word, pill nav) all looked "almost the same". The invariants of this skill are the *values* underneath: real tools, realism and depth, honesty, motion discipline, accessibility, and a visual language that is ownable. The *surface* (the sunlit-worlds look) is one of ten directions; see `09-pattern-library.md` and run `scripts/direction.py` before every build.
+
 This is the taste the skill encodes. It was derived by analysing four reference sites in depth (Creamy ice cream, Puffy puffer jacket, Bowl smoothie bowl, Lunar Homes real estate) and then refined through many rounds of real feedback while building three hospital concepts and one full hospital site. Read it before concept work, and again before the final review.
 
 Contents: the eight signature moves · calm-to-playful dial · realism lessons · anti-patterns · taste test.
@@ -50,6 +52,20 @@ The first hospital imagery was inflated, glossy "balloon" shapes. The user calle
 - Mixed corner radii, three font families, body text below 15 px, low-contrast grey text.
 - A hero that cannot be read at 1280x600 or 390x844.
 
+## Sameness diagnostics (run before showing anything)
+
+If two or more of these are true, the site is probably a repeat. Change direction, not just colour.
+
+- The hero has a saturated colour field, a ghost word and a hero object (the stage look) and the previous site did too.
+- The nav is a floating glass pill again.
+- The section order is hero, find bar, collection cards, items grid, stories, band again.
+- The same display face as the last site.
+- The headline could swap into another business without edits.
+- No block beyond the classic ones (no marquee, story, estimator, schedule, compare, map, bento, gallery).
+- The imagery language is the same (rendered objects on flat colour) for a business that sells an experience or a service.
+
+Fix with `scripts/direction.py --avoid-file <previous direction.json>` and `scripts/sameness_check.py`.
+
 ## Taste test (answer before showing the user anything)
 
 1. Could you tell this site is about this business with the text hidden?
@@ -59,4 +75,5 @@ The first hospital imagery was inflated, glossy "balloon" shapes. The user calle
 5. Is every nav item a real destination?
 6. Does the mobile layout feel designed, not squeezed?
 7. Do shadows, grain and matte materials make it look real, not toy-like?
-8. Would a stranger remember it tomorrow? If it looks like the last site you built, change a variation axis (see `02-concept-engine.md`).
+8. Would a stranger remember it tomorrow? If it looks like the last site you built, change the direction (preset and hero layout first), not only a variation axis (see `02-concept-engine.md` and `09-pattern-library.md`).
+9. Does it carry at least one extra effort and one surprise that only this business would have (see `10-domain-creativity.md`)?

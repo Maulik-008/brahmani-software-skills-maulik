@@ -1,0 +1,452 @@
+{
+ "meta": {
+  "slug": "forge",
+  "title": "Forge · Strength and conditioning",
+  "description": "Strength studio.",
+  "refPrefix": "FG"
+ },
+ "brand": {
+  "name": "Forge",
+  "short": "FORGE",
+  "tagline": "Strength and conditioning. First class is free."
+ },
+ "currency": "$",
+ "locale": "en-US",
+ "theme": {
+  "preset": "brutal"
+ },
+ "contact": {
+  "phone": "+00 00000 00000",
+  "whatsapp": "910000000000",
+  "email": "hello@example.com",
+  "address": "[Your address]",
+  "mapsUrl": "",
+  "chip": {
+   "type": "open"
+  },
+  "hours": [
+   {
+    "label": "Mon to Fri",
+    "days": [
+     1,
+     2,
+     3,
+     4,
+     5
+    ],
+    "open": "05:30",
+    "close": "21:00"
+   },
+   {
+    "label": "Weekend",
+    "days": [
+     0,
+     6
+    ],
+    "open": "08:00",
+    "close": "14:00"
+   }
+  ]
+ },
+ "nav": {
+  "style": "bar",
+  "cta": "Free class",
+  "ctaDo": "form",
+  "links": [
+   {
+    "label": "Classes",
+    "type": "scroll",
+    "target": "schedule"
+   },
+   {
+    "label": "Join",
+    "type": "scroll",
+    "target": "estimate"
+   },
+   {
+    "label": "Plans",
+    "type": "scroll",
+    "target": "plans"
+   },
+   {
+    "label": "About",
+    "type": "page",
+    "target": "about"
+   },
+   {
+    "label": "Visit",
+    "type": "page",
+    "target": "contact"
+   }
+  ]
+ },
+ "hero": {
+  "layout": "bento",
+  "primary": {
+   "label": "Book a free class",
+   "do": "form"
+  },
+  "secondary": {
+   "label": "See the schedule",
+   "do": "scroll:schedule"
+  },
+  "title": "Lift heavy. Move well. Stay.",
+  "sub": "Small-group strength classes for people who would rather train than scroll.",
+  "nav": "light",
+  "bento": {
+   "tiles": [
+    {
+     "type": "headline",
+     "span": [
+      2,
+      2
+     ],
+     "eyebrow": "Strength studio"
+    },
+    {
+     "type": "world",
+     "id": "strength",
+     "span": [
+      1,
+      2
+     ]
+    },
+    {
+     "type": "world",
+     "id": "bells",
+     "span": [
+      1,
+      1
+     ]
+    },
+    {
+     "type": "status"
+    },
+    {
+     "type": "cta",
+     "label": "Free first class",
+     "eyebrow": "Start here",
+     "do": "form",
+     "bg": "#FF4F2B",
+     "ink": "#111"
+    },
+    {
+     "type": "quote",
+     "text": "I came for a month. I am on year three.",
+     "name": "Member, sample quote",
+     "span": [
+      3,
+      1
+     ]
+    }
+   ]
+  }
+ },
+ "worlds": [
+  {
+   "id": "strength",
+   "name": "Strength",
+   "word": "LIFT",
+   "bg": "#FFE27A",
+   "ink": "#111111",
+   "dot": "#111",
+   "tint": "#FFE27A",
+   "img": "dumbbell",
+   "short": "Barbell and dumbbell classes."
+  },
+  {
+   "id": "bells",
+   "name": "Kettlebells",
+   "word": "SWING",
+   "bg": "#FFFFFF",
+   "ink": "#111111",
+   "dot": "#FF4F2B",
+   "tint": "#FFF0B8",
+   "img": "kettlebell",
+   "short": "Conditioning with bells."
+  }
+ ],
+ "items": [],
+ "action": {
+  "mode": "form",
+  "label": "Free class",
+  "form": {
+   "title": "Book a free class",
+   "intro": "Pick a day and we will save you a spot.",
+   "submitLabel": "Reserve my spot",
+   "successTitle": "You are in",
+   "success": "We will text you to confirm.",
+   "fields": [
+    {
+     "id": "name",
+     "label": "Name",
+     "type": "text",
+     "required": true
+    },
+    {
+     "id": "phone",
+     "label": "Phone",
+     "type": "tel",
+     "required": true
+    },
+    {
+     "id": "type",
+     "label": "Class",
+     "type": "chips",
+     "options": [
+      "Strength",
+      "Kettlebells",
+      "Not sure"
+     ],
+     "required": true
+    },
+    {
+     "id": "date",
+     "label": "Preferred day",
+     "type": "date",
+     "required": true
+    }
+   ]
+  }
+ },
+ "page": {
+  "order": [
+   {
+    "block": "marquee",
+    "id": "ticker",
+    "items": [
+     "No excuses",
+     "Heavy things",
+     "Small groups",
+     "Real coaching",
+     "First class free"
+    ],
+    "speed": 30
+   },
+   {
+    "block": "schedule",
+    "id": "schedule",
+    "title": "This week",
+    "sub": "Sample timetable. Replace with your real classes.",
+    "cta": "Book",
+    "do": "form",
+    "classes": [
+     {
+      "day": 1,
+      "time": "06:00",
+      "name": "Strength Foundations",
+      "level": "All levels",
+      "teacher": "Sam"
+     },
+     {
+      "day": 1,
+      "time": "18:30",
+      "name": "Kettlebell Conditioning",
+      "level": "Intermediate",
+      "teacher": "Jo"
+     },
+     {
+      "day": 2,
+      "time": "06:00",
+      "name": "Barbell Basics",
+      "level": "Beginner",
+      "teacher": "Sam"
+     },
+     {
+      "day": 3,
+      "time": "18:30",
+      "name": "Strength Foundations",
+      "level": "All levels",
+      "teacher": "Jo"
+     },
+     {
+      "day": 4,
+      "time": "06:00",
+      "name": "Kettlebell Conditioning",
+      "level": "Intermediate",
+      "teacher": "Sam"
+     },
+     {
+      "day": 6,
+      "time": "09:00",
+      "name": "Saturday Lift",
+      "level": "All levels",
+      "teacher": "Jo"
+     }
+    ]
+   },
+   {
+    "block": "estimator",
+    "id": "estimate",
+    "title": "Find your plan",
+    "sub": "Sample pricing. Replace with your real plans.",
+    "prefix": "$",
+    "suffix": " /month",
+    "base": 20,
+    "resultLabel": "Your monthly plan",
+    "note": "First class is always free.",
+    "cta": {
+     "label": "Start with a free class",
+     "do": "form"
+    },
+    "fields": [
+     {
+      "id": "days",
+      "label": "Classes per week",
+      "type": "range",
+      "min": 1,
+      "max": 6,
+      "step": 1,
+      "value": 3,
+      "unit": "x",
+      "rate": 14
+     },
+     {
+      "id": "pt",
+      "label": "Add coaching",
+      "type": "select",
+      "options": [
+       [
+        "No coaching",
+        0
+       ],
+       [
+        "One check-in a month",
+        30
+       ],
+       [
+        "Weekly check-in",
+        90
+       ]
+      ]
+     }
+    ]
+   },
+   {
+    "block": "compare",
+    "id": "plans",
+    "mode": "table",
+    "title": "Plans",
+    "cols": [
+     "Drop-in",
+     "Member",
+     "Unlimited"
+    ],
+    "hl": 1,
+    "rows": [
+     [
+      "Classes per week",
+      "1",
+      "3",
+      "Any"
+     ],
+     [
+      "Free first class",
+      true,
+      true,
+      true
+     ],
+     [
+      "Coach check-ins",
+      false,
+      true,
+      true
+     ],
+     [
+      "Open gym",
+      false,
+      false,
+      true
+     ]
+    ]
+   },
+   {
+    "block": "faq",
+    "id": "faq",
+    "title": "Before you come",
+    "items": [
+     {
+      "q": "Do I need experience?",
+      "a": "Sample answer: replace with your real policy."
+     },
+     {
+      "q": "What should I bring?",
+      "a": "Sample answer: replace with your real list."
+     }
+    ]
+   },
+   "band"
+  ]
+ },
+ "band": {
+  "eyebrow": "FIRST ONE IS FREE",
+  "title": "Come lift something heavy.",
+  "text": "No contract, no pressure. Just a class.",
+  "bg": "#111111",
+  "ink": "#FFFFFF",
+  "buttons": [
+   {
+    "label": "Book free class",
+    "do": "form"
+   },
+   {
+    "label": "Find us",
+    "do": "page:contact"
+   }
+  ],
+  "decor": [
+   "kettlebell",
+   "dumbbell"
+  ]
+ },
+ "about": {
+  "title": "About Forge",
+  "sub": "Sample page",
+  "heading": "Strength for everyone",
+  "paragraphs": [
+   "Sample text. Replace with your story."
+  ],
+  "values": [
+   {
+    "title": "Small groups",
+    "text": "Real coaching."
+   },
+   {
+    "title": "No contract",
+    "text": "Cancel any time."
+   }
+  ]
+ },
+ "footer": {
+  "cols": [
+   {
+    "title": "Train",
+    "links": [
+     {
+      "label": "Schedule",
+      "do": "scroll:schedule"
+     },
+     {
+      "label": "Plans",
+      "do": "scroll:plans"
+     }
+    ]
+   },
+   {
+    "title": "Forge",
+    "links": [
+     {
+      "label": "About",
+      "do": "page:about"
+     }
+    ]
+   }
+  ],
+  "small": "Privacy · Terms"
+ },
+ "images": {
+  "dumbbell": "images/dumbbell.png",
+  "kettlebell": "images/kettlebell.png"
+ },
+ "decor": []
+}

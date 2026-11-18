@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""Headless QA for a site built with the scaffold.   python test_site.py path/to/site.html [--out qa] [--quick]
+"""Headless QA for a site built with the scaffold.   python test_site.py path/to/site.html [--out qa] [--quick] [--stress] [--no-audit]
 
 Checks: console/page errors · horizontal overflow at 7 widths · nav overlap at 10 widths · hero worlds · filters ·
 item sheet · cart checkout OR form flow (validation + success) · about/contact/menu sheets · Escape closes · broken images.
-Writes screenshots to --out. Exit code 1 if any check fails. Needs: pip install playwright && playwright install chromium
+Then runs audit.py (accessibility, contrast, reflow, reduced motion, focus, hit areas, craft) and prints a verdict:
+Block / Needs changes / Approve. Writes screenshots to --out. Exit code 1 if any check fails. Needs: pip install playwright && playwright install chromium
 """
 import asyncio, json, os, sys
 from playwright.async_api import async_playwright
 args=[a for a in sys.argv[1:] if not a.startswith('--')]; html=os.path.abspath(args[0]); URL='file://'+html
 OUT=sys.argv[sys.argv.index('--out')+1] if '--out' in sys.argv else 'qa'; os.makedirs(OUT,exist_ok=True)
-QUICK='--quick' in sys.argv
+QUICK='--quick' in sys.argv; STRESS='--stress' in sys.argv; NOAUDIT='--no-audit' in sys.argv
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+from audit import run_audit
 R={'pass':[], 'fail':[]}
 def ok(n,c,extra=''):
     (R['pass'] if c else R['fail']).append(n+(' :: '+str(extra) if (extra and not c) else ''))
@@ -23,29 +26,38 @@ async def main():
             await pg.goto(URL); await pg.wait_for_timeout(900); return ctx,pg
         # ------------------------------------------------ desktop functional run
         ctx,pg=await page(1440,900)
-        n_worlds=await pg.evaluate("document.querySelectorAll('.dp').length"); ok('hero has world pickers',n_worlds>=2,n_worlds)
-        for i in range(n_worlds):
+        layout=await pg.evaluate("(CONFIG.hero||{}).layout||'stage'"); ok('hero element exists',await pg.evaluate("!!document.getElementById('top')"))
+        n_worlds=await pg.evaluate("document.querySelectorAll('.dp').length")
+        if layout=='stage': ok('hero has world pickers',n_worlds>=2,n_worlds)
+        await pg.screenshot(path=f'{OUT}/hero_{layout}.png')
+        for i in range(n_worlds if layout=='stage' else 0):
             await pg.click(f'[data-hd="{i}"]'); await pg.wait_for_timeout(1250); await pg.screenshot(path=f'{OUT}/hero_world{i}.png')
             ok(f'world {i} pressed',await pg.evaluate(f"document.querySelectorAll('.dp')[{i}].getAttribute('aria-pressed')")=='true')
-        await pg.click('[data-hd="0"]')
+        if layout=='stage': await pg.click('[data-hd="0"]')
         broken=await pg.evaluate("[...document.images].filter(i=>i.complete&&i.naturalWidth===0).length"); ok('no broken images',broken==0,broken)
         for sec in ['find','worlds','items','how','stories','band','footer']:
             if await pg.evaluate(f"!!document.getElementById('{sec}')&&!document.getElementById('{sec}').hidden"):
                 await pg.evaluate(f"document.getElementById('{sec}').scrollIntoView()"); await pg.wait_for_timeout(1000); await pg.screenshot(path=f'{OUT}/sec_{sec}.png')
         await pg.evaluate("window.scrollTo(0,0)"); await pg.wait_for_timeout(400)
         # filters
-        total=await pg.evaluate("document.querySelectorAll('#igrid .it').length"); ok('items render',total>0,total)
-        if await pg.evaluate("!!document.querySelector('[data-do^=\"quick:\"]')"):
+        total=await pg.evaluate("document.querySelectorAll('#igrid .it').length"); has_items=await pg.evaluate("!!document.getElementById('items')&&!document.getElementById('items').hidden&&document.querySelectorAll('#igrid .it').length>0")
+        if has_items: ok('items render',total>0,total)
+        nb=await pg.evaluate("document.querySelectorAll('.blk').length")
+        for bsel in await pg.evaluate("[...document.querySelectorAll('.blk')].map(b=>b.id)"):
+            await pg.evaluate(f"document.getElementById('{bsel}').scrollIntoView()"); await pg.wait_for_timeout(700); await pg.screenshot(path=f'{OUT}/blk_{bsel}.png')
+        await pg.evaluate("window.scrollTo(0,0)"); await pg.wait_for_timeout(300)
+        if has_items and await pg.evaluate("(()=>{const e=document.querySelector('[data-do^=\"quick:\"]');return !!e&&e.offsetParent!==null})()"):
             await pg.click('[data-do^="quick:"]'); await pg.wait_for_timeout(900)
             after=await pg.evaluate("document.querySelectorAll('#igrid .it').length"); ok('quick filter changes results',after<=total,(total,after))
             await pg.click('#iReset'); await pg.wait_for_timeout(300)
-        await pg.fill('#fQ','zzzzzz'); await pg.press('#fQ','Enter'); await pg.wait_for_timeout(500)
-        ok('empty state shows',await pg.evaluate("!!document.getElementById('iReset2')")); await pg.click('#iReset2'); await pg.wait_for_timeout(300)
-        # item sheet
-        await pg.evaluate("document.getElementById('items').scrollIntoView()"); await pg.wait_for_timeout(700)
-        await pg.click('#igrid .it >> nth=0'); await pg.wait_for_timeout(700); ok('item sheet opens',await pg.evaluate("document.getElementById('scrim').classList.contains('open')")); await pg.screenshot(path=f'{OUT}/sheet_item.png')
         mode=await pg.evaluate("(CONFIG.action||{}).mode")
-        if mode=='cart':
+        if has_items and await pg.evaluate("!!document.getElementById('fQ')&&document.getElementById('fQ').offsetParent!==null"):
+            await pg.fill('#fQ','zzzzzz'); await pg.press('#fQ','Enter'); await pg.wait_for_timeout(500)
+            ok('empty state shows',await pg.evaluate("!!document.getElementById('iReset2')")); await pg.click('#iReset2'); await pg.wait_for_timeout(300)
+        if has_items:
+            await pg.evaluate("document.getElementById('items').scrollIntoView()"); await pg.wait_for_timeout(700)
+            await pg.click('#igrid .it >> nth=0'); await pg.wait_for_timeout(700); ok('item sheet opens',await pg.evaluate("document.getElementById('scrim').classList.contains('open')")); await pg.screenshot(path=f'{OUT}/sheet_item.png')
+        if mode=='cart' and has_items:
             await pg.click('[data-act="add"]'); await pg.wait_for_timeout(500)
             ok('cart count updates',await pg.inner_text('#cartCount')!='0')
             await pg.click('#cartBtn'); await pg.wait_for_timeout(600); await pg.screenshot(path=f'{OUT}/sheet_cart.png')
@@ -55,7 +67,7 @@ async def main():
             if await pg.evaluate("!!document.getElementById('co-addr')"): await pg.fill('#co-addr','12 Test Street, Ahmedabad')
             await pg.click('[data-act="cplace"]'); await pg.wait_for_timeout(500); ok('order confirmation',await pg.evaluate("!!document.querySelector('#sh-body .ok h3')&&/placed/i.test(document.querySelector('#sh-body .ok h3').textContent)")); await pg.screenshot(path=f'{OUT}/sheet_done.png')
         elif mode=='form':
-            await pg.keyboard.press('Escape'); await pg.wait_for_timeout(400); await pg.evaluate("document.querySelector('[data-do=\"form\"]')?.click()")
+            await pg.keyboard.press('Escape'); await pg.wait_for_timeout(400)
             await pg.evaluate("Kit.open('form')"); await pg.wait_for_timeout(500); await pg.click('[data-act="fsubmit"]'); await pg.wait_for_timeout(300)
             ok('form validation shows errors',await pg.evaluate("[...document.querySelectorAll('#sh-body .err')].map(e=>e.textContent).filter(Boolean).length")>=1)
             await pg.screenshot(path=f'{OUT}/sheet_form_errors.png')
@@ -70,8 +82,8 @@ async def main():
         # ------------------------------------------------ mobile
         ctx,pg=await page(390,844,True); await pg.screenshot(path=f'{OUT}/m_hero.png')
         await pg.click('#menuBtn'); await pg.wait_for_timeout(700); ok('mobile menu opens',await pg.evaluate("document.getElementById('scrim').classList.contains('open')")); await pg.screenshot(path=f'{OUT}/m_menu.png'); await pg.keyboard.press('Escape'); await pg.wait_for_timeout(400)
-        for sec in ['worlds','items']:
-            await pg.evaluate(f"document.getElementById('{sec}').scrollIntoView()"); await pg.wait_for_timeout(900); await pg.screenshot(path=f'{OUT}/m_{sec}.png')
+        for sec in await pg.evaluate("[...document.querySelectorAll('main > section:not([hidden]), main > .band:not([hidden])')].map(s=>s.id).filter(Boolean).slice(0,6)"):
+            await pg.evaluate(f"document.getElementById('{sec}').scrollIntoView()"); await pg.wait_for_timeout(800); await pg.screenshot(path=f'{OUT}/m_{sec}.png')
         ok('no horizontal overflow (390 mobile)',not await pg.evaluate("document.documentElement.scrollWidth>innerWidth+1")); await ctx.close()
         # ------------------------------------------------ overflow + nav overlap matrix
         widths=[360,768,1024,1280,1920] if QUICK else [360,390,768,1024,1280,1440,1920,2560]
@@ -79,8 +91,19 @@ async def main():
             c2,p2=await page(w,900 if w<2000 else 1080); ox=await p2.evaluate("document.documentElement.scrollWidth>innerWidth+1"); ok(f'no overflow at {w}',not ox)
             await p2.screenshot(path=f'{OUT}/v_{w}.png'); await c2.close()
         for w in ([901,1100,1320] if QUICK else [901,960,1024,1100,1180,1280,1320,1366,1440]):
-            c2,p2=await page(w,800); r=await p2.evaluate("""()=>{const q=s=>{const e=document.querySelector(s);return e&&!e.hidden&&e.offsetParent!==null?e.getBoundingClientRect():null};const a=q('#chipBtn'),n=q('.pillnav'),s=q('#searchBtn');const ov=(x,y)=>x&&y&&!(x.right+6<=y.left||y.right+6<=x.left);return {c:ov(a,n),s:ov(n,s)}}""")
-            ok(f'nav has no overlap at {w}',not (r['c'] or r['s']),r); await c2.close()
-        ok('no console or page errors',not errs,errs[:4]); await b.close()
-    print(json.dumps({'passed':len(R['pass']),'failed':R['fail']},indent=1)); sys.exit(1 if R['fail'] else 0)
+            c2,p2=await page(w,800); r=await p2.evaluate("""()=>{const vis=e=>e&&!e.hidden&&e.offsetParent!==null;const q=s=>{const e=document.querySelector(s);return vis(e)?e.getBoundingClientRect():null};
+              const ov=(x,y)=>x&&y&&!(x.right+6<=y.left||y.right+6<=x.left||x.bottom<=y.top||y.bottom<=x.top);
+              const style=document.getElementById('nav').dataset.style||'pill';const a=q('#chipBtn'),s=q('#searchBtn');
+              if(style==='pill'){const n=q('.pillnav');return {c:ov(a,n),s:ov(n,s)}}
+              const parts=['.brand','.bookbtn','.cartbtn','.lk'].flatMap(sel=>[...document.querySelectorAll('.pillnav '+sel)].filter(vis).map(e=>e.getBoundingClientRect()));
+              return {c:parts.some(p=>ov(a,p)),s:parts.some(p=>ov(s,p))}}""");             ok(f'nav has no overlap at {w}',not (r['c'] or r['s']),r); await c2.close()
+        ok('no console or page errors',not errs,errs[:4])
+        A=None
+        if not NOAUDIT:
+            A=await run_audit(b,URL,OUT,stress=STRESS)
+        await b.close()
+    out={'passed':len(R['pass']),'failed':R['fail']}
+    if A:
+        out['audit_verdict']=A['verdict']; out['audit_findings']=A['findings']; out['contrast']={'checked':A['contrast_checked'],'measured_from_pixels':A['contrast_measured_from_pixels'],'unmeasured':A['contrast_unmeasured']}
+    print(json.dumps(out,indent=1)); sys.exit(1 if (R['fail'] or (A and A['verdict']=='Block')) else 0)
 asyncio.run(main())

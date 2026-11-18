@@ -21,9 +21,10 @@ h3.t{margin:0 0 12px;font-size:19px;font-weight:600;letter-spacing:-.015em}
 .small{font-size:14px}
 .grid3{display:grid;grid-template-columns:repeat(auto-fill,minmax(224px,1fr));gap:20px}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{height:42px;padding:0 17px;border-radius:999px;border:1.5px solid #D5D8E0;background:#fff;font-size:14.5px;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,border-color .2s}
+.chip{height:44px;padding:0 18px;border-radius:999px;border:0;box-shadow:var(--shadow-ring);background:var(--card,#fff);font-size:14.5px;font-weight:500;color:var(--ink);display:inline-flex;align-items:center;gap:8px;transition:background .2s,color .2s,border-color .2s}
 .chip:hover:not(:disabled){border-color:#9AA0AE}
-.chip[aria-pressed="true"],.chip[aria-selected="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip:hover{box-shadow:var(--shadow-ring-hover)}
+.chip[aria-pressed="true"],.chip[aria-selected="true"]{background:var(--ink);color:var(--soft,#fff);box-shadow:none}
 .chip:disabled{opacity:.42;text-decoration:line-through;cursor:not-allowed}
 .chip i{width:14px;height:14px;border-radius:50%;display:inline-block;border:1px solid rgba(0,0,0,.15)}
 .btn{min-height:46px;padding:0 22px;border-radius:999px;border:0;background:var(--ink);color:#fff;font-size:15px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:transform .25s var(--ease),opacity .2s,background .2s}
@@ -40,7 +41,8 @@ h3.t{margin:0 0 12px;font-size:19px;font-weight:600;letter-spacing:-.015em}
 .fld>span,.fld>label,legend{font-size:13.5px;font-weight:600;color:#2B2E37}
 select,input[type=text],input[type=email],input[type=number],textarea{font:inherit;font-size:16px;color:var(--ink);background:#fff;border:1.5px solid #CDD1DA;border-radius:14px;padding:11px 14px;min-height:46px;width:100%;transition:border-color .2s,box-shadow .2s}
 textarea{min-height:130px;resize:vertical}
-select:focus,input:focus,textarea:focus{outline:none;border-color:var(--ink);box-shadow:0 0 0 3px rgba(21,22,26,.12)}
+select:focus,input:focus,textarea:focus{border-color:var(--ink)}
+select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .err{color:#B3261E;font-size:13.5px;min-height:20px;margin:0}
 input[aria-invalid="true"],textarea[aria-invalid="true"],select[aria-invalid="true"]{border-color:#B3261E}
 
@@ -98,7 +100,7 @@ details>div{padding:0 0 18px;color:#3A3D47}
 .line .mid{flex:1;min-width:0}
 .line .mid b{display:block;font-size:15.5px}
 .qty{display:inline-flex;align-items:center;border:1.5px solid #D5D8E0;border-radius:99px;margin-top:8px}
-.qty button{width:40px;height:38px;border:0;background:none;font-size:20px;line-height:1;border-radius:99px}
+.qty button{width:44px;height:44px;border:0;background:none;font-size:20px;line-height:1;border-radius:99px}
 .qty button:hover:not(:disabled){background:var(--soft)}
 .qty button:disabled{opacity:.35}
 .qty span{min-width:26px;text-align:center;font-weight:600;font-size:15px}
@@ -141,3 +143,8 @@ input[type=range]{width:100%;accent-color:#15161A;min-height:34px;padding:0;bord
 }
 @media (max-width:520px){.grid3{grid-template-columns:1fr}.pc .im{aspect-ratio:1/.85}}
 @media (prefers-reduced-motion:reduce){.sheet,.scrim,.toast{transition-duration:.01s!important}}
+
+/* ---- craft rules (see references/11-interface-craft.md) ---- */
+.scrim:not(.open) .sheet{transition-duration:.3s,.2s}                                   /* exits are shorter than enters */
+.btn,.chip,.cir,.go,.sbtn,.fgo,.cartbtn,.bookbtn,.mbtn,.emi,.b1,.b2,.bt1,.bt2,.hf-go,.dp,.vb,.sh-x,.arrs button,.hd-re{transition-property:background-color,color,box-shadow,transform,opacity,scale;transition-duration:.2s,.2s,.2s,.25s,.2s,.15s;transition-timing-function:ease-out}
+.btn:active,.chip:active,.cir:active,.go:active,.sbtn:active,.fgo:active,.cartbtn:active,.bookbtn:active,.b1:active,.b2:active,.bt1:active,.bt2:active,.hf-go:active,.dp:active,.vb:active,.arrs button:active{scale:.96}
