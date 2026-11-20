@@ -1,0 +1,435 @@
+/* Paper & Pastel for Tailwind 4 (CSS-first config).
+   Order matters: tailwindcss, then the variables, then this file's theme.
+   Place tokens.vars.css next to this file (and a11y-text.css if you want the AA text set). */
+@import "tailwindcss";
+/* Paper & Pastel: variables only (generated from tokens.css by scripts/build_assets.py).
+   HSL channels, no hsl() wrapper. Light = :root, dark = .dark.
+   Do not edit by hand: edit tokens.css and regenerate. */
+@layer base {
+  :root {
+    /* ---- Canvas & ink -------------------------------------------------------
+       Light mode is a paper-white editorial canvas. Pure #fff page, near-black
+       (never pure black) ink. Cards sit a hair off-white so they read as objects
+       on paper without a shadow. */
+    --background: 0 0% 100%;          /* page              #ffffff              */
+    --foreground: 222 20% 12%;        /* primary text      ~#181c24            */
+
+    --card: 220 20% 98%;             /* default card fill  ~#f8f9fb            */
+    --card-foreground: 222 20% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 12%;
+
+    /* ---- Brand accent (cobalt) — links / focus / logo dot / tiny emphasis.
+       NOT a button fill. See --cta for buttons. */
+    --primary: 217 78% 50%;          /* ~#2160d6 */
+    --primary-foreground: 0 0% 100%;
+
+    /* ---- Neutral UI fills ------------------------------------------------- */
+    --accent: 220 16% 94%;           /* ghost-button hover, subtle fills       */
+    --accent-foreground: 222 20% 15%;
+    --secondary: 220 16% 95%;        /* secondary button fill                  */
+    --secondary-foreground: 222 20% 15%;
+    --muted: 220 16% 95%;
+    --muted-foreground: 220 9% 42%;  /* captions, meta, secondary body ~#5f6672 */
+
+    /* ---- Status -------------------------------------------------------------- */
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 55% 34%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 88% 46%;
+    --warning-foreground: 38 96% 10%;
+
+    /* ---- Lines & focus ---------------------------------------------------- */
+    --border: 220 15% 90%;           /* hairline, ~#e1e4e9 — the ONLY divider  */
+    --input: 220 15% 88%;
+    --ring: 217 78% 50%;             /* = primary                             */
+
+    /* ---- Shape ----------------------------------------------------------------
+       One base radius; component radii are derived from it (see tailwind snippet)
+       but most surfaces use explicit rounded-[Npx] — see the ladder in
+       component-recipes.md. */
+    --radius: 1.25rem;               /* 20px */
+
+    /* ---- Curated 6-colour accent set -----------------------------------------
+       Category coding ONLY (services, projects, testimonials, tech groups, blog).
+       Harmonised: matched saturation/lightness family, not a Tailwind grab-bag.
+       Used as: icon glyph colour + `/10`-`/15` icon-chip bg + `/35` hover border. */
+    --accent-blue: 217 78% 50%;
+    --accent-violet: 258 65% 58%;
+    --accent-emerald: 156 55% 34%;
+    --accent-coral: 351 75% 58%;
+    --accent-amber: 32 88% 48%;
+    --accent-teal: 185 62% 34%;
+
+    /* ---- Pastel tint washes ------------------------------------------------
+       Full-surface card / band / eyebrow-chip backgrounds ("ClickUp agent card"
+       style). Soft, high-lightness, low-mid saturation. Text on these is
+       `text-foreground` / `text-foreground/70`; chips on these are
+       `bg-white/70 dark:bg-black/20`. */
+    --tint-blue: 213 78% 94%;
+    --tint-violet: 258 60% 95%;
+    --tint-emerald: 156 45% 92%;
+    --tint-coral: 351 65% 95%;
+    --tint-amber: 34 75% 93%;
+    --tint-teal: 185 45% 92%;
+    --tint-cream: 38 40% 95%;
+
+    /* ---- Ink / Paper CTA --------------------------------------------------
+       The ONE filled-button colour. Primary CTAs are ink-on-paper, never the
+       blue accent (ClickUp / Acctual filled-button doctrine). */
+    --cta: 222 20% 12%;              /* near-black */
+    --cta-foreground: 0 0% 100%;
+
+    /* ---- Surface elevation ramp ----------------------------------------------
+       Gentle lightness steps in ONE hue. This — plus hairline borders — is the
+       depth system. Real shadows appear only on hover-lift and floating chrome.
+       surface-1 = the standard alternating-section / resting-card background. */
+    --surface-0: 0 0% 100%;
+    --surface-1: 220 20% 98%;
+    --surface-2: 220 17% 96%;
+    --surface-3: 220 15% 94%;
+    --surface-4: 220 13% 91%;
+    --surface-5: 220 11% 87%;
+
+    --shadow-color: 220 30% 15%;     /* tint for every box-shadow, at low alpha */
+
+    /* ---- Sidebar (dashboard shells) ------------------------------------------ */
+    --sidebar-background: 220 20% 98%;
+    --sidebar-foreground: 222 20% 15%;
+    --sidebar-primary: 217 78% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 16% 94%;
+    --sidebar-accent-foreground: 222 20% 15%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 217 78% 50%;
+  }
+
+  .dark {
+    /* ---- Canvas & ink — true ink-black, never navy, never #000 ---------- */
+    --background: 222 16% 6%;         /* ~#0d0f12 */
+    --foreground: 220 15% 92%;        /* ~#e7e9 ee — off-white */
+
+    --card: 222 15% 9%;
+    --card-foreground: 220 15% 92%;
+    --popover: 222 16% 8%;
+    --popover-foreground: 220 15% 92%;
+
+    --primary: 217 85% 63%;          /* brightened for dark contrast */
+    --primary-foreground: 222 20% 8%;
+
+    --accent: 222 12% 14%;
+    --accent-foreground: 220 15% 92%;
+    --secondary: 222 12% 14%;
+    --secondary-foreground: 220 15% 92%;
+    --muted: 222 12% 13%;
+    --muted-foreground: 220 10% 60%;
+
+    --destructive: 0 68% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 50% 48%;
+    --success-foreground: 152 70% 8%;
+    --warning: 42 88% 58%;
+    --warning-foreground: 42 90% 10%;
+
+    --border: 222 12% 16%;
+    --input: 222 12% 17%;
+    --ring: 217 85% 63%;
+
+    /* accent set — brightened / slightly desaturated for dark */
+    --accent-blue: 217 85% 63%;
+    --accent-violet: 258 75% 70%;
+    --accent-emerald: 156 50% 52%;
+    --accent-coral: 351 78% 66%;
+    --accent-amber: 34 88% 60%;
+    --accent-teal: 185 55% 52%;
+
+    /* tint washes become low-lightness tinted SURFACES, not literal pastels */
+    --tint-blue: 217 45% 15%;
+    --tint-violet: 258 38% 17%;
+    --tint-emerald: 156 30% 14%;
+    --tint-coral: 351 40% 17%;
+    --tint-amber: 34 45% 15%;
+    --tint-teal: 185 32% 14%;
+    --tint-cream: 38 20% 13%;
+
+    /* CTA flips to paper-on-ink */
+    --cta: 0 0% 96%;
+    --cta-foreground: 222 20% 10%;
+
+    --surface-0: 222 16% 6%;
+    --surface-1: 222 15% 9%;
+    --surface-2: 222 13% 11.5%;
+    --surface-3: 222 12% 14%;
+    --surface-4: 222 11% 17%;
+    --surface-5: 222 10% 21%;
+
+    --shadow-color: 222 40% 2%;
+
+    --sidebar-background: 222 16% 7%;
+    --sidebar-foreground: 220 15% 88%;
+    --sidebar-primary: 217 85% 63%;
+    --sidebar-primary-foreground: 222 20% 8%;
+    --sidebar-accent: 222 12% 13%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 222 12% 15%;
+    --sidebar-ring: 217 85% 63%;
+  }
+}
+
+/* Paper & Pastel Studio: craft layer (plain CSS, framework-agnostic).
+   Loaded AFTER the tokens. Uses only token variables, no raw colours except the sanctioned image outline.
+   Everything is inside cascade layers so utilities and your own unlayered CSS always win.
+   Rules and the reasons behind them: references/craft/*.md (adapted from Jakub Krehel's better-* skills, MIT). */
+
+@layer base {
+  /* Focus and in-page anchors never hide behind the floating nav (WCAG 2.4.11). Set to the nav's real height + gap. */
+  html { scroll-padding-top: 6rem; }
+
+  /* Headings balance, paragraphs avoid a lone last word. Never `balance` on paragraphs. */
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p, li, blockquote, figcaption { text-wrap: pretty; }
+
+  /* Long words, URLs and IDs wrap instead of breaking the layout. */
+  h1, h2, h3, h4, p, li, td, th, dd { overflow-wrap: break-word; }
+
+  /* Dialogs, drawers, menus, side panels and palettes do not scroll the page behind them. */
+  dialog, [role="dialog"], [role="menu"], [role="listbox"] { overscroll-behavior: contain; }
+}
+
+@layer components {
+  /* One cluster, one rendering of numbers that tick or align. */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Press feedback: named properties, 150ms, ease-out, never on disabled controls. System value 0.98 (decision 14), never below 0.96. */
+  .press { transition-property: scale, background-color, color, border-color; transition-duration: 150ms; transition-timing-function: ease-out; }
+  .press:not(:disabled):active { scale: 0.98; }
+
+  /* Invisible hit area of at least 44 x 44 around a smaller visual control (WCAG 2.5.8 AA is 24px; the system uses 44).
+     Put it on the label or button, never on an <input>. Make sure two hit areas never overlap. */
+  .tap-target { position: relative; }
+  .tap-target::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: max(100%, 44px); height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  /* 1px inset image outline: pure black or white at 10%, never a tinted grey. Skip logos and transparent cut-outs. */
+  .img-outline { outline: 1px solid rgb(0 0 0 / 0.1); outline-offset: -1px; }
+  .dark .img-outline, [data-theme="dark"] .img-outline { outline-color: rgb(255 255 255 / 0.1); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .img-outline { outline-color: rgb(255 255 255 / 0.1); } }
+
+  /* Scrollable overlays keep their scroll to themselves. */
+  .scroll-contain { overscroll-behavior: contain; }
+
+  /* Skip link: first focusable element on the page, target <main id="main" tabindex="-1">. */
+  .skip-link { position: absolute; inset-inline-start: -999px; z-index: 100; padding: 0.5rem 1rem; border-radius: 9999px;
+    background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); font-size: 0.875rem; font-weight: 500; }
+  .skip-link:focus { inset-inline-start: 1rem; inset-block-start: 1rem; }
+
+  /* Visually hidden but available to assistive tech. Never display:none or visibility:hidden for this. */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+}
+
+/* Windows high contrast / forced colours: keep edges that were drawn by box-shadow or hairline colour. */
+@media (forced-colors: active) {
+  .press, .tap-target { forced-color-adjust: auto; }
+}
+
+/* AA-safe text variants. Generated by scripts/suggest_ink.py from tokens.css.
+   Use ONLY for text (labels, eyebrows, stat numbers). Keep chip-* for glyphs
+   and icon-chip fills. Paste after tokens.css. Same hues, darker lightness. */
+@layer base {
+  :root {
+    --chip-blue-ink: 217 78% 45.5%;  /* worst pair 4.57:1 */
+    --chip-violet-ink: 258 65% 56%;  /* worst pair 4.57:1 */
+    --chip-emerald-ink: 156 55% 29%;  /* worst pair 4.57:1 */
+    --chip-coral-ink: 351 75% 44%;  /* worst pair 4.62:1 */
+    --chip-amber-ink: 32 88% 32.5%;  /* worst pair 4.57:1 */
+    --chip-teal-ink: 185 62% 29%;  /* worst pair 4.58:1 */
+    --warning-ink: 38 88% 30.5%;
+    --destructive-ink: 0 72% 46.5%;
+    --success-ink: 152 55% 30%;
+  }
+  .dark {
+    --chip-blue-ink: 217 85% 63%;  /* worst pair 4.57:1 */
+    --chip-violet-ink: 258 75% 70.5%;  /* worst pair 4.58:1 */
+    --chip-emerald-ink: 156 50% 52%;  /* worst pair 6.31:1 */
+    --chip-coral-ink: 351 78% 66%;  /* worst pair 4.80:1 */
+    --chip-amber-ink: 34 88% 60%;  /* worst pair 6.76:1 */
+    --chip-teal-ink: 185 55% 52%;  /* worst pair 6.22:1 */
+    --warning-ink: 42 88% 58%;
+    --destructive-ink: 0 68% 62.5%;
+    --success-ink: 152 50% 48%;
+  }
+}
+
+
+/* dark = the .dark class (next-themes / the bundled ThemeProvider) or [data-theme="dark"] */
+@custom-variant dark (&:where(.dark, .dark *, [data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-success: hsl(var(--success));
+  --color-success-foreground: hsl(var(--success-foreground));
+  --color-warning: hsl(var(--warning));
+  --color-warning-foreground: hsl(var(--warning-foreground));
+  --color-warning-ink: hsl(var(--warning-ink, var(--warning)));
+  --color-destructive-ink: hsl(var(--destructive-ink, var(--destructive)));
+  --color-success-ink: hsl(var(--success-ink, var(--success)));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-cta: hsl(var(--cta));
+  --color-cta-foreground: hsl(var(--cta-foreground));
+
+  --color-surface-0: hsl(var(--surface-0));
+  --color-surface-1: hsl(var(--surface-1));
+  --color-surface-2: hsl(var(--surface-2));
+  --color-surface-3: hsl(var(--surface-3));
+  --color-surface-4: hsl(var(--surface-4));
+  --color-surface-5: hsl(var(--surface-5));
+
+  --color-chip-blue: hsl(var(--accent-blue));
+  --color-chip-violet: hsl(var(--accent-violet));
+  --color-chip-emerald: hsl(var(--accent-emerald));
+  --color-chip-coral: hsl(var(--accent-coral));
+  --color-chip-amber: hsl(var(--accent-amber));
+  --color-chip-teal: hsl(var(--accent-teal));
+  /* AA-safe text variants: fall back to the plain chip colour if a11y-text.css is not imported */
+  --color-chip-blue-ink: hsl(var(--chip-blue-ink, var(--accent-blue)));
+  --color-chip-violet-ink: hsl(var(--chip-violet-ink, var(--accent-violet)));
+  --color-chip-emerald-ink: hsl(var(--chip-emerald-ink, var(--accent-emerald)));
+  --color-chip-coral-ink: hsl(var(--chip-coral-ink, var(--accent-coral)));
+  --color-chip-amber-ink: hsl(var(--chip-amber-ink, var(--accent-amber)));
+  --color-chip-teal-ink: hsl(var(--chip-teal-ink, var(--accent-teal)));
+
+  --color-tint-blue: hsl(var(--tint-blue));
+  --color-tint-violet: hsl(var(--tint-violet));
+  --color-tint-emerald: hsl(var(--tint-emerald));
+  --color-tint-coral: hsl(var(--tint-coral));
+  --color-tint-amber: hsl(var(--tint-amber));
+  --color-tint-teal: hsl(var(--tint-teal));
+  --color-tint-cream: hsl(var(--tint-cream));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+
+  --font-sans: var(--font-geist-sans), "Geist", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --text-display-sm: 2.75rem;
+  --text-display-sm--line-height: 1.05;
+  --text-display-sm--letter-spacing: -0.03em;
+  --text-display: 3.5rem;
+  --text-display--line-height: 1.02;
+  --text-display--letter-spacing: -0.035em;
+  --text-display-lg: 4.5rem;
+  --text-display-lg--line-height: 1;
+  --text-display-lg--letter-spacing: -0.04em;
+  --text-display-xl: 5.5rem;
+  --text-display-xl--line-height: 0.98;
+  --text-display-xl--letter-spacing: -0.04em;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-marquee: marquee 30s linear infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-breathe: breathe 2.2s ease-in-out infinite;
+  --animate-rise: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-rise-delayed: rise 0.3s cubic-bezier(0.22, 1, 0.36, 1) 0.28s forwards;
+
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  @keyframes breathe { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.45; transform: scale(0.82); } }
+  @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+}
+
+@layer base {
+  * { border-color: hsl(var(--border)); }
+  html { background-color: hsl(var(--background)); scroll-behavior: smooth; }
+  body {
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans);
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--surface-4)); border-radius: 9999px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--surface-5)); }
+}
+
+@layer components {
+  .gradient-text { color: hsl(var(--primary)); }          /* solid accent. Never a real gradient. */
+  .card-hover { transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s cubic-bezier(.4,0,.2,1); }
+  @media (hover: hover) {
+    .card-hover:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 1px 2px hsl(var(--shadow-color) / 0.06), 0 12px 24px -8px hsl(var(--shadow-color) / 0.18);
+    }
+  }
+  .glass {                                               /* reserved for the floating nav + its mobile sheet */
+    background: hsl(var(--surface-1) / 0.72);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+  .section-padding { padding: 5rem 1rem; }
+  @media (min-width: 640px)  { .section-padding { padding-left: 1.5rem; padding-right: 1.5rem; } }
+  @media (min-width: 768px)  { .section-padding { padding-top: 7rem; padding-bottom: 7rem; } }
+  @media (min-width: 1024px) { .section-padding { padding-left: 2rem; padding-right: 2rem; } }
+  /* chip sitting ON a tint wash: white/70 in light, black/20 in dark. Token-driven, no dark: variant needed */
+  .on-tint { background: hsl(0 0% 100% / 0.7); }
+  .dark .on-tint, [data-theme="dark"] .on-tint { background: hsl(0 0% 0% / 0.2); }
+}
+
+@utility noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.025;
+}
+@utility scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@media (max-width: 640px) {
+  html, body { overflow-x: hidden; }
+  button, a { min-height: 44px; min-width: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

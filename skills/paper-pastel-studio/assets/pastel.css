@@ -1,0 +1,188 @@
+/* Paper & Pastel: plain-CSS component layer (no Tailwind, no build step).
+   Load order:  tokens.vars.css  ->  a11y-text.css  ->  pastel.css
+   Theme: add class="dark" to <html> (or data-theme="dark"). Every colour is a token, so dark needs no extra rules.
+   Hue: put a modifier on any component, e.g. class="pp-showcase pp-hue-violet".
+   Rules this file enforces for you: one filled button style (.pp-btn--cta), pills for controls, 18-28px cards,
+   10-12px inputs, hairline depth, no resting shadow, Geist + Geist Mono only. */
+
+:root {
+  --font-sans: "Geist", "Geist Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+*, *::before, *::after { box-sizing: border-box; border-color: hsl(var(--border)); }
+html { background: hsl(var(--background)); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--font-sans);
+  font-feature-settings: 'rlig' 1, 'calt' 1; -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden; }
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+img, svg { max-width: 100%; }
+a { color: hsl(var(--primary)); text-underline-offset: 4px; }
+
+/* ---- hue modifiers: set three variables, components read them ---- */
+.pp-hue-blue    { --hue: var(--accent-blue);    --hue-ink: var(--chip-blue-ink, var(--accent-blue));       --hue-tint: var(--tint-blue); }
+.pp-hue-violet  { --hue: var(--accent-violet);  --hue-ink: var(--chip-violet-ink, var(--accent-violet));   --hue-tint: var(--tint-violet); }
+.pp-hue-emerald { --hue: var(--accent-emerald); --hue-ink: var(--chip-emerald-ink, var(--accent-emerald)); --hue-tint: var(--tint-emerald); }
+.pp-hue-coral   { --hue: var(--accent-coral);   --hue-ink: var(--chip-coral-ink, var(--accent-coral));     --hue-tint: var(--tint-coral); }
+.pp-hue-amber   { --hue: var(--accent-amber);   --hue-ink: var(--chip-amber-ink, var(--accent-amber));     --hue-tint: var(--tint-amber); }
+.pp-hue-teal    { --hue: var(--accent-teal);    --hue-ink: var(--chip-teal-ink, var(--accent-teal));       --hue-tint: var(--tint-teal); }
+
+/* ---- layout: container ladder 5xl / 6xl / 2xl, never wider ---- */
+.pp-container { width: 100%; max-width: 72rem; margin-inline: auto; }
+.pp-container--5xl { max-width: 64rem; }
+.pp-measure { max-width: 42rem; }
+.pp-section { position: relative; padding: 5rem 1rem; scroll-margin-top: 6rem; }
+.pp-section--band { background: hsl(var(--surface-1)); border-top: 1px solid hsl(var(--border)); }
+@media (min-width: 640px)  { .pp-section { padding-inline: 1.5rem; } }
+@media (min-width: 768px)  { .pp-section { padding-block: 7rem; } }
+@media (min-width: 1024px) { .pp-section { padding-inline: 2rem; } }
+.pp-grid { display: grid; gap: 1rem; }
+@media (min-width: 640px)  { .pp-grid--2, .pp-grid--3, .pp-grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .pp-grid--3 { grid-template-columns: repeat(3, 1fr); } .pp-grid--4 { grid-template-columns: repeat(4, 1fr); } }
+.pp-grid--tight { gap: 0.75rem; }
+
+/* ---- type ---- */
+.pp-display { font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; margin: 0; }
+@media (min-width: 640px) { .pp-display { font-size: 3.5rem; line-height: 1.02; letter-spacing: -0.035em; } }
+@media (min-width: 768px) { .pp-display--hero { font-size: 4.5rem; line-height: 1; letter-spacing: -0.04em; } }
+.pp-h2 { font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; margin: 0; }
+.pp-h3 { font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.01em; font-weight: 600; margin: 0; }
+.pp-lead { font-size: 1.0625rem; line-height: 1.6; color: hsl(var(--muted-foreground)); max-width: 42rem; margin: 1rem 0 0; }
+.pp-muted { color: hsl(var(--muted-foreground)); }
+.pp-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.pp-center { text-align: center; } .pp-center .pp-lead { margin-inline: auto; }
+.pp-eyebrow { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.875rem; border-radius: 9999px;
+  background: hsl(var(--hue-tint, var(--tint-blue))); color: hsl(var(--hue-ink, var(--chip-blue-ink, var(--accent-blue))));
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
+.pp-eyebrow--mono { font-family: var(--font-mono); font-weight: 500; text-transform: uppercase; letter-spacing: 0.14em; }
+.pp-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- buttons: full pills. ONE filled style (cta). The accent is never a fill. ---- */
+.pp-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.5rem; padding: 0 1.25rem;
+  border-radius: 9999px; border: 1px solid transparent; background: transparent; color: inherit; font: 500 0.875rem/1 var(--font-sans);
+  text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color .2s, border-color .2s, transform .2s; }
+.pp-btn::after { content: ""; position: absolute; inset: -2px; }                       /* 44px hit area without growing the button */
+.pp-btn:active { transform: scale(0.98); }
+.pp-btn:disabled, .pp-btn[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.pp-btn--cta { background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); }
+.pp-btn--outline { border-color: hsl(var(--border)); color: hsl(var(--foreground)); }
+.pp-btn--ghost { color: hsl(var(--foreground)); }
+.pp-btn--lg { height: 3rem; padding: 0 1.75rem; font-size: 0.9375rem; }
+.pp-btn--sm { height: 2.25rem; padding: 0 1rem; font-size: 0.8125rem; }
+.pp-btn .pp-arrow { transition: transform .2s; }
+
+/* ---- surfaces: hairline border + surface step. No shadow at rest. ---- */
+.pp-card { border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); border-radius: 24px; padding: 1.5rem; }
+.pp-card--compact { border-radius: 18px; padding: 1rem; }
+.pp-card--minimal { background: transparent; border-radius: 18px; padding: 1.25rem; }
+.pp-lift { transition: transform .3s; }
+
+/* tint wash: showcase cards, eyebrow chips, footer CTA. Chips ON a tint use .pp-on-tint */
+.pp-tint { background: hsl(var(--hue-tint, var(--tint-blue))); }
+.pp-on-tint { background: hsl(0 0% 100% / .7); }
+.dark .pp-on-tint, [data-theme="dark"] .pp-on-tint { background: hsl(0 0% 0% / .2); }
+
+/* icon in a circle (chip). On the canvas: tinted fill. */
+.pp-chip { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: 9999px;
+  background: hsl(var(--hue, var(--accent-blue)) / .10); color: hsl(var(--hue, var(--accent-blue))); transition: background-color .3s; }
+.pp-chip svg { width: 1rem; height: 1rem; }
+
+/* FEATURED tile */
+.pp-showcase { position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 300px; overflow: hidden; padding: 1.25rem;
+  border-radius: 28px; background: hsl(var(--hue-tint)); color: inherit; text-decoration: none; transition: transform .3s; }
+.pp-showcase__label { display: inline-flex; align-items: center; gap: .5rem; width: fit-content; padding: .5rem .75rem; border-radius: 9999px; font-size: .8125rem; font-weight: 600; }
+.pp-showcase__label svg { width: 1rem; height: 1rem; }
+.pp-showcase__body { position: relative; max-width: 85%; font-size: .8125rem; line-height: 1.6; color: hsl(var(--foreground) / .7); margin: 0; }
+.pp-watermark { position: absolute; right: -1.5rem; bottom: -1.5rem; width: 10rem; height: 10rem; color: hsl(var(--foreground) / .06); pointer-events: none; }
+.pp-circle-action { position: absolute; right: 1rem; bottom: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem;
+  border-radius: 9999px; background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); transition: transform .3s; }
+
+/* SECONDARY tile */
+.pp-listcard { display: flex; gap: .875rem; align-items: flex-start; padding: 1rem; border-radius: 18px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1));
+  color: inherit; text-decoration: none; transition: border-color .3s; }
+.pp-listcard h3 { margin: 0; font-size: .875rem; font-weight: 600; line-height: 1.3; }
+.pp-listcard p { margin: .25rem 0 0; font-size: .75rem; line-height: 1.6; color: hsl(var(--muted-foreground)); }
+
+/* KPI tile (double bezel) */
+.pp-stat { border-radius: 22px; padding: .375rem; background: hsl(var(--hue-tint)); transition: transform .3s; }
+.pp-stat__inner { height: 100%; border-radius: 17px; padding: 1rem; background: hsl(var(--background) / .6); box-shadow: inset 0 1px 0 hsl(var(--foreground) / .06); }
+.pp-stat__num { display: block; font: 600 2rem/1.1 var(--font-mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: hsl(var(--hue-ink)); margin: .75rem 0 .25rem; }
+.pp-stat h3 { margin: 0; font-size: .875rem; font-weight: 600; } .pp-stat p { margin: .25rem 0 0; font-size: .6875rem; color: hsl(var(--foreground) / .7); }
+
+/* pill tag */
+.pp-pill { display: inline-flex; align-items: center; padding: .25rem .625rem; border-radius: 9999px; font-size: .625rem; font-weight: 500; letter-spacing: .02em;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--surface-2)); color: hsl(var(--foreground) / .85); }
+.pp-pill--mono { font-family: var(--font-mono); }
+
+/* ---- forms: inputs are the ONE non-pill control ---- */
+.pp-field { display: grid; gap: .375rem; }
+.pp-label { display: flex; align-items: center; gap: .375rem; font-size: .75rem; font-weight: 500; color: hsl(var(--muted-foreground)); }
+.pp-input { width: 100%; padding: .75rem 1rem; border-radius: 10px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-2) / .6); color: inherit;
+  font: inherit; font-size: .875rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+.pp-input::placeholder { color: hsl(var(--muted-foreground) / .6); }
+.pp-input:focus { border-color: hsl(var(--primary) / .5); box-shadow: 0 0 0 1px hsl(var(--primary) / .3); }
+.pp-input[aria-invalid="true"] { border-color: hsl(var(--destructive) / .6); }
+.pp-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 1px hsl(var(--destructive) / .2); }
+textarea.pp-input { min-height: 5.5rem; resize: vertical; }
+.pp-error { margin: 0; font-size: .75rem; color: hsl(var(--destructive-ink, var(--destructive))); }
+.pp-hint { margin: 0; font-size: .75rem; color: hsl(var(--muted-foreground)); }
+.pp-input--dense { padding: .625rem .875rem; font-size: .8125rem; }
+
+/* ---- status callouts: their own axis, never a category colour ---- */
+.pp-callout { display: flex; gap: .875rem; padding: 1rem; border-radius: 20px; border: 1px solid var(--c-border); background: var(--c-bg); }
+.pp-callout__label { display: block; margin-bottom: .25rem; font: 600 .75rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--c-ink); }
+.pp-callout p { margin: 0; font-size: .875rem; line-height: 1.6; color: hsl(var(--foreground) / .8); }
+.pp-callout--info    { --c-ink: hsl(var(--primary));                          --c-border: hsl(var(--primary) / .2);     --c-bg: hsl(var(--primary) / .05); }
+.pp-callout--tip     { --c-ink: hsl(var(--success-ink, var(--success)));       --c-border: hsl(var(--success) / .2);     --c-bg: hsl(var(--success) / .05); }
+.pp-callout--warning { --c-ink: hsl(var(--warning-ink, var(--warning)));       --c-border: hsl(var(--warning) / .25);    --c-bg: hsl(var(--warning) / .06); }
+.pp-callout--danger  { --c-ink: hsl(var(--destructive-ink, var(--destructive))); --c-border: hsl(var(--destructive) / .2); --c-bg: hsl(var(--destructive) / .05); }
+
+/* ---- nav: floating glass pill. The ONLY place blur is allowed (plus its mobile sheet). ---- */
+.pp-nav { position: fixed; inset: 0 0 auto 0; z-index: 50; padding: 1rem 1rem 0; }
+.pp-nav__bar { display: flex; align-items: center; justify-content: space-between; max-width: 64rem; margin-inline: auto; padding: .625rem .75rem; border-radius: 9999px;
+  background: hsl(var(--surface-1) / .72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border: 1px solid hsl(var(--border) / .8); }
+.pp-nav__links { display: none; gap: .125rem; }
+@media (min-width: 768px) { .pp-nav__links { display: flex; } }
+.pp-nav__links a { padding: .375rem .875rem; border-radius: 9999px; font-size: .875rem; font-weight: 500; color: hsl(var(--muted-foreground)); text-decoration: none; transition: background-color .2s, color .2s; }
+.pp-nav__links a[aria-current="page"] { background: hsl(var(--tint-blue)); color: hsl(var(--chip-blue-ink, var(--accent-blue))); }
+.pp-wordmark { font: 600 .9375rem/1 var(--font-mono); letter-spacing: -0.01em; color: hsl(var(--foreground)); text-decoration: none; }
+.pp-wordmark i { font-style: normal; color: hsl(var(--primary)); } .pp-wordmark span { color: hsl(var(--muted-foreground)); }
+.pp-icon-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); color: hsl(var(--foreground) / .7); cursor: pointer; transition: color .2s; }
+.pp-icon-btn::after { content: ""; position: absolute; inset: -4px; }
+
+/* ---- footer ---- */
+.pp-footer { position: relative; overflow: hidden; border-top: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); }
+.pp-footer::before { content: ""; position: absolute; inset: 0; opacity: .03; pointer-events: none;
+  background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px); background-size: 28px 28px; }
+.pp-cta-card { position: relative; overflow: hidden; border-radius: 28px; padding: 2rem 1.5rem; background: hsl(var(--hue-tint)); }
+@media (min-width: 640px) { .pp-cta-card { padding: 2.5rem; } }
+
+/* ---- states ---- */
+.pp-empty { display: flex; flex-direction: column; align-items: center; gap: .75rem; padding: 3.5rem 1.5rem; text-align: center; }
+.pp-empty__icon { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 9999px; background: hsl(var(--surface-2)); color: hsl(var(--muted-foreground)); }
+.pp-skeleton { border-radius: 10px; background: hsl(var(--surface-3)); animation: pp-pulse 2s ease-in-out infinite; }
+@keyframes pp-pulse { 50% { opacity: .5; } }
+.pp-live-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 9999px; background: hsl(var(--primary)); animation: pp-breathe 2.2s ease-in-out infinite; }
+@keyframes pp-breathe { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+@keyframes pp-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.pp-rise { animation: pp-rise .6s var(--ease) both; }
+
+@media (max-width: 640px) { .pp-btn, .pp-icon-btn { min-height: 44px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+/* Hover only where hover exists (touch screens get no sticky hover). craft/surfaces-and-icons.md section 3. */
+@media (hover: hover) {
+  .pp-btn--cta:hover { background: hsl(var(--cta) / .9); }
+  .pp-btn--outline:hover { border-color: hsl(var(--primary) / .3); background: hsl(var(--surface-1)); }
+  .pp-btn--ghost:hover { background: hsl(var(--accent)); }
+  .pp-btn:hover .pp-arrow { transform: translateX(2px); }
+  .pp-lift:hover { transform: translateY(-4px); }
+  .pp-lift-shadow:hover { box-shadow: 0 1px 2px hsl(var(--shadow-color) / .06), 0 12px 24px -8px hsl(var(--shadow-color) / .18); }
+  .pp-showcase:hover { transform: translateY(-4px); }
+  .pp-showcase:hover .pp-circle-action { transform: scale(1.1); }
+  .pp-listcard:hover { border-color: hsl(var(--hue, var(--accent-blue)) / .35); }
+  .pp-listcard:hover .pp-chip { background: hsl(var(--hue, var(--accent-blue)) / .15); }
+  .pp-stat:hover { transform: translateY(-4px); }
+  .pp-nav__links a:hover { background: hsl(var(--surface-2) / .7); color: hsl(var(--foreground)); }
+  .pp-icon-btn:hover { color: hsl(var(--foreground)); }
+}

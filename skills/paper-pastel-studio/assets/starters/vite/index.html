@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0d0f12" media="(prefers-color-scheme: dark)" />
+    <title>Brand app</title>
+    <link rel="icon" href="data:," />
+    <!-- applies the saved theme before first paint (no flash). Keep the storage key in sync with ThemeProvider. -->
+    <script>
+      (function () { try {
+        var t = localStorage.getItem('pp-theme');
+        if (t !== 'light' && t !== 'dark') t = 'light';
+        document.documentElement.classList.toggle('dark', t === 'dark');
+        document.documentElement.style.colorScheme = t;
+      } catch (e) {} })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

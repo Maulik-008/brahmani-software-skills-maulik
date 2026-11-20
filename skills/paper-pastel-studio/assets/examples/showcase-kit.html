@@ -1,0 +1,882 @@
+<title>Paper &amp; Pastel Kit</title>
+<meta name="description" content="A living token and component reference for the Paper & Pastel design system." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" />
+
+<script src="https://cdn.tailwindcss.com/3.4.16"></script>
+<script>
+  tailwind.config = {
+    darkMode: ['selector', '[data-theme="dark"]'],
+    theme: {
+      extend: {
+        fontFamily: {
+          sans: ["Geist", "system-ui", "sans-serif"],
+          mono: ["Geist Mono", "ui-monospace", "SFMono-Regular", "monospace"],
+        },
+        fontSize: {
+          "display-sm": ["2.75rem", { lineHeight: "1.05", letterSpacing: "-0.03em" }],
+          display: ["3.5rem", { lineHeight: "1.02", letterSpacing: "-0.035em" }],
+          "display-lg": ["4.5rem", { lineHeight: "1", letterSpacing: "-0.04em" }],
+        },
+        colors: {
+          background: "hsl(var(--background) / <alpha-value>)",
+          foreground: "hsl(var(--foreground) / <alpha-value>)",
+          border: "hsl(var(--border))",
+          input: "hsl(var(--input))",
+          ring: "hsl(var(--ring))",
+          "muted-foreground": "hsl(var(--muted-foreground))",
+          card: "hsl(var(--card))",
+          accent: { DEFAULT: "hsl(var(--accent))", foreground: "hsl(var(--accent-foreground))" },
+          secondary: { DEFAULT: "hsl(var(--secondary))", foreground: "hsl(var(--secondary-foreground))" },
+          primary: { DEFAULT: "hsl(var(--primary) / <alpha-value>)", foreground: "hsl(var(--primary-foreground))" },
+          destructive: { DEFAULT: "hsl(var(--destructive) / <alpha-value>)", foreground: "hsl(var(--destructive-foreground))" },
+          success: "hsl(var(--success) / <alpha-value>)",
+          warning: "hsl(var(--warning) / <alpha-value>)",
+          cta: { DEFAULT: "hsl(var(--cta))", foreground: "hsl(var(--cta-foreground))" },
+          surface: {
+            0: "hsl(var(--surface-0))",
+            1: "hsl(var(--surface-1))",
+            2: "hsl(var(--surface-2) / <alpha-value>)",
+            3: "hsl(var(--surface-3))",
+            4: "hsl(var(--surface-4))",
+            5: "hsl(var(--surface-5))",
+          },
+          chip: {
+            blue: "hsl(var(--accent-blue) / <alpha-value>)",
+            violet: "hsl(var(--accent-violet) / <alpha-value>)",
+            emerald: "hsl(var(--accent-emerald) / <alpha-value>)",
+            coral: "hsl(var(--accent-coral) / <alpha-value>)",
+            amber: "hsl(var(--accent-amber) / <alpha-value>)",
+            teal: "hsl(var(--accent-teal) / <alpha-value>)",
+          },
+          tint: {
+            blue: "hsl(var(--tint-blue))",
+            violet: "hsl(var(--tint-violet))",
+            emerald: "hsl(var(--tint-emerald))",
+            coral: "hsl(var(--tint-coral))",
+            amber: "hsl(var(--tint-amber))",
+            teal: "hsl(var(--tint-teal))",
+            cream: "hsl(var(--tint-cream))",
+          },
+        },
+      },
+    },
+  };
+</script>
+
+<style>
+  /* ============================================================
+     Paper & Pastel — token definitions (ground truth: tokens.css)
+     Light = bare :root. Dark = OS-dark (unless data-theme=light)
+     and explicit data-theme=dark. All colour is token-driven, so
+     the page holds in all three viewer theme states.
+     ============================================================ */
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222 20% 12%;
+    --card: 220 20% 98%;
+    --muted-foreground: 220 9% 42%;
+    --primary: 217 78% 50%;
+    --primary-foreground: 0 0% 100%;
+    --accent: 220 16% 94%;
+    --accent-foreground: 222 20% 15%;
+    --secondary: 220 16% 95%;
+    --secondary-foreground: 222 20% 15%;
+    --border: 220 15% 90%;
+    --input: 220 15% 88%;
+    --ring: 217 78% 50%;
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 55% 34%;
+    --warning: 38 88% 46%;
+
+    --accent-blue: 217 78% 50%;
+    --accent-violet: 258 65% 58%;
+    --accent-emerald: 156 55% 34%;
+    --accent-coral: 351 75% 58%;
+    --accent-amber: 32 88% 48%;
+    --accent-teal: 185 62% 34%;
+
+    --tint-blue: 213 78% 94%;
+    --tint-violet: 258 60% 95%;
+    --tint-emerald: 156 45% 92%;
+    --tint-coral: 351 65% 95%;
+    --tint-amber: 34 75% 93%;
+    --tint-teal: 185 45% 92%;
+    --tint-cream: 38 40% 95%;
+
+    --cta: 222 20% 12%;
+    --cta-foreground: 0 0% 100%;
+
+    --surface-0: 0 0% 100%;
+    --surface-1: 220 20% 98%;
+    --surface-2: 220 17% 96%;
+    --surface-3: 220 15% 94%;
+    --surface-4: 220 13% 91%;
+    --surface-5: 220 11% 87%;
+
+    --shadow-color: 220 30% 15%;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --background: 222 16% 6%;
+      --foreground: 220 15% 92%;
+      --card: 222 15% 9%;
+      --muted-foreground: 220 10% 60%;
+      --primary: 217 85% 63%;
+      --primary-foreground: 222 20% 8%;
+      --accent: 222 12% 14%;
+      --accent-foreground: 220 15% 92%;
+      --secondary: 222 12% 14%;
+      --secondary-foreground: 220 15% 92%;
+      --border: 222 12% 16%;
+      --input: 222 12% 17%;
+      --ring: 217 85% 63%;
+      --destructive: 0 68% 56%;
+      --success: 152 50% 48%;
+      --warning: 42 88% 58%;
+      --accent-blue: 217 85% 63%;
+      --accent-violet: 258 75% 70%;
+      --accent-emerald: 156 50% 52%;
+      --accent-coral: 351 78% 66%;
+      --accent-amber: 34 88% 60%;
+      --accent-teal: 185 55% 52%;
+      --tint-blue: 217 45% 15%;
+      --tint-violet: 258 38% 17%;
+      --tint-emerald: 156 30% 14%;
+      --tint-coral: 351 40% 17%;
+      --tint-amber: 34 45% 15%;
+      --tint-teal: 185 32% 14%;
+      --tint-cream: 38 20% 13%;
+      --cta: 0 0% 96%;
+      --cta-foreground: 222 20% 10%;
+      --surface-0: 222 16% 6%;
+      --surface-1: 222 15% 9%;
+      --surface-2: 222 13% 11.5%;
+      --surface-3: 222 12% 14%;
+      --surface-4: 222 11% 17%;
+      --surface-5: 222 10% 21%;
+      --shadow-color: 222 40% 2%;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --background: 222 16% 6%;
+    --foreground: 220 15% 92%;
+    --card: 222 15% 9%;
+    --muted-foreground: 220 10% 60%;
+    --primary: 217 85% 63%;
+    --primary-foreground: 222 20% 8%;
+    --accent: 222 12% 14%;
+    --accent-foreground: 220 15% 92%;
+    --secondary: 222 12% 14%;
+    --secondary-foreground: 220 15% 92%;
+    --border: 222 12% 16%;
+    --input: 222 12% 17%;
+    --ring: 217 85% 63%;
+    --destructive: 0 68% 56%;
+    --success: 152 50% 48%;
+    --warning: 42 88% 58%;
+    --accent-blue: 217 85% 63%;
+    --accent-violet: 258 75% 70%;
+    --accent-emerald: 156 50% 52%;
+    --accent-coral: 351 78% 66%;
+    --accent-amber: 34 88% 60%;
+    --accent-teal: 185 55% 52%;
+    --tint-blue: 217 45% 15%;
+    --tint-violet: 258 38% 17%;
+    --tint-emerald: 156 30% 14%;
+    --tint-coral: 351 40% 17%;
+    --tint-amber: 34 45% 15%;
+    --tint-teal: 185 32% 14%;
+    --tint-cream: 38 20% 13%;
+    --cta: 0 0% 96%;
+    --cta-foreground: 222 20% 10%;
+    --surface-0: 222 16% 6%;
+    --surface-1: 222 15% 9%;
+    --surface-2: 222 13% 11.5%;
+    --surface-3: 222 12% 14%;
+    --surface-4: 222 11% 17%;
+    --surface-5: 222 10% 21%;
+    --shadow-color: 222 40% 2%;
+    color-scheme: dark;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: hsl(var(--background));
+    color: hsl(var(--foreground));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ---- the few named utilities the system relies on ---- */
+  .glass {
+    background: hsl(var(--surface-1) / 0.72);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--border) / 0.8);
+  }
+  .card-hover { transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s cubic-bezier(.4,0,.2,1); }
+  .card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 1px 2px hsl(var(--shadow-color) / .06), 0 12px 24px -8px hsl(var(--shadow-color) / .18);
+  }
+  .lift { transition: transform .3s cubic-bezier(.22,1,.36,1), border-color .3s ease; }
+  .lift:hover { transform: translateY(-4px); }
+  /* chip sitting ON a tint wash — white/70 in light, black/20 in dark */
+  .chip-on-tint { background: hsl(0 0% 100% / .7); }
+  :root[data-theme="dark"] .chip-on-tint { background: hsl(0 0% 0% / .22); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .chip-on-tint { background: hsl(0 0% 0% / .22); }
+  }
+  .noise {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .025;
+  }
+  .dotgrid {
+    background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px);
+    background-size: 28px 28px;
+    opacity: .04;
+  }
+  [data-lucide] { width: 1rem; height: 1rem; }
+  :focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--surface-4)); border-radius: 9999px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition-duration: .01ms !important; animation-duration: .01ms !important; scroll-behavior: auto !important; }
+  }
+</style>
+
+<div class="min-h-screen bg-background font-sans text-foreground">
+  <div aria-hidden="true" class="noise pointer-events-none fixed inset-0 z-[1]"></div>
+
+  <!-- ============ Floating pill nav ============ -->
+  <header class="fixed inset-x-0 top-0 z-50 px-4 pt-4 sm:px-6 lg:px-8">
+    <nav class="glass mx-auto flex max-w-5xl items-center justify-between rounded-full px-3 py-2 sm:px-4">
+      <a href="#top" class="group flex items-center gap-2.5">
+        <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-blue">
+          <i data-lucide="layers" class="text-chip-blue"></i>
+        </span>
+        <span class="font-mono text-[15px] font-semibold tracking-tight">
+          paper<span class="text-primary">.</span><span class="text-muted-foreground">pastel</span>
+        </span>
+      </a>
+
+      <div class="hidden items-center gap-0.5 md:flex" id="navlinks">
+        <a href="#colour" data-nav class="relative rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-2/70 hover:text-foreground">Colour</a>
+        <a href="#type" data-nav class="relative rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-2/70 hover:text-foreground">Type</a>
+        <a href="#controls" data-nav class="relative rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-2/70 hover:text-foreground">Controls</a>
+        <a href="#cards" data-nav class="relative rounded-full px-3.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-surface-2/70 hover:text-foreground">Cards</a>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" type="button" aria-label="Toggle theme"
+          class="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:text-foreground">
+          <i data-lucide="moon" data-theme-icon></i>
+        </button>
+        <a href="#contact" class="group hidden items-center gap-1.5 rounded-full bg-cta px-5 py-2 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 sm:inline-flex">
+          Get the kit
+          <i data-lucide="arrow-right" class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"></i>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <!-- ============ Intro ============ -->
+    <section class="px-4 pb-16 pt-32 sm:px-6 md:pb-20 md:pt-40 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-6 inline-flex items-center gap-1.5 rounded-full bg-tint-blue px-3.5 py-1.5 text-xs font-semibold text-chip-blue">
+          <i data-lucide="sparkles" class="h-3 w-3"></i>
+          Design system &middot; review build
+        </span>
+        <h1 class="max-w-3xl text-balance text-display-sm font-semibold tracking-tight sm:text-display">
+          Paper &amp; Pastel
+        </h1>
+        <p class="mt-5 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+          A white canvas carrying a small, curated family of pastel-tinted cards. Depth comes from
+          hairline borders and a one-hue surface ramp, not shadows. Colour is spent by category,
+          never for decoration. The one filled button is ink on paper. This page is built entirely
+          in the system, so every surface below is the real recipe.
+        </p>
+        <div class="mt-8 flex flex-wrap items-center gap-3">
+          <a href="#colour" class="group inline-flex items-center gap-2 rounded-full bg-cta px-6 py-3 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[.98]">
+            Start with colour
+            <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5"></i>
+          </a>
+          <button id="themeToggle2" type="button" class="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 text-sm font-semibold transition-colors hover:border-primary/30 hover:bg-surface-1">
+            <i data-lucide="sun" class="h-4 w-4"></i>
+            Flip the theme
+          </button>
+        </div>
+        <p class="mt-4 font-mono text-xs text-muted-foreground">
+          // toggle light &harr; dark and watch every token re-resolve. tints become dark tinted surfaces, not pastels.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============ 01 Colour ============ -->
+    <section id="colour" class="scroll-mt-24 border-t border-border bg-surface-1 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-blue px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-blue">// colour</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Five colour jobs, no more</h2>
+        <p class="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+          Canvas, ink, line, brand accent, and category colour. Greys are blue-tinted (hue ~220),
+          never neutral. If a colour you want does not map to one of these jobs, stop.
+        </p>
+
+        <!-- canvas & ink ramp -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">Canvas, ink &amp; line</h3>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-8">
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-background"></div>
+            <div class="p-3"><p class="text-xs font-semibold">background</p><p class="font-mono text-[10px] text-muted-foreground">0 0% 100%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-surface-1"></div>
+            <div class="p-3"><p class="text-xs font-semibold">surface-1</p><p class="font-mono text-[10px] text-muted-foreground">220 20% 98%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-surface-2"></div>
+            <div class="p-3"><p class="text-xs font-semibold">surface-2</p><p class="font-mono text-[10px] text-muted-foreground">220 17% 96%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-surface-3"></div>
+            <div class="p-3"><p class="text-xs font-semibold">surface-3</p><p class="font-mono text-[10px] text-muted-foreground">220 15% 94%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-surface-4"></div>
+            <div class="p-3"><p class="text-xs font-semibold">surface-4</p><p class="font-mono text-[10px] text-muted-foreground">220 13% 91%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16 bg-surface-5"></div>
+            <div class="p-3"><p class="text-xs font-semibold">surface-5</p><p class="font-mono text-[10px] text-muted-foreground">220 11% 87%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="flex h-16 items-center justify-center"><span class="h-8 w-8 rounded-full border-2 border-border"></span></div>
+            <div class="p-3"><p class="text-xs font-semibold">border</p><p class="font-mono text-[10px] text-muted-foreground">220 15% 90%</p></div>
+          </div>
+          <div class="overflow-hidden rounded-[16px] border border-border bg-card">
+            <div class="h-16" style="background:hsl(var(--foreground))"></div>
+            <div class="p-3"><p class="text-xs font-semibold">foreground</p><p class="font-mono text-[10px] text-muted-foreground">222 20% 12%</p></div>
+          </div>
+        </div>
+
+        <!-- chip accents -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Category colour &middot; <span class="text-foreground/70">chip-*</span> = solid glyph + /10 chip
+        </h3>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-blue/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-blue/10"><i data-lucide="stethoscope" class="text-chip-blue"></i></span>
+            <p class="mt-3 text-sm font-semibold">blue</p><p class="font-mono text-[10px] text-muted-foreground">217 78% 50%</p>
+          </div>
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-violet/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-violet/10"><i data-lucide="file-text" class="text-chip-violet"></i></span>
+            <p class="mt-3 text-sm font-semibold">violet</p><p class="font-mono text-[10px] text-muted-foreground">258 65% 58%</p>
+          </div>
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-emerald/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="video" class="text-chip-emerald"></i></span>
+            <p class="mt-3 text-sm font-semibold">emerald</p><p class="font-mono text-[10px] text-muted-foreground">156 55% 34%</p>
+          </div>
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-coral/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-coral/10"><i data-lucide="dollar-sign" class="text-chip-coral"></i></span>
+            <p class="mt-3 text-sm font-semibold">coral</p><p class="font-mono text-[10px] text-muted-foreground">351 75% 58%</p>
+          </div>
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-amber/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-amber/10"><i data-lucide="bar-chart-2" class="text-chip-amber"></i></span>
+            <p class="mt-3 text-sm font-semibold">amber</p><p class="font-mono text-[10px] text-muted-foreground">32 88% 48%</p>
+          </div>
+          <div class="rounded-[16px] border border-border bg-card p-4 transition-colors lift hover:border-chip-teal/35">
+            <span class="flex h-9 w-9 items-center justify-center rounded-full bg-chip-teal/10"><i data-lucide="users" class="text-chip-teal"></i></span>
+            <p class="mt-3 text-sm font-semibold">teal</p><p class="font-mono text-[10px] text-muted-foreground">185 62% 34%</p>
+          </div>
+        </div>
+
+        <!-- tint washes -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Category colour &middot; <span class="text-foreground/70">tint-*</span> = full-surface wash
+        </h3>
+        <div class="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <div class="rounded-[16px] bg-tint-blue p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-blue">tint-blue</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+          <div class="rounded-[16px] bg-tint-violet p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-violet">tint-violet</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+          <div class="rounded-[16px] bg-tint-emerald p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-emerald">tint-emerald</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+          <div class="rounded-[16px] bg-tint-coral p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-coral">tint-coral</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+          <div class="rounded-[16px] bg-tint-amber p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-amber">tint-amber</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+          <div class="rounded-[16px] bg-tint-teal p-4"><span class="chip-on-tint inline-flex rounded-full px-2.5 py-1 text-[11px] font-semibold text-chip-teal">tint-teal</span><p class="mt-3 text-xs text-foreground/70">card / band / chip ground</p></div>
+        </div>
+
+        <!-- brand + cta -->
+        <div class="mt-12 grid gap-4 sm:grid-cols-2">
+          <div class="flex items-center gap-4 rounded-[20px] border border-border bg-card p-5">
+            <span class="h-12 w-12 shrink-0 rounded-full" style="background:hsl(var(--primary))"></span>
+            <div>
+              <p class="text-sm font-semibold">primary &middot; cobalt</p>
+              <p class="mt-0.5 text-xs text-muted-foreground">Links, focus ring, the <span class="text-primary">.</span> in a wordmark, form-focus border. Never a button fill.</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 rounded-[20px] border border-border bg-card p-5">
+            <span class="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-cta text-cta-foreground"><i data-lucide="arrow-up-right"></i></span>
+            <div>
+              <p class="text-sm font-semibold">cta &middot; ink / paper</p>
+              <p class="mt-0.5 text-xs text-muted-foreground">The only filled button in the system. Flips to paper-on-ink in dark.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 02 Typography ============ -->
+    <section id="type" class="scroll-mt-24 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-violet px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-violet">// type</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Geist Sans, Geist Mono, nothing else</h2>
+        <p class="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+          Sans for everything readable. Mono for eyebrows, labels, meta, stat numbers and the
+          wordmark, always uppercase and wide-tracked. The display scale is oversized with very
+          tight tracking, used for headlines only.
+        </p>
+
+        <div class="mt-12 space-y-8">
+          <div class="border-b border-border pb-8">
+            <p class="text-display-lg font-semibold tracking-tight">Ship it clean</p>
+            <p class="mt-2 font-mono text-xs text-muted-foreground">text-display-lg &middot; 4.5rem / lh 1 / tracking -0.04em / font-semibold</p>
+          </div>
+          <div class="border-b border-border pb-8">
+            <p class="text-display font-semibold tracking-tight">Ship it clean</p>
+            <p class="mt-2 font-mono text-xs text-muted-foreground">text-display &middot; 3.5rem / lh 1.02 / tracking -0.035em</p>
+          </div>
+          <div class="border-b border-border pb-8">
+            <p class="text-display-sm font-semibold tracking-tight">Ship it clean</p>
+            <p class="mt-2 font-mono text-xs text-muted-foreground">text-display-sm &middot; 2.75rem / lh 1.05 / tracking -0.03em &middot; used for every section H2</p>
+          </div>
+          <div class="border-b border-border pb-8">
+            <p class="max-w-[65ch] text-base leading-relaxed text-muted-foreground md:text-lg">
+              Lead paragraph. Sits under a heading at <span class="font-mono text-xs text-foreground/70">max-w-2xl</span>,
+              muted, relaxed leading. Around 65 characters per line keeps it comfortable to read.
+            </p>
+            <p class="mt-2 font-mono text-xs text-muted-foreground">text-base md:text-lg &middot; leading-relaxed &middot; text-muted-foreground</p>
+          </div>
+          <div class="flex flex-wrap items-end gap-x-10 gap-y-6">
+            <div>
+              <span class="tabular-nums block text-4xl font-semibold tracking-tight text-chip-blue">25+</span>
+              <p class="mt-1 font-mono text-xs text-muted-foreground">stat number &middot; tabular-nums &middot; text-chip-*</p>
+            </div>
+            <div>
+              <span class="inline-flex items-center gap-1.5 rounded-full bg-tint-emerald px-3.5 py-1.5 text-xs font-semibold text-chip-emerald">
+                <i data-lucide="sparkles" class="h-3 w-3"></i> eyebrow &middot; chip form
+              </span>
+              <p class="mt-2 font-mono text-xs text-muted-foreground">bg-tint-* &middot; text-xs font-semibold text-chip-*</p>
+            </div>
+            <div>
+              <span class="font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-coral">// eyebrow &middot; label form</span>
+              <p class="mt-2 font-mono text-xs text-muted-foreground">font-mono uppercase tracking-[0.14em]</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 03 Controls ============ -->
+    <section id="controls" class="scroll-mt-24 border-t border-border bg-surface-1 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-emerald px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-emerald">// controls</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Pill-forward, one loud button</h2>
+        <p class="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+          Every button and badge is a full pill. One filled <span class="font-mono text-xs text-foreground/70">bg-cta</span> per
+          view; everything else recedes to outline, ghost or link.
+        </p>
+
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">Button variants</h3>
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="group inline-flex h-10 items-center gap-2 rounded-full bg-cta px-5 text-sm font-medium text-cta-foreground transition-all hover:bg-cta/90 active:scale-[.98]">
+            Start a project <i data-lucide="arrow-right" class="h-4 w-4 transition-transform group-hover:translate-x-0.5"></i>
+          </button>
+          <button class="inline-flex h-10 items-center gap-2 rounded-full border border-border bg-transparent px-5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">Outline</button>
+          <button class="inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">Ghost</button>
+          <button class="inline-flex h-10 items-center gap-1 px-1 text-sm font-medium text-primary underline-offset-4 hover:underline">Link style <i data-lucide="arrow-up-right" class="h-3.5 w-3.5"></i></button>
+          <button class="inline-flex h-10 items-center gap-2 rounded-full bg-destructive px-5 text-sm font-medium text-destructive-foreground transition-colors hover:bg-destructive/90">Destructive</button>
+        </div>
+
+        <h3 class="mb-4 mt-10 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">Sizes</h3>
+        <div class="flex flex-wrap items-center gap-3">
+          <button class="inline-flex h-9 items-center rounded-full bg-cta px-4 text-[13px] font-medium text-cta-foreground hover:bg-cta/90">Small</button>
+          <button class="inline-flex h-10 items-center rounded-full bg-cta px-5 text-sm font-medium text-cta-foreground hover:bg-cta/90">Default</button>
+          <button class="inline-flex h-12 items-center rounded-full bg-cta px-7 text-[15px] font-medium text-cta-foreground hover:bg-cta/90">Large</button>
+        </div>
+
+        <h3 class="mb-4 mt-10 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">Pills &amp; badges</h3>
+        <div class="flex flex-wrap items-center gap-2.5">
+          <span class="rounded-full border border-transparent bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">Badge</span>
+          <span class="rounded-full border border-transparent bg-secondary px-2.5 py-0.5 text-xs font-semibold text-secondary-foreground">Secondary</span>
+          <span class="rounded-full border border-border px-2.5 py-0.5 text-xs font-semibold">Outline</span>
+          <span class="rounded-full border border-border bg-surface-2 px-2.5 py-1 text-[10px] font-medium tracking-wide text-foreground/85">neutral tag</span>
+          <span class="rounded-full bg-tint-blue px-2.5 py-1 font-mono text-[10px] font-medium text-chip-blue">Next.js</span>
+          <span class="rounded-full bg-tint-violet px-2.5 py-1 font-mono text-[10px] font-medium text-chip-violet">TypeScript</span>
+          <span class="inline-flex items-center gap-1.5 rounded-full bg-tint-emerald px-2.5 py-1 text-[10px] font-semibold text-chip-emerald">
+            <span class="h-1.5 w-1.5 rounded-full" style="background:hsl(var(--success))"></span> Live
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 04 Cards ============ -->
+    <section id="cards" class="scroll-mt-24 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-coral px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-coral">// cards</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Three tile families, not one repeated card</h2>
+        <p class="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+          Featured showcase tiles, compact secondary cards, and fully-tinted content cards, each
+          doing a different job. Category colour is assigned once per item and cycled.
+        </p>
+
+        <!-- A: showcase tiles -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">A &middot; Tinted showcase tile</h3>
+        <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <a href="#cards" class="group relative flex h-[300px] flex-col justify-between overflow-hidden rounded-[28px] bg-tint-blue p-5 lift">
+            <span class="chip-on-tint inline-flex w-fit items-center gap-2 rounded-full px-3 py-2">
+              <i data-lucide="stethoscope" class="text-foreground"></i>
+              <span class="text-[13px] font-semibold">Healthcare Platforms</span>
+            </span>
+            <i data-lucide="stethoscope" class="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 text-foreground/[0.06]" style="width:10rem;height:10rem" stroke-width="1"></i>
+            <p class="relative max-w-[85%] text-[13px] leading-relaxed text-foreground/70">Full-stack systems for clinical workflows, from patient management to multi-site health systems.</p>
+            <span class="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-cta text-cta-foreground transition-transform group-hover:scale-110"><i data-lucide="arrow-up-right"></i></span>
+          </a>
+          <a href="#cards" class="group relative flex h-[300px] flex-col justify-between overflow-hidden rounded-[28px] bg-tint-violet p-5 lift md:mt-8">
+            <span class="chip-on-tint inline-flex w-fit items-center gap-2 rounded-full px-3 py-2">
+              <i data-lucide="file-text" class="text-foreground"></i>
+              <span class="text-[13px] font-semibold">EMR &amp; EHR Systems</span>
+            </span>
+            <i data-lucide="file-text" class="pointer-events-none absolute -bottom-6 -right-6 text-foreground/[0.06]" style="width:10rem;height:10rem" stroke-width="1"></i>
+            <p class="relative max-w-[85%] text-[13px] leading-relaxed text-foreground/70">Records systems built around your specialty and workflow, with FHIR R4 interoperability baked in.</p>
+            <span class="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-cta text-cta-foreground transition-transform group-hover:scale-110"><i data-lucide="arrow-up-right"></i></span>
+          </a>
+          <a href="#cards" class="group relative flex h-[300px] flex-col justify-between overflow-hidden rounded-[28px] bg-tint-emerald p-5 lift">
+            <span class="chip-on-tint inline-flex w-fit items-center gap-2 rounded-full px-3 py-2">
+              <i data-lucide="video" class="text-foreground"></i>
+              <span class="text-[13px] font-semibold">Telemedicine</span>
+            </span>
+            <i data-lucide="video" class="pointer-events-none absolute -bottom-6 -right-6 text-foreground/[0.06]" style="width:10rem;height:10rem" stroke-width="1"></i>
+            <p class="relative max-w-[85%] text-[13px] leading-relaxed text-foreground/70">WebRTC video visits, async messaging, digital intake, and HIPAA-eligible infrastructure.</p>
+            <span class="absolute bottom-4 right-4 flex h-10 w-10 items-center justify-center rounded-full bg-cta text-cta-foreground transition-transform group-hover:scale-110"><i data-lucide="arrow-up-right"></i></span>
+          </a>
+        </div>
+
+        <!-- B: compact secondary -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">B &middot; Compact secondary card</h3>
+        <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-coral/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-coral/10 transition-colors group-hover:bg-chip-coral/15"><i data-lucide="dollar-sign" class="text-chip-coral"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">Medical Billing</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Claim workflows, ERA/EOB processing, and aging analysis.</p></div>
+          </a>
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-teal/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-teal/10 transition-colors group-hover:bg-chip-teal/15"><i data-lucide="users" class="text-chip-teal"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">Patient Portals</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Booking, document access, and two-way secure messaging.</p></div>
+          </a>
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-violet/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-violet/10 transition-colors group-hover:bg-chip-violet/15"><i data-lucide="layers" class="text-chip-violet"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">Healthcare SaaS</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Multi-tenant products with per-org data isolation.</p></div>
+          </a>
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-blue/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-blue/10 transition-colors group-hover:bg-chip-blue/15"><i data-lucide="shield" class="text-chip-blue"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">HIPAA Compliance</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Encryption, audit logging, BAA-ready architecture.</p></div>
+          </a>
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-amber/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-amber/10 transition-colors group-hover:bg-chip-amber/15"><i data-lucide="calendar" class="text-chip-amber"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">Practice Management</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Scheduling, billing cycles, multi-facility operations.</p></div>
+          </a>
+          <a href="#cards" class="group flex items-start gap-3.5 rounded-[18px] border border-border bg-card p-4 transition-colors hover:border-chip-emerald/35">
+            <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-emerald/10 transition-colors group-hover:bg-chip-emerald/15"><i data-lucide="zap" class="text-chip-emerald"></i></span>
+            <div class="min-w-0"><h4 class="text-sm font-semibold leading-snug">Workflow Automation</h4><p class="mt-1 text-xs leading-relaxed text-muted-foreground">Automated reminders, intake, prior-authorization.</p></div>
+          </a>
+        </div>
+
+        <!-- C: fully tinted content cards -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">C &middot; Fully-tinted content card</h3>
+        <div class="grid gap-4 md:grid-cols-3">
+          <article class="group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-tint-violet p-6 lift">
+            <i data-lucide="arrow-up-right" class="absolute right-5 top-5 h-5 w-5 -translate-y-1 text-chip-violet opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"></i>
+            <div class="mb-4 flex flex-wrap gap-1.5 pr-6">
+              <span class="chip-on-tint rounded-full px-2.5 py-1 font-mono text-[11px] font-medium text-chip-violet">architecture</span>
+              <span class="chip-on-tint rounded-full px-2.5 py-1 font-mono text-[11px] font-medium text-chip-violet">FHIR</span>
+            </div>
+            <h4 class="mb-2 text-lg font-semibold leading-snug tracking-tight">Designing an EMR around one specialty</h4>
+            <p class="mb-5 flex-1 text-sm leading-relaxed text-foreground/70">Why generic record systems slow clinicians down, and how a specialty-shaped schema fixes it.</p>
+            <div class="flex items-center gap-3 border-t border-foreground/10 pt-4 text-xs text-foreground/60">
+              <span class="flex items-center gap-1"><i data-lucide="calendar" class="h-3 w-3"></i> Feb 14</span>
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i> 8 min</span>
+            </div>
+          </article>
+          <article class="group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-tint-blue p-6 lift">
+            <i data-lucide="arrow-up-right" class="absolute right-5 top-5 h-5 w-5 -translate-y-1 text-chip-blue opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"></i>
+            <div class="mb-4 flex flex-wrap gap-1.5 pr-6">
+              <span class="chip-on-tint rounded-full px-2.5 py-1 font-mono text-[11px] font-medium text-chip-blue">scaling</span>
+              <span class="chip-on-tint rounded-full px-2.5 py-1 font-mono text-[11px] font-medium text-chip-blue">APIs</span>
+            </div>
+            <h4 class="mb-2 text-lg font-semibold leading-snug tracking-tight">Multi-tenant isolation without the pain</h4>
+            <p class="mb-5 flex-1 text-sm leading-relaxed text-foreground/70">Row-level security, per-org keys, and the migration path that got us there.</p>
+            <div class="flex items-center gap-3 border-t border-foreground/10 pt-4 text-xs text-foreground/60">
+              <span class="flex items-center gap-1"><i data-lucide="calendar" class="h-3 w-3"></i> Jan 30</span>
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i> 11 min</span>
+            </div>
+          </article>
+          <article class="group relative flex h-full flex-col overflow-hidden rounded-[24px] bg-tint-coral p-6 lift">
+            <i data-lucide="arrow-up-right" class="absolute right-5 top-5 h-5 w-5 -translate-y-1 text-chip-coral opacity-0 transition-all group-hover:translate-y-0 group-hover:opacity-100"></i>
+            <div class="mb-4 flex flex-wrap gap-1.5 pr-6">
+              <span class="chip-on-tint rounded-full px-2.5 py-1 font-mono text-[11px] font-medium text-chip-coral">AI agents</span>
+            </div>
+            <h4 class="mb-2 text-lg font-semibold leading-snug tracking-tight">A triage assistant that knows when to stop</h4>
+            <p class="mb-5 flex-1 text-sm leading-relaxed text-foreground/70">Building guardrails so an LLM front desk escalates instead of guessing.</p>
+            <div class="flex items-center gap-3 border-t border-foreground/10 pt-4 text-xs text-foreground/60">
+              <span class="flex items-center gap-1"><i data-lucide="calendar" class="h-3 w-3"></i> Jan 12</span>
+              <span class="flex items-center gap-1"><i data-lucide="clock" class="h-3 w-3"></i> 6 min</span>
+            </div>
+          </article>
+        </div>
+
+        <!-- D: stat tiles -->
+        <h3 class="mb-4 mt-12 font-mono text-xs font-semibold uppercase tracking-wider text-muted-foreground">D &middot; Stat tile &middot; double-bezel</h3>
+        <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+          <div class="group rounded-[22px] bg-tint-blue p-1.5 lift">
+            <div class="h-full rounded-[17px] bg-background/60 p-4" style="box-shadow:inset 0 1px 0 hsl(var(--foreground)/0.06)">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-blue"><i data-lucide="calendar" class="text-chip-blue"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-blue md:text-4xl">5+</span>
+              <h4 class="mt-1 text-sm font-semibold leading-tight">Years shipping</h4>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">production healthcare &amp; SaaS</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-coral p-1.5 lift">
+            <div class="h-full rounded-[17px] bg-background/60 p-4" style="box-shadow:inset 0 1px 0 hsl(var(--foreground)/0.06)">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-coral"><i data-lucide="activity" class="text-chip-coral"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-coral md:text-4xl">3</span>
+              <h4 class="mt-1 text-sm font-semibold leading-tight">Healthcare products</h4>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">patient mgmt, billing, AI tools</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-violet p-1.5 lift">
+            <div class="h-full rounded-[17px] bg-background/60 p-4" style="box-shadow:inset 0 1px 0 hsl(var(--foreground)/0.06)">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-violet"><i data-lucide="layers" class="text-chip-violet"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-violet md:text-4xl">25+</span>
+              <h4 class="mt-1 text-sm font-semibold leading-tight">Projects shipped</h4>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">healthcare, finance &amp; AI</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-emerald p-1.5 lift">
+            <div class="h-full rounded-[17px] bg-background/60 p-4" style="box-shadow:inset 0 1px 0 hsl(var(--foreground)/0.06)">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-emerald"><i data-lucide="stethoscope" class="text-chip-emerald"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-emerald md:text-4xl">12</span>
+              <h4 class="mt-1 text-sm font-semibold leading-tight">Service lines</h4>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">every one HIPAA-aware</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 05 Forms & feedback ============ -->
+    <section class="scroll-mt-24 border-t border-border bg-surface-1 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-amber px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-amber">// forms &amp; feedback</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Inputs are the one thing that is not a pill</h2>
+
+        <div class="mt-12 grid gap-10 lg:grid-cols-2">
+          <div class="rounded-[24px] border border-border bg-background p-6 sm:p-8">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full bg-tint-blue px-3 py-1.5">
+              <i data-lucide="mail" class="h-3.5 w-3.5 text-chip-blue"></i>
+              <span class="font-mono text-xs font-semibold uppercase tracking-widest text-chip-blue">Send a message</span>
+            </div>
+            <form class="space-y-4" onsubmit="return false">
+              <div class="space-y-1.5">
+                <label for="f-name" class="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><i data-lucide="user" class="h-3 w-3"></i> Your name</label>
+                <input id="f-name" type="text" value="Jordan Ellis"
+                  class="w-full rounded-[10px] border border-border bg-surface-2/60 px-4 py-3 text-sm outline-none transition-all placeholder:text-muted-foreground/50 focus:border-primary/50 focus:ring-1 focus:ring-primary/30" />
+              </div>
+              <div class="space-y-1.5">
+                <label for="f-email" class="flex items-center gap-1.5 text-xs font-medium text-muted-foreground"><i data-lucide="mail" class="h-3 w-3"></i> Email address</label>
+                <input id="f-email" type="email" value="jordan@clinic"
+                  class="w-full rounded-[10px] border border-destructive/60 bg-surface-2/60 px-4 py-3 text-sm outline-none transition-all focus:border-destructive/60 focus:ring-1 focus:ring-destructive/20" />
+                <p class="flex items-center gap-1 text-xs text-destructive"><i data-lucide="alert-circle" class="h-3 w-3"></i> Please enter a valid email address</p>
+              </div>
+              <button class="flex w-full items-center justify-center gap-2 rounded-full bg-cta px-6 py-3.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90">
+                <i data-lucide="arrow-right" class="h-4 w-4"></i> Send message
+              </button>
+            </form>
+          </div>
+
+          <div class="space-y-4">
+            <div class="flex gap-3.5 rounded-xl border border-primary/20 p-4" style="background:hsl(var(--primary)/0.05)">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10"><i data-lucide="info" class="h-4 w-4 text-primary"></i></span>
+              <div><span class="mb-1 block font-mono text-xs font-semibold uppercase tracking-wider text-primary">Note</span><p class="text-sm leading-relaxed text-foreground/80">Info callout uses the brand accent. This is the one place the blue shows up as a surface tint.</p></div>
+            </div>
+            <div class="flex gap-3.5 rounded-xl border border-warning/20 p-4" style="background:hsl(var(--warning)/0.05)">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-warning/20 bg-warning/10"><i data-lucide="alert-triangle" class="h-4 w-4 text-warning"></i></span>
+              <div><span class="mb-1 block font-mono text-xs font-semibold uppercase tracking-wider text-warning">Warning</span><p class="text-sm leading-relaxed text-foreground/80">Status colour, separate from the six category accents. Never counts as your accent.</p></div>
+            </div>
+            <div class="flex gap-3.5 rounded-xl border border-success/20 p-4" style="background:hsl(var(--success)/0.05)">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-success/20 bg-success/10"><i data-lucide="lightbulb" class="h-4 w-4 text-success"></i></span>
+              <div><span class="mb-1 block font-mono text-xs font-semibold uppercase tracking-wider text-success">Tip</span><p class="text-sm leading-relaxed text-foreground/80">Match the padding tier to the component weight. Dense UI lives in 1.5 to 4.</p></div>
+            </div>
+            <div class="flex gap-3.5 rounded-xl border border-destructive/20 p-4" style="background:hsl(var(--destructive)/0.05)">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-destructive/20 bg-destructive/10"><i data-lucide="alert-circle" class="h-4 w-4 text-destructive"></i></span>
+              <div><span class="mb-1 block font-mono text-xs font-semibold uppercase tracking-wider text-destructive">Danger</span><p class="text-sm leading-relaxed text-foreground/80">Reserved for genuinely destructive actions and hard failures only.</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 06 Motion ============ -->
+    <section class="scroll-mt-24 px-4 py-20 sm:px-6 md:py-28 lg:px-8">
+      <div class="mx-auto max-w-6xl">
+        <span class="mb-4 inline-block rounded-full bg-tint-teal px-3.5 py-1.5 font-mono text-xs font-medium uppercase tracking-[0.14em] text-chip-teal">// motion</span>
+        <h2 class="text-balance text-display-sm font-semibold tracking-tight">Quiet, brief, once</h2>
+        <p class="mt-4 max-w-2xl text-base text-muted-foreground md:text-lg">
+          framer-motion in the real app. Hover the card to feel the standard lift. Everything sits
+          at a visible resting state and respects <span class="font-mono text-xs text-foreground/70">prefers-reduced-motion</span>.
+        </p>
+        <div class="mt-12 grid gap-4 md:grid-cols-2">
+          <div class="card-hover cursor-default rounded-[24px] border border-border bg-card p-6">
+            <p class="text-sm font-semibold">Hover-lift</p>
+            <p class="mt-1 text-xs text-muted-foreground">translateY(-3px) + tinted shadow built from <span class="font-mono">--shadow-color</span> at low alpha. No grey drop shadow anywhere.</p>
+          </div>
+          <div class="overflow-x-auto rounded-[24px] border border-border bg-card p-6">
+            <p class="mb-3 text-sm font-semibold">Reveal recipe</p>
+            <pre class="font-mono text-[11px] leading-relaxed text-muted-foreground">initial:  { opacity: 0, y: 20 }
+inView:   { opacity: 1, y: 0 }   once, margin -60px
+duration: 0.4 to 0.7   ease [0.22, 1, 0.36, 1]
+stagger:  0.06 per child</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer id="contact" class="relative scroll-mt-24 overflow-hidden border-t border-border bg-surface-1">
+    <div aria-hidden="true" class="dotgrid pointer-events-none absolute inset-0"></div>
+    <div class="relative mx-auto max-w-6xl px-4 pb-10 pt-14 sm:px-6 lg:px-8">
+      <div class="relative mb-14 overflow-hidden rounded-[28px] bg-tint-blue px-6 py-8 sm:px-10 sm:py-10">
+        <i data-lucide="heart-pulse" class="pointer-events-none absolute -bottom-10 -right-6 text-foreground/[0.06]" style="width:12rem;height:12rem" stroke-width="1"></i>
+        <div class="relative flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div>
+            <p class="mb-1.5 inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-widest text-chip-blue">
+              <span class="h-1.5 w-1.5 rounded-full" style="background:hsl(var(--success))"></span> Reviewable build
+            </p>
+            <h3 class="text-xl font-semibold tracking-tight sm:text-2xl">Did the skill get it right?</h3>
+          </div>
+          <a href="#top" class="group inline-flex shrink-0 items-center gap-1.5 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90">
+            Back to top <i data-lucide="arrow-right" class="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="grid gap-10 sm:grid-cols-[1.3fr_1fr_1fr]">
+        <div>
+          <span class="font-mono text-base font-bold">paper<span class="text-primary">.</span><span class="text-muted-foreground">pastel</span></span>
+          <p class="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            The Paper & Pastel visual language, packaged as a skill and a conversion agent for reuse across products.
+          </p>
+        </div>
+        <div>
+          <h4 class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">In this build</h4>
+          <ul class="grid gap-2.5 text-sm text-foreground/80">
+            <li><a href="#colour" class="transition-colors hover:text-foreground">Colour tokens</a></li>
+            <li><a href="#type" class="transition-colors hover:text-foreground">Typography</a></li>
+            <li><a href="#controls" class="transition-colors hover:text-foreground">Controls</a></li>
+            <li><a href="#cards" class="transition-colors hover:text-foreground">Card patterns</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="mb-4 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">Not in this build</h4>
+          <ul class="grid gap-2.5 text-sm text-muted-foreground">
+            <li>Cream + serif + terracotta</li>
+            <li>Single-accent monochrome</li>
+            <li>Blue as a button fill</li>
+            <li>Grey shadow-md</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-12 border-t border-border/60 pt-6">
+        <p class="font-mono text-xs text-muted-foreground">&copy; 2026 Paper &amp; Pastel &middot; built in the system it documents</p>
+      </div>
+    </div>
+  </footer>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.462.0/lucide.min.js"></script>
+<script>
+  (function () {
+    var root = document.documentElement;
+    var KEY = "pp-kit-theme";
+
+    function stored() {
+      try { return localStorage.getItem(KEY); } catch (e) { return null; }
+    }
+    function apply(mode) {
+      if (mode === "light" || mode === "dark") root.setAttribute("data-theme", mode);
+      else root.removeAttribute("data-theme");
+      refreshIcon();
+    }
+    function currentIsDark() {
+      var t = root.getAttribute("data-theme");
+      if (t === "dark") return true;
+      if (t === "light") return false;
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    }
+    function refreshIcon() {
+      var dark = currentIsDark();
+      document.querySelectorAll("[data-theme-icon]").forEach(function (el) {
+        el.setAttribute("data-lucide", dark ? "sun" : "moon");
+      });
+      if (window.lucide) window.lucide.createIcons({ attrs: { "stroke-width": 1.75 } });
+    }
+    function toggle() {
+      var next = currentIsDark() ? "light" : "dark";
+      try { localStorage.setItem(KEY, next); } catch (e) {}
+      apply(next);
+    }
+
+    var initial = stored();
+    if (initial === "light" || initial === "dark") root.setAttribute("data-theme", initial);
+
+    ["themeToggle", "themeToggle2"].forEach(function (id) {
+      var b = document.getElementById(id);
+      if (b) b.addEventListener("click", toggle);
+    });
+
+    if (window.lucide) window.lucide.createIcons({ attrs: { "stroke-width": 1.75 } });
+    refreshIcon();
+
+    // active-section highlight on the floating nav
+    var links = Array.prototype.slice.call(document.querySelectorAll("[data-nav]"));
+    var map = {};
+    links.forEach(function (l) {
+      var id = l.getAttribute("href").slice(1);
+      var sec = document.getElementById(id);
+      if (sec) map[id] = l;
+    });
+    var obs = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        links.forEach(function (l) {
+          l.classList.remove("bg-tint-blue", "text-chip-blue");
+          l.classList.add("text-muted-foreground");
+        });
+        var active = map[e.target.id];
+        if (active) {
+          active.classList.remove("text-muted-foreground");
+          active.classList.add("bg-tint-blue", "text-chip-blue");
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px" });
+    Object.keys(map).forEach(function (id) { obs.observe(document.getElementById(id)); });
+  })();
+</script>

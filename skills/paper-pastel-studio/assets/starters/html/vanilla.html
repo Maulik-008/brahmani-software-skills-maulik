@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Brand app (plain CSS)</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+<style>
+/* Paper & Pastel: variables only (generated from tokens.css by scripts/build_assets.py).
+   HSL channels, no hsl() wrapper. Light = :root, dark = .dark.
+   Do not edit by hand: edit tokens.css and regenerate. */
+@layer base {
+  :root {
+    /* ---- Canvas & ink -------------------------------------------------------
+       Light mode is a paper-white editorial canvas. Pure #fff page, near-black
+       (never pure black) ink. Cards sit a hair off-white so they read as objects
+       on paper without a shadow. */
+    --background: 0 0% 100%;          /* page              #ffffff              */
+    --foreground: 222 20% 12%;        /* primary text      ~#181c24            */
+
+    --card: 220 20% 98%;             /* default card fill  ~#f8f9fb            */
+    --card-foreground: 222 20% 12%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 20% 12%;
+
+    /* ---- Brand accent (cobalt) — links / focus / logo dot / tiny emphasis.
+       NOT a button fill. See --cta for buttons. */
+    --primary: 217 78% 50%;          /* ~#2160d6 */
+    --primary-foreground: 0 0% 100%;
+
+    /* ---- Neutral UI fills ------------------------------------------------- */
+    --accent: 220 16% 94%;           /* ghost-button hover, subtle fills       */
+    --accent-foreground: 222 20% 15%;
+    --secondary: 220 16% 95%;        /* secondary button fill                  */
+    --secondary-foreground: 222 20% 15%;
+    --muted: 220 16% 95%;
+    --muted-foreground: 220 9% 42%;  /* captions, meta, secondary body ~#5f6672 */
+
+    /* ---- Status -------------------------------------------------------------- */
+    --destructive: 0 72% 48%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 55% 34%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 88% 46%;
+    --warning-foreground: 38 96% 10%;
+
+    /* ---- Lines & focus ---------------------------------------------------- */
+    --border: 220 15% 90%;           /* hairline, ~#e1e4e9 — the ONLY divider  */
+    --input: 220 15% 88%;
+    --ring: 217 78% 50%;             /* = primary                             */
+
+    /* ---- Shape ----------------------------------------------------------------
+       One base radius; component radii are derived from it (see tailwind snippet)
+       but most surfaces use explicit rounded-[Npx] — see the ladder in
+       component-recipes.md. */
+    --radius: 1.25rem;               /* 20px */
+
+    /* ---- Curated 6-colour accent set -----------------------------------------
+       Category coding ONLY (services, projects, testimonials, tech groups, blog).
+       Harmonised: matched saturation/lightness family, not a Tailwind grab-bag.
+       Used as: icon glyph colour + `/10`-`/15` icon-chip bg + `/35` hover border. */
+    --accent-blue: 217 78% 50%;
+    --accent-violet: 258 65% 58%;
+    --accent-emerald: 156 55% 34%;
+    --accent-coral: 351 75% 58%;
+    --accent-amber: 32 88% 48%;
+    --accent-teal: 185 62% 34%;
+
+    /* ---- Pastel tint washes ------------------------------------------------
+       Full-surface card / band / eyebrow-chip backgrounds ("ClickUp agent card"
+       style). Soft, high-lightness, low-mid saturation. Text on these is
+       `text-foreground` / `text-foreground/70`; chips on these are
+       `bg-white/70 dark:bg-black/20`. */
+    --tint-blue: 213 78% 94%;
+    --tint-violet: 258 60% 95%;
+    --tint-emerald: 156 45% 92%;
+    --tint-coral: 351 65% 95%;
+    --tint-amber: 34 75% 93%;
+    --tint-teal: 185 45% 92%;
+    --tint-cream: 38 40% 95%;
+
+    /* ---- Ink / Paper CTA --------------------------------------------------
+       The ONE filled-button colour. Primary CTAs are ink-on-paper, never the
+       blue accent (ClickUp / Acctual filled-button doctrine). */
+    --cta: 222 20% 12%;              /* near-black */
+    --cta-foreground: 0 0% 100%;
+
+    /* ---- Surface elevation ramp ----------------------------------------------
+       Gentle lightness steps in ONE hue. This — plus hairline borders — is the
+       depth system. Real shadows appear only on hover-lift and floating chrome.
+       surface-1 = the standard alternating-section / resting-card background. */
+    --surface-0: 0 0% 100%;
+    --surface-1: 220 20% 98%;
+    --surface-2: 220 17% 96%;
+    --surface-3: 220 15% 94%;
+    --surface-4: 220 13% 91%;
+    --surface-5: 220 11% 87%;
+
+    --shadow-color: 220 30% 15%;     /* tint for every box-shadow, at low alpha */
+
+    /* ---- Sidebar (dashboard shells) ------------------------------------------ */
+    --sidebar-background: 220 20% 98%;
+    --sidebar-foreground: 222 20% 15%;
+    --sidebar-primary: 217 78% 50%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 220 16% 94%;
+    --sidebar-accent-foreground: 222 20% 15%;
+    --sidebar-border: 220 15% 90%;
+    --sidebar-ring: 217 78% 50%;
+  }
+
+  .dark {
+    /* ---- Canvas & ink — true ink-black, never navy, never #000 ---------- */
+    --background: 222 16% 6%;         /* ~#0d0f12 */
+    --foreground: 220 15% 92%;        /* ~#e7e9 ee — off-white */
+
+    --card: 222 15% 9%;
+    --card-foreground: 220 15% 92%;
+    --popover: 222 16% 8%;
+    --popover-foreground: 220 15% 92%;
+
+    --primary: 217 85% 63%;          /* brightened for dark contrast */
+    --primary-foreground: 222 20% 8%;
+
+    --accent: 222 12% 14%;
+    --accent-foreground: 220 15% 92%;
+    --secondary: 222 12% 14%;
+    --secondary-foreground: 220 15% 92%;
+    --muted: 222 12% 13%;
+    --muted-foreground: 220 10% 60%;
+
+    --destructive: 0 68% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 50% 48%;
+    --success-foreground: 152 70% 8%;
+    --warning: 42 88% 58%;
+    --warning-foreground: 42 90% 10%;
+
+    --border: 222 12% 16%;
+    --input: 222 12% 17%;
+    --ring: 217 85% 63%;
+
+    /* accent set — brightened / slightly desaturated for dark */
+    --accent-blue: 217 85% 63%;
+    --accent-violet: 258 75% 70%;
+    --accent-emerald: 156 50% 52%;
+    --accent-coral: 351 78% 66%;
+    --accent-amber: 34 88% 60%;
+    --accent-teal: 185 55% 52%;
+
+    /* tint washes become low-lightness tinted SURFACES, not literal pastels */
+    --tint-blue: 217 45% 15%;
+    --tint-violet: 258 38% 17%;
+    --tint-emerald: 156 30% 14%;
+    --tint-coral: 351 40% 17%;
+    --tint-amber: 34 45% 15%;
+    --tint-teal: 185 32% 14%;
+    --tint-cream: 38 20% 13%;
+
+    /* CTA flips to paper-on-ink */
+    --cta: 0 0% 96%;
+    --cta-foreground: 222 20% 10%;
+
+    --surface-0: 222 16% 6%;
+    --surface-1: 222 15% 9%;
+    --surface-2: 222 13% 11.5%;
+    --surface-3: 222 12% 14%;
+    --surface-4: 222 11% 17%;
+    --surface-5: 222 10% 21%;
+
+    --shadow-color: 222 40% 2%;
+
+    --sidebar-background: 222 16% 7%;
+    --sidebar-foreground: 220 15% 88%;
+    --sidebar-primary: 217 85% 63%;
+    --sidebar-primary-foreground: 222 20% 8%;
+    --sidebar-accent: 222 12% 13%;
+    --sidebar-accent-foreground: 220 15% 90%;
+    --sidebar-border: 222 12% 15%;
+    --sidebar-ring: 217 85% 63%;
+  }
+}
+
+/* AA-safe text variants. Generated by scripts/suggest_ink.py from tokens.css.
+   Use ONLY for text (labels, eyebrows, stat numbers). Keep chip-* for glyphs
+   and icon-chip fills. Paste after tokens.css. Same hues, darker lightness. */
+@layer base {
+  :root {
+    --chip-blue-ink: 217 78% 45.5%;  /* worst pair 4.57:1 */
+    --chip-violet-ink: 258 65% 56%;  /* worst pair 4.57:1 */
+    --chip-emerald-ink: 156 55% 29%;  /* worst pair 4.57:1 */
+    --chip-coral-ink: 351 75% 44%;  /* worst pair 4.62:1 */
+    --chip-amber-ink: 32 88% 32.5%;  /* worst pair 4.57:1 */
+    --chip-teal-ink: 185 62% 29%;  /* worst pair 4.58:1 */
+    --warning-ink: 38 88% 30.5%;
+    --destructive-ink: 0 72% 46.5%;
+    --success-ink: 152 55% 30%;
+  }
+  .dark {
+    --chip-blue-ink: 217 85% 63%;  /* worst pair 4.57:1 */
+    --chip-violet-ink: 258 75% 70.5%;  /* worst pair 4.58:1 */
+    --chip-emerald-ink: 156 50% 52%;  /* worst pair 6.31:1 */
+    --chip-coral-ink: 351 78% 66%;  /* worst pair 4.80:1 */
+    --chip-amber-ink: 34 88% 60%;  /* worst pair 6.76:1 */
+    --chip-teal-ink: 185 55% 52%;  /* worst pair 6.22:1 */
+    --warning-ink: 42 88% 58%;
+    --destructive-ink: 0 68% 62.5%;
+    --success-ink: 152 50% 48%;
+  }
+}
+
+/* Paper & Pastel Studio: craft layer (plain CSS, framework-agnostic).
+   Loaded AFTER the tokens. Uses only token variables, no raw colours except the sanctioned image outline.
+   Everything is inside cascade layers so utilities and your own unlayered CSS always win.
+   Rules and the reasons behind them: references/craft/*.md (adapted from Jakub Krehel's better-* skills, MIT). */
+
+@layer base {
+  /* Focus and in-page anchors never hide behind the floating nav (WCAG 2.4.11). Set to the nav's real height + gap. */
+  html { scroll-padding-top: 6rem; }
+
+  /* Headings balance, paragraphs avoid a lone last word. Never `balance` on paragraphs. */
+  h1, h2, h3, h4 { text-wrap: balance; }
+  p, li, blockquote, figcaption { text-wrap: pretty; }
+
+  /* Long words, URLs and IDs wrap instead of breaking the layout. */
+  h1, h2, h3, h4, p, li, td, th, dd { overflow-wrap: break-word; }
+
+  /* Dialogs, drawers, menus, side panels and palettes do not scroll the page behind them. */
+  dialog, [role="dialog"], [role="menu"], [role="listbox"] { overscroll-behavior: contain; }
+}
+
+@layer components {
+  /* One cluster, one rendering of numbers that tick or align. */
+  .tabular { font-variant-numeric: tabular-nums; }
+
+  /* Press feedback: named properties, 150ms, ease-out, never on disabled controls. System value 0.98 (decision 14), never below 0.96. */
+  .press { transition-property: scale, background-color, color, border-color; transition-duration: 150ms; transition-timing-function: ease-out; }
+  .press:not(:disabled):active { scale: 0.98; }
+
+  /* Invisible hit area of at least 44 x 44 around a smaller visual control (WCAG 2.5.8 AA is 24px; the system uses 44).
+     Put it on the label or button, never on an <input>. Make sure two hit areas never overlap. */
+  .tap-target { position: relative; }
+  .tap-target::after {
+    content: ""; position: absolute; top: 50%; left: 50%;
+    width: max(100%, 44px); height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+
+  /* 1px inset image outline: pure black or white at 10%, never a tinted grey. Skip logos and transparent cut-outs. */
+  .img-outline { outline: 1px solid rgb(0 0 0 / 0.1); outline-offset: -1px; }
+  .dark .img-outline, [data-theme="dark"] .img-outline { outline-color: rgb(255 255 255 / 0.1); }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .img-outline { outline-color: rgb(255 255 255 / 0.1); } }
+
+  /* Scrollable overlays keep their scroll to themselves. */
+  .scroll-contain { overscroll-behavior: contain; }
+
+  /* Skip link: first focusable element on the page, target <main id="main" tabindex="-1">. */
+  .skip-link { position: absolute; inset-inline-start: -999px; z-index: 100; padding: 0.5rem 1rem; border-radius: 9999px;
+    background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); font-size: 0.875rem; font-weight: 500; }
+  .skip-link:focus { inset-inline-start: 1rem; inset-block-start: 1rem; }
+
+  /* Visually hidden but available to assistive tech. Never display:none or visibility:hidden for this. */
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden;
+    clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0;
+  }
+}
+
+/* Windows high contrast / forced colours: keep edges that were drawn by box-shadow or hairline colour. */
+@media (forced-colors: active) {
+  .press, .tap-target { forced-color-adjust: auto; }
+}
+
+/* Paper & Pastel: plain-CSS component layer (no Tailwind, no build step).
+   Load order:  tokens.vars.css  ->  a11y-text.css  ->  pastel.css
+   Theme: add class="dark" to <html> (or data-theme="dark"). Every colour is a token, so dark needs no extra rules.
+   Hue: put a modifier on any component, e.g. class="pp-showcase pp-hue-violet".
+   Rules this file enforces for you: one filled button style (.pp-btn--cta), pills for controls, 18-28px cards,
+   10-12px inputs, hairline depth, no resting shadow, Geist + Geist Mono only. */
+
+:root {
+  --font-sans: "Geist", "Geist Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+*, *::before, *::after { box-sizing: border-box; border-color: hsl(var(--border)); }
+html { background: hsl(var(--background)); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: hsl(var(--background)); color: hsl(var(--foreground)); font-family: var(--font-sans);
+  font-feature-settings: 'rlig' 1, 'calt' 1; -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden; }
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+img, svg { max-width: 100%; }
+a { color: hsl(var(--primary)); text-underline-offset: 4px; }
+
+/* ---- hue modifiers: set three variables, components read them ---- */
+.pp-hue-blue    { --hue: var(--accent-blue);    --hue-ink: var(--chip-blue-ink, var(--accent-blue));       --hue-tint: var(--tint-blue); }
+.pp-hue-violet  { --hue: var(--accent-violet);  --hue-ink: var(--chip-violet-ink, var(--accent-violet));   --hue-tint: var(--tint-violet); }
+.pp-hue-emerald { --hue: var(--accent-emerald); --hue-ink: var(--chip-emerald-ink, var(--accent-emerald)); --hue-tint: var(--tint-emerald); }
+.pp-hue-coral   { --hue: var(--accent-coral);   --hue-ink: var(--chip-coral-ink, var(--accent-coral));     --hue-tint: var(--tint-coral); }
+.pp-hue-amber   { --hue: var(--accent-amber);   --hue-ink: var(--chip-amber-ink, var(--accent-amber));     --hue-tint: var(--tint-amber); }
+.pp-hue-teal    { --hue: var(--accent-teal);    --hue-ink: var(--chip-teal-ink, var(--accent-teal));       --hue-tint: var(--tint-teal); }
+
+/* ---- layout: container ladder 5xl / 6xl / 2xl, never wider ---- */
+.pp-container { width: 100%; max-width: 72rem; margin-inline: auto; }
+.pp-container--5xl { max-width: 64rem; }
+.pp-measure { max-width: 42rem; }
+.pp-section { position: relative; padding: 5rem 1rem; scroll-margin-top: 6rem; }
+.pp-section--band { background: hsl(var(--surface-1)); border-top: 1px solid hsl(var(--border)); }
+@media (min-width: 640px)  { .pp-section { padding-inline: 1.5rem; } }
+@media (min-width: 768px)  { .pp-section { padding-block: 7rem; } }
+@media (min-width: 1024px) { .pp-section { padding-inline: 2rem; } }
+.pp-grid { display: grid; gap: 1rem; }
+@media (min-width: 640px)  { .pp-grid--2, .pp-grid--3, .pp-grid--4 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .pp-grid--3 { grid-template-columns: repeat(3, 1fr); } .pp-grid--4 { grid-template-columns: repeat(4, 1fr); } }
+.pp-grid--tight { gap: 0.75rem; }
+
+/* ---- type ---- */
+.pp-display { font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; margin: 0; }
+@media (min-width: 640px) { .pp-display { font-size: 3.5rem; line-height: 1.02; letter-spacing: -0.035em; } }
+@media (min-width: 768px) { .pp-display--hero { font-size: 4.5rem; line-height: 1; letter-spacing: -0.04em; } }
+.pp-h2 { font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.03em; font-weight: 600; text-wrap: balance; margin: 0; }
+.pp-h3 { font-size: 1.125rem; line-height: 1.3; letter-spacing: -0.01em; font-weight: 600; margin: 0; }
+.pp-lead { font-size: 1.0625rem; line-height: 1.6; color: hsl(var(--muted-foreground)); max-width: 42rem; margin: 1rem 0 0; }
+.pp-muted { color: hsl(var(--muted-foreground)); }
+.pp-mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.pp-center { text-align: center; } .pp-center .pp-lead { margin-inline: auto; }
+.pp-eyebrow { display: inline-flex; align-items: center; gap: 0.375rem; padding: 0.375rem 0.875rem; border-radius: 9999px;
+  background: hsl(var(--hue-tint, var(--tint-blue))); color: hsl(var(--hue-ink, var(--chip-blue-ink, var(--accent-blue))));
+  font-size: 0.75rem; font-weight: 600; margin-bottom: 1rem; }
+.pp-eyebrow--mono { font-family: var(--font-mono); font-weight: 500; text-transform: uppercase; letter-spacing: 0.14em; }
+.pp-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---- buttons: full pills. ONE filled style (cta). The accent is never a fill. ---- */
+.pp-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; height: 2.5rem; padding: 0 1.25rem;
+  border-radius: 9999px; border: 1px solid transparent; background: transparent; color: inherit; font: 500 0.875rem/1 var(--font-sans);
+  text-decoration: none; white-space: nowrap; cursor: pointer; transition: background-color .2s, border-color .2s, transform .2s; }
+.pp-btn::after { content: ""; position: absolute; inset: -2px; }                       /* 44px hit area without growing the button */
+.pp-btn:active { transform: scale(0.98); }
+.pp-btn:disabled, .pp-btn[aria-disabled="true"] { opacity: .5; pointer-events: none; }
+.pp-btn--cta { background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); }
+.pp-btn--outline { border-color: hsl(var(--border)); color: hsl(var(--foreground)); }
+.pp-btn--ghost { color: hsl(var(--foreground)); }
+.pp-btn--lg { height: 3rem; padding: 0 1.75rem; font-size: 0.9375rem; }
+.pp-btn--sm { height: 2.25rem; padding: 0 1rem; font-size: 0.8125rem; }
+.pp-btn .pp-arrow { transition: transform .2s; }
+
+/* ---- surfaces: hairline border + surface step. No shadow at rest. ---- */
+.pp-card { border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); border-radius: 24px; padding: 1.5rem; }
+.pp-card--compact { border-radius: 18px; padding: 1rem; }
+.pp-card--minimal { background: transparent; border-radius: 18px; padding: 1.25rem; }
+.pp-lift { transition: transform .3s; }
+
+/* tint wash: showcase cards, eyebrow chips, footer CTA. Chips ON a tint use .pp-on-tint */
+.pp-tint { background: hsl(var(--hue-tint, var(--tint-blue))); }
+.pp-on-tint { background: hsl(0 0% 100% / .7); }
+.dark .pp-on-tint, [data-theme="dark"] .pp-on-tint { background: hsl(0 0% 0% / .2); }
+
+/* icon in a circle (chip). On the canvas: tinted fill. */
+.pp-chip { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; flex: none; border-radius: 9999px;
+  background: hsl(var(--hue, var(--accent-blue)) / .10); color: hsl(var(--hue, var(--accent-blue))); transition: background-color .3s; }
+.pp-chip svg { width: 1rem; height: 1rem; }
+
+/* FEATURED tile */
+.pp-showcase { position: relative; display: flex; flex-direction: column; justify-content: space-between; height: 300px; overflow: hidden; padding: 1.25rem;
+  border-radius: 28px; background: hsl(var(--hue-tint)); color: inherit; text-decoration: none; transition: transform .3s; }
+.pp-showcase__label { display: inline-flex; align-items: center; gap: .5rem; width: fit-content; padding: .5rem .75rem; border-radius: 9999px; font-size: .8125rem; font-weight: 600; }
+.pp-showcase__label svg { width: 1rem; height: 1rem; }
+.pp-showcase__body { position: relative; max-width: 85%; font-size: .8125rem; line-height: 1.6; color: hsl(var(--foreground) / .7); margin: 0; }
+.pp-watermark { position: absolute; right: -1.5rem; bottom: -1.5rem; width: 10rem; height: 10rem; color: hsl(var(--foreground) / .06); pointer-events: none; }
+.pp-circle-action { position: absolute; right: 1rem; bottom: 1rem; display: inline-flex; align-items: center; justify-content: center; width: 2.5rem; height: 2.5rem;
+  border-radius: 9999px; background: hsl(var(--cta)); color: hsl(var(--cta-foreground)); transition: transform .3s; }
+
+/* SECONDARY tile */
+.pp-listcard { display: flex; gap: .875rem; align-items: flex-start; padding: 1rem; border-radius: 18px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1));
+  color: inherit; text-decoration: none; transition: border-color .3s; }
+.pp-listcard h3 { margin: 0; font-size: .875rem; font-weight: 600; line-height: 1.3; }
+.pp-listcard p { margin: .25rem 0 0; font-size: .75rem; line-height: 1.6; color: hsl(var(--muted-foreground)); }
+
+/* KPI tile (double bezel) */
+.pp-stat { border-radius: 22px; padding: .375rem; background: hsl(var(--hue-tint)); transition: transform .3s; }
+.pp-stat__inner { height: 100%; border-radius: 17px; padding: 1rem; background: hsl(var(--background) / .6); box-shadow: inset 0 1px 0 hsl(var(--foreground) / .06); }
+.pp-stat__num { display: block; font: 600 2rem/1.1 var(--font-mono); letter-spacing: -0.02em; font-variant-numeric: tabular-nums; color: hsl(var(--hue-ink)); margin: .75rem 0 .25rem; }
+.pp-stat h3 { margin: 0; font-size: .875rem; font-weight: 600; } .pp-stat p { margin: .25rem 0 0; font-size: .6875rem; color: hsl(var(--foreground) / .7); }
+
+/* pill tag */
+.pp-pill { display: inline-flex; align-items: center; padding: .25rem .625rem; border-radius: 9999px; font-size: .625rem; font-weight: 500; letter-spacing: .02em;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--surface-2)); color: hsl(var(--foreground) / .85); }
+.pp-pill--mono { font-family: var(--font-mono); }
+
+/* ---- forms: inputs are the ONE non-pill control ---- */
+.pp-field { display: grid; gap: .375rem; }
+.pp-label { display: flex; align-items: center; gap: .375rem; font-size: .75rem; font-weight: 500; color: hsl(var(--muted-foreground)); }
+.pp-input { width: 100%; padding: .75rem 1rem; border-radius: 10px; border: 1px solid hsl(var(--border)); background: hsl(var(--surface-2) / .6); color: inherit;
+  font: inherit; font-size: .875rem; outline: none; transition: border-color .2s, box-shadow .2s; }
+.pp-input::placeholder { color: hsl(var(--muted-foreground) / .6); }
+.pp-input:focus { border-color: hsl(var(--primary) / .5); box-shadow: 0 0 0 1px hsl(var(--primary) / .3); }
+.pp-input[aria-invalid="true"] { border-color: hsl(var(--destructive) / .6); }
+.pp-input[aria-invalid="true"]:focus { box-shadow: 0 0 0 1px hsl(var(--destructive) / .2); }
+textarea.pp-input { min-height: 5.5rem; resize: vertical; }
+.pp-error { margin: 0; font-size: .75rem; color: hsl(var(--destructive-ink, var(--destructive))); }
+.pp-hint { margin: 0; font-size: .75rem; color: hsl(var(--muted-foreground)); }
+.pp-input--dense { padding: .625rem .875rem; font-size: .8125rem; }
+
+/* ---- status callouts: their own axis, never a category colour ---- */
+.pp-callout { display: flex; gap: .875rem; padding: 1rem; border-radius: 20px; border: 1px solid var(--c-border); background: var(--c-bg); }
+.pp-callout__label { display: block; margin-bottom: .25rem; font: 600 .75rem/1 var(--font-mono); text-transform: uppercase; letter-spacing: .05em; color: var(--c-ink); }
+.pp-callout p { margin: 0; font-size: .875rem; line-height: 1.6; color: hsl(var(--foreground) / .8); }
+.pp-callout--info    { --c-ink: hsl(var(--primary));                          --c-border: hsl(var(--primary) / .2);     --c-bg: hsl(var(--primary) / .05); }
+.pp-callout--tip     { --c-ink: hsl(var(--success-ink, var(--success)));       --c-border: hsl(var(--success) / .2);     --c-bg: hsl(var(--success) / .05); }
+.pp-callout--warning { --c-ink: hsl(var(--warning-ink, var(--warning)));       --c-border: hsl(var(--warning) / .25);    --c-bg: hsl(var(--warning) / .06); }
+.pp-callout--danger  { --c-ink: hsl(var(--destructive-ink, var(--destructive))); --c-border: hsl(var(--destructive) / .2); --c-bg: hsl(var(--destructive) / .05); }
+
+/* ---- nav: floating glass pill. The ONLY place blur is allowed (plus its mobile sheet). ---- */
+.pp-nav { position: fixed; inset: 0 0 auto 0; z-index: 50; padding: 1rem 1rem 0; }
+.pp-nav__bar { display: flex; align-items: center; justify-content: space-between; max-width: 64rem; margin-inline: auto; padding: .625rem .75rem; border-radius: 9999px;
+  background: hsl(var(--surface-1) / .72); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); border: 1px solid hsl(var(--border) / .8); }
+.pp-nav__links { display: none; gap: .125rem; }
+@media (min-width: 768px) { .pp-nav__links { display: flex; } }
+.pp-nav__links a { padding: .375rem .875rem; border-radius: 9999px; font-size: .875rem; font-weight: 500; color: hsl(var(--muted-foreground)); text-decoration: none; transition: background-color .2s, color .2s; }
+.pp-nav__links a[aria-current="page"] { background: hsl(var(--tint-blue)); color: hsl(var(--chip-blue-ink, var(--accent-blue))); }
+.pp-wordmark { font: 600 .9375rem/1 var(--font-mono); letter-spacing: -0.01em; color: hsl(var(--foreground)); text-decoration: none; }
+.pp-wordmark i { font-style: normal; color: hsl(var(--primary)); } .pp-wordmark span { color: hsl(var(--muted-foreground)); }
+.pp-icon-btn { position: relative; display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 9999px;
+  border: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); color: hsl(var(--foreground) / .7); cursor: pointer; transition: color .2s; }
+.pp-icon-btn::after { content: ""; position: absolute; inset: -4px; }
+
+/* ---- footer ---- */
+.pp-footer { position: relative; overflow: hidden; border-top: 1px solid hsl(var(--border)); background: hsl(var(--surface-1)); }
+.pp-footer::before { content: ""; position: absolute; inset: 0; opacity: .03; pointer-events: none;
+  background-image: radial-gradient(circle, hsl(var(--foreground)) 1px, transparent 1px); background-size: 28px 28px; }
+.pp-cta-card { position: relative; overflow: hidden; border-radius: 28px; padding: 2rem 1.5rem; background: hsl(var(--hue-tint)); }
+@media (min-width: 640px) { .pp-cta-card { padding: 2.5rem; } }
+
+/* ---- states ---- */
+.pp-empty { display: flex; flex-direction: column; align-items: center; gap: .75rem; padding: 3.5rem 1.5rem; text-align: center; }
+.pp-empty__icon { display: flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 9999px; background: hsl(var(--surface-2)); color: hsl(var(--muted-foreground)); }
+.pp-skeleton { border-radius: 10px; background: hsl(var(--surface-3)); animation: pp-pulse 2s ease-in-out infinite; }
+@keyframes pp-pulse { 50% { opacity: .5; } }
+.pp-live-dot { display: inline-block; width: .5rem; height: .5rem; border-radius: 9999px; background: hsl(var(--primary)); animation: pp-breathe 2.2s ease-in-out infinite; }
+@keyframes pp-breathe { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+@keyframes pp-rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+.pp-rise { animation: pp-rise .6s var(--ease) both; }
+
+@media (max-width: 640px) { .pp-btn, .pp-icon-btn { min-height: 44px; } }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+
+/* Hover only where hover exists (touch screens get no sticky hover). craft/surfaces-and-icons.md section 3. */
+@media (hover: hover) {
+  .pp-btn--cta:hover { background: hsl(var(--cta) / .9); }
+  .pp-btn--outline:hover { border-color: hsl(var(--primary) / .3); background: hsl(var(--surface-1)); }
+  .pp-btn--ghost:hover { background: hsl(var(--accent)); }
+  .pp-btn:hover .pp-arrow { transform: translateX(2px); }
+  .pp-lift:hover { transform: translateY(-4px); }
+  .pp-lift-shadow:hover { box-shadow: 0 1px 2px hsl(var(--shadow-color) / .06), 0 12px 24px -8px hsl(var(--shadow-color) / .18); }
+  .pp-showcase:hover { transform: translateY(-4px); }
+  .pp-showcase:hover .pp-circle-action { transform: scale(1.1); }
+  .pp-listcard:hover { border-color: hsl(var(--hue, var(--accent-blue)) / .35); }
+  .pp-listcard:hover .pp-chip { background: hsl(var(--hue, var(--accent-blue)) / .15); }
+  .pp-stat:hover { transform: translateY(-4px); }
+  .pp-nav__links a:hover { background: hsl(var(--surface-2) / .7); color: hsl(var(--foreground)); }
+  .pp-icon-btn:hover { color: hsl(var(--foreground)); }
+}
+
+</style>
+</head>
+<body>
+<header class="pp-nav"><nav class="pp-nav__bar" aria-label="Primary">
+  <a class="pp-wordmark" href="#top">Brand<i>.</i><span>app</span></a>
+  <div class="pp-nav__links"><a href="#features" aria-current="page">Features</a><a href="#numbers">Numbers</a><a href="#contact">Contact</a></div>
+  <div style="display:flex;gap:.5rem;align-items:center">
+    <button class="pp-icon-btn" id="themeToggle" type="button" aria-label="Switch theme"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></button>
+    <a class="pp-btn pp-btn--cta pp-btn--sm" href="#contact">Get started</a>
+  </div>
+</nav></header>
+<main id="top">
+  <section class="pp-section" style="padding-top:8rem"><div class="pp-container pp-center">
+    <span class="pp-eyebrow pp-hue-blue pp-rise"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>Starter built on Paper and Pastel</span>
+    <h1 class="pp-display pp-display--hero pp-rise" style="margin-inline:auto;max-width:56rem">Calm, white, and quietly colourful</h1>
+    <p class="pp-lead pp-rise">One ink button, six category colours, hairline depth. Replace this copy and keep the structure.</p>
+    <p class="pp-rise" style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:2rem"><a class="pp-btn pp-btn--cta pp-btn--lg" href="#contact">Start a project <svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a><a class="pp-btn pp-btn--outline pp-btn--lg" href="#features">See the kit</a></p>
+  </div></section>
+  <section class="pp-section pp-section--band" id="features"><div class="pp-container">
+    <div class="pp-center" style="margin-bottom:3rem"><span class="pp-eyebrow pp-eyebrow--mono pp-hue-blue">features</span><h2 class="pp-h2" style="max-width:48rem;margin-inline:auto">Three tile families, not one repeated card</h2><p class="pp-lead">Featured tiles carry a wash and a watermark. Secondary tiles stay neutral. Minimal tiles are one line and one link.</p></div>
+    <div class="pp-grid pp-grid--3"><a class="pp-showcase pp-hue-blue" href="#contact"><span class="pp-showcase__label pp-on-tint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>Care</span><svg class="pp-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg><p class="pp-showcase__body">A featured tile for the thing you most want people to open.</p><span class="pp-circle-action" aria-hidden="true"><svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a><a class="pp-showcase pp-hue-violet" href="#contact"><span class="pp-showcase__label pp-on-tint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>Platform</span><svg class="pp-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg><p class="pp-showcase__body">Wash, watermark, one ink circle. Colour says which category.</p><span class="pp-circle-action" aria-hidden="true"><svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a><a class="pp-showcase pp-hue-emerald" href="#contact"><span class="pp-showcase__label pp-on-tint"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg>Automation</span><svg class="pp-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg><p class="pp-showcase__body">Each item gets one hue, cycled. Never six colours in one card.</p><span class="pp-circle-action" aria-hidden="true"><svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span></a></div>
+    <div class="pp-grid pp-grid--4 pp-grid--tight" style="margin-top:1.5rem"><div class="pp-listcard pp-hue-coral"><span class="pp-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><div><h3>Shared inbox</h3><p>Compact tile, icon in a tinted circle.</p></div></div><div class="pp-listcard pp-hue-amber"><span class="pp-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><div><h3>Scheduling</h3><p>Hover takes the category colour.</p></div></div><div class="pp-listcard pp-hue-teal"><span class="pp-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><div><h3>Reporting</h3><p>Neutral surface, hairline border.</p></div></div><div class="pp-listcard pp-hue-blue"><span class="pp-chip"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><div><h3>Audit log</h3><p>No shadow at rest. Depth is a border.</p></div></div></div>
+    <div class="pp-grid pp-grid--3 pp-grid--tight" style="margin-top:1.5rem"><div class="pp-card pp-card--minimal"><h3 class="pp-h3" style="font-size:.875rem">Docs</h3><p class="pp-hint" style="margin-top:.375rem">Plain tile, one link.</p><a href="#contact" style="font-size:.75rem">Read more</a></div><div class="pp-card pp-card--minimal"><h3 class="pp-h3" style="font-size:.875rem">Changelog</h3><p class="pp-hint" style="margin-top:.375rem">Plain tile, one link.</p><a href="#contact" style="font-size:.75rem">Read more</a></div><div class="pp-card pp-card--minimal"><h3 class="pp-h3" style="font-size:.875rem">Status</h3><p class="pp-hint" style="margin-top:.375rem">Plain tile, one link.</p><a href="#contact" style="font-size:.75rem">Read more</a></div></div>
+  </div></section>
+  <section class="pp-section" id="numbers"><div class="pp-container">
+    <div class="pp-center" style="margin-bottom:3rem"><span class="pp-eyebrow pp-eyebrow--mono pp-hue-emerald">numbers</span><h2 class="pp-h2" style="max-width:48rem;margin-inline:auto">Numbers use mono and stay tabular</h2></div>
+    <div class="pp-grid pp-grid--4"><div class="pp-stat pp-hue-blue"><div class="pp-stat__inner"><span class="pp-chip" style="background:hsl(var(--hue-tint))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><span class="pp-stat__num">182</span><h3>Conversations</h3><p>Sample figure</p></div></div><div class="pp-stat pp-hue-emerald"><div class="pp-stat__inner"><span class="pp-chip" style="background:hsl(var(--hue-tint))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><span class="pp-stat__num">71%</span><h3>Handled automatically</h3><p>Sample figure</p></div></div><div class="pp-stat pp-hue-violet"><div class="pp-stat__inner"><span class="pp-chip" style="background:hsl(var(--hue-tint))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><span class="pp-stat__num">12</span><h3>Active projects</h3><p>Sample figure</p></div></div><div class="pp-stat pp-hue-amber"><div class="pp-stat__inner"><span class="pp-chip" style="background:hsl(var(--hue-tint))"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2z"/></svg></span><span class="pp-stat__num">46</span><h3>Bookings</h3><p>Sample figure</p></div></div></div>
+  </div></section>
+  <section class="pp-section pp-section--band"><div class="pp-container" style="display:grid;gap:.75rem;max-width:42rem">
+    <div class="pp-callout pp-callout--info" role="note"><div><span class="pp-callout__label">Note</span><p>Info uses the quiet accent.</p></div></div>
+    <div class="pp-callout pp-callout--warning" role="note"><div><span class="pp-callout__label">Heads up</span><p>Warning text uses the AA-safe ink variant.</p></div></div>
+    <div class="pp-callout pp-callout--danger" role="alert"><div><span class="pp-callout__label">Careful</span><p>Danger is for things that cannot be undone.</p></div></div>
+  </div></section>
+  <section class="pp-section" id="contact"><div class="pp-container pp-container--5xl">
+    <div class="pp-center" style="margin-bottom:3rem"><span class="pp-eyebrow pp-eyebrow--mono pp-hue-teal">contact</span><h2 class="pp-h2" style="max-width:36rem;margin-inline:auto">Inputs are the one thing that is not a pill</h2></div>
+    <form class="pp-card" style="max-width:36rem;margin-inline:auto;display:grid;gap:1rem" onsubmit="return false">
+      <div class="pp-field"><label class="pp-label" for="n">Your name</label><input class="pp-input" id="n" placeholder="Jane Doe"></div>
+      <div class="pp-field"><label class="pp-label" for="e">Email</label><input class="pp-input" id="e" type="email" placeholder="jane@company.com" aria-describedby="eh"><p class="pp-hint" id="eh">We only use this to reply.</p></div>
+      <div class="pp-field"><label class="pp-label" for="m">Message</label><textarea class="pp-input" id="m" placeholder="What are you building?"></textarea></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:.75rem"><span class="pp-pill pp-pill--mono">reply in 1 day</span><button class="pp-btn pp-btn--cta" type="submit">Send message <svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+    </form>
+  </div></section>
+</main>
+<footer class="pp-footer"><div class="pp-container" style="position:relative;padding:4rem 1rem 2rem">
+  <div class="pp-cta-card pp-hue-blue" style="margin-bottom:3.5rem"><svg class="pp-watermark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" aria-hidden="true"><path d="M3 12h4l2-6 4 12 2-6h6"/></svg>
+    <div style="position:relative;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between"><div><p class="pp-eyebrow pp-eyebrow--mono" style="background:none;padding:0;margin:0 0 .375rem;font-size:.6875rem;letter-spacing:.1em">Available for new projects</p><h3 class="pp-h3" style="font-size:1.5rem">Have something in mind?</h3></div><a class="pp-btn pp-btn--cta" href="#top">Start a conversation <svg class="pp-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a></div></div>
+  <p class="pp-mono pp-muted" style="font-size:.75rem;border-top:1px solid hsl(var(--border));padding-top:1.5rem;margin:0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem"><span>Brand.app</span><span>Built on Paper and Pastel</span></p>
+</div></footer>
+<script>
+(function(){var r=document.documentElement,K='pp-theme';try{var t=localStorage.getItem(K);if(t==='dark')r.classList.add('dark')}catch(e){}
+document.getElementById('themeToggle').addEventListener('click',function(){var d=r.classList.toggle('dark');r.style.colorScheme=d?'dark':'light';try{localStorage.setItem(K,d?'dark':'light')}catch(e){}});})();
+</script>
+</body>
+</html>

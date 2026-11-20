@@ -1,0 +1,1433 @@
+<title>Pulse Desk Prototype</title>
+<link rel="icon" href="data:,">
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
+
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+<script>
+  tailwind.config = {
+    darkMode: ['class', '[data-theme="dark"]'],
+    theme: {
+      extend: {
+        colors: {
+          border: 'hsl(var(--border) / <alpha-value>)',
+          input: 'hsl(var(--input) / <alpha-value>)',
+          ring: 'hsl(var(--ring) / <alpha-value>)',
+          background: 'hsl(var(--background) / <alpha-value>)',
+          foreground: 'hsl(var(--foreground) / <alpha-value>)',
+          primary: { DEFAULT: 'hsl(var(--primary) / <alpha-value>)', foreground: 'hsl(var(--primary-foreground) / <alpha-value>)' },
+          muted: { DEFAULT: 'hsl(var(--muted) / <alpha-value>)', foreground: 'hsl(var(--muted-foreground) / <alpha-value>)' },
+          accent: { DEFAULT: 'hsl(var(--accent) / <alpha-value>)', foreground: 'hsl(var(--accent-foreground) / <alpha-value>)' },
+          destructive: { DEFAULT: 'hsl(var(--destructive) / <alpha-value>)', foreground: 'hsl(var(--destructive-foreground) / <alpha-value>)' },
+          success: { DEFAULT: 'hsl(var(--success) / <alpha-value>)', foreground: 'hsl(var(--success-foreground) / <alpha-value>)' },
+          warning: { DEFAULT: 'hsl(var(--warning) / <alpha-value>)', foreground: 'hsl(var(--warning-foreground) / <alpha-value>)', ink: 'hsl(var(--warning-ink) / <alpha-value>)' },
+          surface: {
+            0: 'hsl(var(--surface-0) / <alpha-value>)', 1: 'hsl(var(--surface-1) / <alpha-value>)',
+            2: 'hsl(var(--surface-2) / <alpha-value>)', 3: 'hsl(var(--surface-3) / <alpha-value>)',
+            4: 'hsl(var(--surface-4) / <alpha-value>)', 5: 'hsl(var(--surface-5) / <alpha-value>)'
+          },
+          chip: {
+            blue: 'hsl(var(--accent-blue) / <alpha-value>)', violet: 'hsl(var(--accent-violet) / <alpha-value>)',
+            emerald: 'hsl(var(--accent-emerald) / <alpha-value>)', coral: 'hsl(var(--accent-coral) / <alpha-value>)',
+            amber: 'hsl(var(--accent-amber) / <alpha-value>)', teal: 'hsl(var(--accent-teal) / <alpha-value>)',
+            'blue-ink': 'hsl(var(--chip-blue-ink) / <alpha-value>)', 'violet-ink': 'hsl(var(--chip-violet-ink) / <alpha-value>)', 'emerald-ink': 'hsl(var(--chip-emerald-ink) / <alpha-value>)',
+            'coral-ink': 'hsl(var(--chip-coral-ink) / <alpha-value>)', 'amber-ink': 'hsl(var(--chip-amber-ink) / <alpha-value>)', 'teal-ink': 'hsl(var(--chip-teal-ink) / <alpha-value>)'
+          },
+          tint: {
+            blue: 'hsl(var(--tint-blue) / <alpha-value>)', violet: 'hsl(var(--tint-violet) / <alpha-value>)',
+            emerald: 'hsl(var(--tint-emerald) / <alpha-value>)', coral: 'hsl(var(--tint-coral) / <alpha-value>)',
+            amber: 'hsl(var(--tint-amber) / <alpha-value>)', teal: 'hsl(var(--tint-teal) / <alpha-value>)',
+            cream: 'hsl(var(--tint-cream) / <alpha-value>)'
+          },
+          cta: { DEFAULT: 'hsl(var(--cta) / <alpha-value>)', foreground: 'hsl(var(--cta-foreground) / <alpha-value>)' },
+          sidebar: {
+            DEFAULT: 'hsl(var(--sidebar-background) / <alpha-value>)',
+            foreground: 'hsl(var(--sidebar-foreground) / <alpha-value>)',
+            border: 'hsl(var(--sidebar-border) / <alpha-value>)',
+            accent: 'hsl(var(--sidebar-accent) / <alpha-value>)'
+          }
+        },
+        fontFamily: {
+          sans: ['Geist', 'system-ui', '-apple-system', 'sans-serif'],
+          mono: ['Geist Mono', 'ui-monospace', 'SFMono-Regular', 'monospace']
+        },
+        fontSize: {
+          'display-sm': ['2.75rem', { lineHeight: '1.05', letterSpacing: '-0.03em' }],
+          'display': ['3.5rem', { lineHeight: '1.02', letterSpacing: '-0.035em' }]
+        },
+        borderRadius: { lg: 'var(--radius)', md: 'calc(var(--radius) - 2px)', sm: 'calc(var(--radius) - 4px)' }
+      }
+    }
+  };
+</script>
+
+<style>
+/* ---------------------------------------------------------------------------
+   Layout concept: a left rail of product destinations beside a fluid work
+   surface. Paper-white canvas, hairline depth, pastel tints for category only.
+   Tokens are the Paper & Pastel ground truth, HSL channels only.
+   --------------------------------------------------------------------------- */
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222 20% 12%;
+  --primary: 217 78% 50%;
+  --primary-foreground: 0 0% 100%;
+  --accent: 220 16% 94%;
+  --accent-foreground: 222 20% 15%;
+  --muted: 220 16% 95%;
+  --muted-foreground: 220 9% 42%;
+  --destructive: 0 72% 48%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 152 55% 34%;
+  --success-foreground: 0 0% 100%;
+  --warning: 38 88% 46%;
+  --warning-foreground: 38 96% 10%;
+  --border: 220 15% 90%;
+  --input: 220 15% 88%;
+  --ring: 217 78% 50%;
+  --radius: 1.25rem;
+
+  --accent-blue: 217 78% 50%;
+  --accent-violet: 258 65% 58%;
+  --accent-emerald: 156 55% 34%;
+  --accent-coral: 351 75% 58%;
+  --accent-amber: 32 88% 48%;
+  --accent-teal: 185 62% 34%;
+
+  --tint-blue: 213 78% 94%;
+  --tint-violet: 258 60% 95%;
+  --tint-emerald: 156 45% 92%;
+  --tint-coral: 351 65% 95%;
+  --tint-amber: 34 75% 93%;
+  --tint-teal: 185 45% 92%;
+  --tint-cream: 38 40% 95%;
+
+  --cta: 222 20% 12%;
+  --cta-foreground: 0 0% 100%;
+
+  --surface-0: 0 0% 100%;
+  --surface-1: 220 20% 98%;
+  --surface-2: 220 17% 96%;
+  --surface-3: 220 15% 94%;
+  --surface-4: 220 13% 91%;
+  --surface-5: 220 11% 87%;
+  --shadow-color: 220 30% 15%;
+
+  --sidebar-background: 220 20% 98%;
+  --sidebar-foreground: 222 20% 15%;
+  --sidebar-accent: 220 16% 94%;
+  --sidebar-border: 220 15% 90%;
+
+  /* chips sitting on a tint wash: the one pair that needs a per-theme value */
+  --on-tint: rgba(255, 255, 255, 0.7);
+  --chip-blue-ink: 217 78% 45.5%;
+  --chip-violet-ink: 258 65% 56%;
+  --chip-emerald-ink: 156 55% 29%;
+  --chip-coral-ink: 351 75% 44%;
+  --chip-amber-ink: 32 88% 32.5%;
+  --chip-teal-ink: 185 62% 29%;
+  --warning-ink: 38 88% 30.5%;
+  --destructive-ink: 0 72% 46.5%;
+  --success-ink: 152 55% 30%;
+  --on-tint-strong: rgba(255, 255, 255, 0.92);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --background: 222 16% 6%;
+    --foreground: 220 15% 92%;
+    --primary: 217 85% 63%;
+    --primary-foreground: 222 20% 8%;
+    --accent: 222 12% 14%;
+    --accent-foreground: 220 15% 92%;
+    --muted: 222 12% 13%;
+    --muted-foreground: 220 10% 60%;
+    --destructive: 0 68% 56%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 50% 48%;
+    --success-foreground: 152 70% 8%;
+    --warning: 42 88% 58%;
+    --warning-foreground: 42 90% 10%;
+    --border: 222 12% 16%;
+    --input: 222 12% 17%;
+    --ring: 217 85% 63%;
+    --accent-blue: 217 85% 63%;
+    --accent-violet: 258 75% 70%;
+    --accent-emerald: 156 50% 52%;
+    --accent-coral: 351 78% 66%;
+    --accent-amber: 34 88% 60%;
+    --accent-teal: 185 55% 52%;
+    --tint-blue: 217 45% 15%;
+    --tint-violet: 258 38% 17%;
+    --tint-emerald: 156 30% 14%;
+    --tint-coral: 351 40% 17%;
+    --tint-amber: 34 45% 15%;
+    --tint-teal: 185 32% 14%;
+    --tint-cream: 38 20% 13%;
+    --cta: 0 0% 96%;
+    --cta-foreground: 222 20% 10%;
+    --surface-0: 222 16% 6%;
+    --surface-1: 222 15% 9%;
+    --surface-2: 222 13% 11.5%;
+    --surface-3: 222 12% 14%;
+    --surface-4: 222 11% 17%;
+    --surface-5: 222 10% 21%;
+    --shadow-color: 222 40% 2%;
+    --sidebar-background: 222 16% 7%;
+    --sidebar-foreground: 220 15% 88%;
+    --sidebar-accent: 222 12% 13%;
+    --sidebar-border: 222 12% 15%;
+    --on-tint: rgba(0, 0, 0, 0.2);
+    --chip-blue-ink: 217 85% 63%;
+    --chip-violet-ink: 258 75% 70.5%;
+    --chip-emerald-ink: 156 50% 52%;
+    --chip-coral-ink: 351 78% 66%;
+    --chip-amber-ink: 34 88% 60%;
+    --chip-teal-ink: 185 55% 52%;
+    --warning-ink: 42 88% 58%;
+    --destructive-ink: 0 68% 62.5%;
+    --success-ink: 152 50% 48%;
+    --on-tint-strong: rgba(0, 0, 0, 0.32);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: 222 16% 6%;
+  --foreground: 220 15% 92%;
+  --primary: 217 85% 63%;
+  --primary-foreground: 222 20% 8%;
+  --accent: 222 12% 14%;
+  --accent-foreground: 220 15% 92%;
+  --muted: 222 12% 13%;
+  --muted-foreground: 220 10% 60%;
+  --destructive: 0 68% 56%;
+  --destructive-foreground: 0 0% 100%;
+  --success: 152 50% 48%;
+  --success-foreground: 152 70% 8%;
+  --warning: 42 88% 58%;
+  --warning-foreground: 42 90% 10%;
+  --border: 222 12% 16%;
+  --input: 222 12% 17%;
+  --ring: 217 85% 63%;
+  --accent-blue: 217 85% 63%;
+  --accent-violet: 258 75% 70%;
+  --accent-emerald: 156 50% 52%;
+  --accent-coral: 351 78% 66%;
+  --accent-amber: 34 88% 60%;
+  --accent-teal: 185 55% 52%;
+  --tint-blue: 217 45% 15%;
+  --tint-violet: 258 38% 17%;
+  --tint-emerald: 156 30% 14%;
+  --tint-coral: 351 40% 17%;
+  --tint-amber: 34 45% 15%;
+  --tint-teal: 185 32% 14%;
+  --tint-cream: 38 20% 13%;
+  --cta: 0 0% 96%;
+  --cta-foreground: 222 20% 10%;
+  --surface-0: 222 16% 6%;
+  --surface-1: 222 15% 9%;
+  --surface-2: 222 13% 11.5%;
+  --surface-3: 222 12% 14%;
+  --surface-4: 222 11% 17%;
+  --surface-5: 222 10% 21%;
+  --shadow-color: 222 40% 2%;
+  --sidebar-background: 222 16% 7%;
+  --sidebar-foreground: 220 15% 88%;
+  --sidebar-accent: 222 12% 13%;
+  --sidebar-border: 222 12% 15%;
+  --on-tint: rgba(0, 0, 0, 0.2);
+  --chip-blue-ink: 217 85% 63%;
+  --chip-violet-ink: 258 75% 70.5%;
+  --chip-emerald-ink: 156 50% 52%;
+  --chip-coral-ink: 351 78% 66%;
+  --chip-amber-ink: 34 88% 60%;
+  --chip-teal-ink: 185 55% 52%;
+  --warning-ink: 42 88% 58%;
+  --destructive-ink: 0 68% 62.5%;
+  --success-ink: 152 50% 48%;
+  --on-tint-strong: rgba(0, 0, 0, 0.32);
+}
+
+* { border-color: hsl(var(--border)); }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+:focus-visible { outline: 2px solid hsl(var(--ring)); outline-offset: 2px; }
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: hsl(var(--surface-4)); border-radius: 9999px; }
+::-webkit-scrollbar-thumb:hover { background: hsl(var(--surface-5)); }
+
+.on-tint { background: var(--on-tint); }
+.on-tint-strong { background: var(--on-tint-strong); }
+
+.glass {
+  background: hsl(var(--surface-1) / 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.card-hover { transition: transform .25s cubic-bezier(.4,0,.2,1), box-shadow .25s cubic-bezier(.4,0,.2,1); }
+.card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 1px 2px hsl(var(--shadow-color) / .06), 0 12px 24px -8px hsl(var(--shadow-color) / .18);
+}
+
+.noise {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: .025;
+}
+
+.tabular-nums { font-variant-numeric: tabular-nums; }
+.text-balance { text-wrap: balance; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* breathing live dot */
+@keyframes breathe { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: .45; transform: scale(.82); } }
+.live-dot { animation: breathe 2.2s ease-in-out infinite; }
+
+/* quiet reveal: starts visible, nudges into place */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+.rise { animation: rise .5s cubic-bezier(.22,1,.36,1) both; }
+
+/* sliding sidebar indicator */
+#navIndicator { transition: transform .32s cubic-bezier(.22,1,.36,1), height .32s cubic-bezier(.22,1,.36,1); }
+
+/* segmented pill switcher indicator */
+.seg-ind { transition: transform .28s cubic-bezier(.22,1,.36,1), width .28s cubic-bezier(.22,1,.36,1); }
+
+.bar-grow { transition: height .7s cubic-bezier(.22,1,.36,1); }
+.meter-grow { transition: width .8s cubic-bezier(.22,1,.36,1); }
+
+@media (max-width: 640px) {
+  button, a[role="button"], .tap { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+</style>
+
+<div aria-hidden="true" class="noise pointer-events-none fixed inset-0 z-[1]"></div>
+
+<div class="relative z-[2] flex min-h-full">
+
+  <!-- ===================== SIDEBAR ===================== -->
+  <aside class="sticky top-0 hidden h-screen w-[244px] shrink-0 flex-col border-r border-sidebar-border bg-sidebar lg:flex"
+         style="padding-left: max(0px, env(safe-area-inset-left, 0px));">
+    <div class="flex h-[60px] shrink-0 items-center gap-2.5 px-5">
+      <span class="flex h-8 w-8 items-center justify-center rounded-full bg-tint-blue">
+        <i data-lucide="activity" class="h-4 w-4 text-chip-blue"></i>
+      </span>
+      <span class="font-mono text-[15px] font-semibold tracking-tight text-foreground">Pulse<span class="text-primary">.</span><span class="text-muted-foreground">desk</span></span>
+    </div>
+
+    <nav class="relative mt-2 flex-1 px-3" aria-label="Product sections">
+      <span id="navIndicator" aria-hidden="true" class="pointer-events-none absolute left-3 right-3 top-0 rounded-full bg-tint-blue"></span>
+      <ul class="relative space-y-0.5">
+        <li><button data-screen="inbox" class="nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200">
+          <i data-lucide="messages-square" class="h-4 w-4 shrink-0"></i><span class="flex-1">Inbox</span>
+          <span class="rounded-full bg-chip-coral/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-chip-coral-ink">7</span>
+        </button></li>
+        <li><button data-screen="dashboard" class="nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200">
+          <i data-lucide="layout-dashboard" class="h-4 w-4 shrink-0"></i><span class="flex-1">Overview</span>
+        </button></li>
+        <li><button data-screen="agent" class="nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200">
+          <i data-lucide="bot" class="h-4 w-4 shrink-0"></i><span class="flex-1">AI agent</span>
+        </button></li>
+        <li><button data-screen="reminders" class="nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200">
+          <i data-lucide="bell-ring" class="h-4 w-4 shrink-0"></i><span class="flex-1">Reminders</span>
+        </button></li>
+        <li><button data-screen="billing" class="nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200">
+          <i data-lucide="credit-card" class="h-4 w-4 shrink-0"></i><span class="flex-1">Plan and usage</span>
+        </button></li>
+      </ul>
+
+      <p class="mb-2 mt-7 px-3.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Connected</p>
+      <ul class="space-y-0.5 px-1">
+        <li class="flex items-center gap-2.5 rounded-full px-2.5 py-2 text-[13px] text-muted-foreground">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="message-circle" class="h-3 w-3 text-chip-emerald"></i></span>
+          WhatsApp <span class="ml-auto h-1.5 w-1.5 rounded-full bg-success"></span>
+        </li>
+        <li class="flex items-center gap-2.5 rounded-full px-2.5 py-2 text-[13px] text-muted-foreground">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-coral/10"><i data-lucide="instagram" class="h-3 w-3 text-chip-coral"></i></span>
+          Instagram <span class="ml-auto h-1.5 w-1.5 rounded-full bg-success"></span>
+        </li>
+        <li class="flex items-center gap-2.5 rounded-full px-2.5 py-2 text-[13px] text-muted-foreground">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-blue/10"><i data-lucide="facebook" class="h-3 w-3 text-chip-blue"></i></span>
+          Messenger <span class="ml-auto h-1.5 w-1.5 rounded-full bg-success"></span>
+        </li>
+        <li class="flex items-center gap-2.5 rounded-full px-2.5 py-2 text-[13px] text-muted-foreground">
+          <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-violet/10"><i data-lucide="calendar-days" class="h-3 w-3 text-chip-violet"></i></span>
+          Cliniko <span class="ml-auto h-1.5 w-1.5 rounded-full bg-success"></span>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="p-3">
+      <div class="relative overflow-hidden rounded-[20px] bg-tint-violet p-4">
+        <i data-lucide="sparkles" stroke-width="1" class="pointer-events-none absolute -bottom-5 -right-4 h-24 w-24 text-foreground/[0.06]"></i>
+        <p class="relative font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-violet-ink">Trial</p>
+        <p class="relative mt-1.5 text-[13px] font-semibold leading-snug text-foreground">9 days left on Pro</p>
+        <button data-screen="billing" class="nav-jump tap relative mt-3 inline-flex items-center gap-1.5 rounded-full on-tint-strong px-3 py-1.5 text-xs font-semibold text-foreground">
+          See plans <i data-lucide="arrow-right" class="h-3 w-3"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ===================== MAIN ===================== -->
+  <div class="flex min-w-0 flex-1 flex-col">
+
+    <!-- Top bar -->
+    <header class="glass sticky z-30 flex h-[60px] shrink-0 items-center gap-3 border-b border-border"
+            style="top: env(safe-area-inset-top, 0px); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <span class="flex h-8 w-8 items-center justify-center rounded-full bg-tint-blue lg:hidden">
+        <i data-lucide="activity" class="h-4 w-4 text-chip-blue"></i>
+      </span>
+      <div class="min-w-0 flex-1">
+        <h1 id="screenTitle" class="truncate text-[15px] font-semibold tracking-tight text-foreground">Inbox</h1>
+        <p id="screenMeta" class="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Ridgeview Dental, Auckland</p>
+      </div>
+
+      <span class="hidden items-center gap-1.5 rounded-full border border-border bg-surface-1 px-3 py-1.5 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground sm:inline-flex">
+        <span class="live-dot h-1.5 w-1.5 rounded-full bg-chip-amber"></span> Prototype, sample data
+      </span>
+
+      <button id="themeToggle" type="button" aria-label="Switch theme"
+        class="tap relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface-1 text-foreground/70 transition-colors hover:text-foreground">
+        <i id="themeIcon" data-lucide="moon" class="h-[17px] w-[17px]"></i>
+      </button>
+
+      <span class="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-teal font-mono text-[11px] font-semibold text-chip-teal-ink sm:flex" title="Signed in as Maya K.">MK</span>
+    </header>
+
+    <!-- Mobile destination pills -->
+    <div class="scrollbar-hide sticky z-20 flex gap-1.5 overflow-x-auto border-b border-border bg-background py-2.5 lg:hidden"
+         style="top: calc(60px + env(safe-area-inset-top, 0px)); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <button data-screen="inbox" class="nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors">Inbox</button>
+      <button data-screen="dashboard" class="nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors">Overview</button>
+      <button data-screen="agent" class="nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors">AI agent</button>
+      <button data-screen="reminders" class="nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors">Reminders</button>
+      <button data-screen="billing" class="nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors">Plan</button>
+    </div>
+
+    <!-- ============ SCREEN: INBOX ============ -->
+    <main id="screen-inbox" class="flex min-h-0 flex-1 flex-col xl:flex-row">
+
+      <!-- conversation list -->
+      <section class="flex min-w-0 shrink-0 flex-col border-b border-border xl:w-[340px] xl:border-b-0 xl:border-r"
+               aria-label="Conversations">
+        <div class="flex flex-col gap-2.5 px-4 pb-3 pt-4">
+          <div class="flex items-center gap-2">
+            <div class="relative flex-1">
+              <i data-lucide="search" class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"></i>
+              <input id="convSearch" type="search" placeholder="Search patients or messages"
+                class="w-full rounded-[10px] border border-border bg-surface-2/60 py-2 pl-8 pr-3 text-[13px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-1 focus:ring-primary/30">
+            </div>
+            <button type="button" aria-label="Sort conversations" class="tap flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border bg-surface-1 text-muted-foreground transition-colors hover:text-foreground">
+              <i data-lucide="arrow-down-up" class="h-3.5 w-3.5"></i>
+            </button>
+          </div>
+
+          <div class="relative flex rounded-full border border-border bg-surface-1 p-0.5">
+            <span id="segInd" aria-hidden="true" class="seg-ind absolute left-0.5 top-0.5 h-[calc(100%-4px)] rounded-full bg-tint-blue"></span>
+            <button data-seg="all" class="seg tap relative z-10 flex-1 rounded-full px-2 py-1.5 text-[12px] font-medium transition-colors">All</button>
+            <button data-seg="waiting" class="seg tap relative z-10 flex-1 rounded-full px-2 py-1.5 text-[12px] font-medium transition-colors">Waiting</button>
+            <button data-seg="mine" class="seg tap relative z-10 flex-1 rounded-full px-2 py-1.5 text-[12px] font-medium transition-colors">Mine</button>
+            <button data-seg="ai" class="seg tap relative z-10 flex-1 rounded-full px-2 py-1.5 text-[12px] font-medium transition-colors">AI</button>
+          </div>
+
+          <div id="filterChips" class="flex flex-wrap items-center gap-1.5">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-tint-emerald px-2.5 py-1 font-mono text-[10px] font-medium text-chip-emerald-ink">
+              Channel: WhatsApp
+              <button id="clearFilter" type="button" aria-label="Clear channel filter" class="transition-opacity hover:opacity-70"><i data-lucide="x" class="h-2.5 w-2.5"></i></button>
+            </span>
+            <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground"><span id="convCount" class="tabular-nums">7</span> open</span>
+          </div>
+        </div>
+
+        <ul id="convList" class="min-h-0 flex-1 overflow-y-auto px-2 pb-4 xl:max-h-[calc(100vh-200px)]"></ul>
+      </section>
+
+      <!-- thread -->
+      <section class="flex min-w-0 flex-1 flex-col bg-surface-1/40" aria-label="Conversation">
+        <div class="flex items-center gap-3 border-b border-border px-4 py-3">
+          <span class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-emerald font-mono text-[11px] font-semibold text-chip-emerald-ink">
+            AM
+            <span class="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-background bg-surface-1">
+              <i data-lucide="message-circle" class="h-2 w-2 text-chip-emerald"></i>
+            </span>
+          </span>
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-semibold text-foreground">Aarav Mehta</p>
+            <p class="truncate font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">WhatsApp, waiting 4m</p>
+          </div>
+          <button type="button" class="tap hidden items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-1 sm:inline-flex">
+            <i data-lucide="user-plus" class="h-3 w-3"></i> Assign
+          </button>
+          <button type="button" class="tap inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-chip-coral/35 hover:bg-surface-1" aria-label="Escalate">
+            <i data-lucide="siren" class="h-3 w-3 text-chip-coral"></i> <span class="hidden sm:inline">Escalate</span>
+          </button>
+        </div>
+
+        <div class="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-5 xl:max-h-[calc(100vh-232px)]">
+          <p class="text-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Today, 09:12</p>
+
+          <div class="flex max-w-[82%] flex-col gap-1">
+            <div class="rounded-[18px] rounded-tl-[6px] border border-border bg-background px-4 py-2.5 text-[13px] leading-relaxed text-foreground">
+              Hi, do you have anything after 6pm this week? I cannot get away from work earlier.
+            </div>
+            <span class="pl-1 font-mono text-[10px] tabular-nums text-muted-foreground">09:12</span>
+          </div>
+
+          <div class="ml-auto flex max-w-[82%] flex-col items-end gap-1">
+            <div class="rounded-[18px] rounded-tr-[6px] bg-tint-violet px-4 py-2.5 text-[13px] leading-relaxed text-foreground">
+              <span class="mb-1.5 inline-flex items-center gap-1 rounded-full on-tint px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-chip-violet-ink">
+                <i data-lucide="bot" class="h-2.5 w-2.5"></i> AI agent
+              </span>
+              <p>Evening slots are open Wednesday 6:30pm and Thursday 7:00pm with Dr Nadia Haq. Would you like me to hold one?</p>
+            </div>
+            <span class="pr-1 font-mono text-[10px] tabular-nums text-muted-foreground">09:12</span>
+          </div>
+
+          <div class="flex max-w-[82%] flex-col gap-1">
+            <div class="rounded-[18px] rounded-tl-[6px] border border-border bg-background px-4 py-2.5 text-[13px] leading-relaxed text-foreground">Thursday please</div>
+            <span class="pl-1 font-mono text-[10px] tabular-nums text-muted-foreground">09:14</span>
+          </div>
+
+          <!-- slot hold card -->
+          <div class="ml-auto w-full max-w-[380px] overflow-hidden rounded-[20px] border border-border bg-background">
+            <div class="flex items-center gap-2 border-b border-border bg-tint-blue px-4 py-2.5">
+              <i data-lucide="calendar-check" class="h-3.5 w-3.5 text-chip-blue"></i>
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-blue-ink">Slot held in Cliniko</span>
+              <span class="ml-auto flex items-center gap-1 font-mono text-[11px] font-semibold tabular-nums text-chip-blue-ink">
+                <span class="live-dot h-1.5 w-1.5 rounded-full bg-chip-blue"></span><span id="holdTimer">09:42</span>
+              </span>
+            </div>
+            <div class="px-4 py-3.5">
+              <p class="text-sm font-semibold text-foreground">Thursday 24 Oct, 7:00pm</p>
+              <p class="mt-0.5 text-xs text-muted-foreground">Checkup and clean, 30 min, Dr Nadia Haq</p>
+              <div class="mt-3 flex gap-2">
+                <button type="button" class="tap inline-flex items-center gap-1.5 rounded-full border border-border px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-1">
+                  <i data-lucide="check" class="h-3 w-3 text-chip-emerald"></i> Confirm booking
+                </button>
+                <button type="button" class="tap inline-flex items-center gap-1.5 rounded-full px-3.5 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-accent hover:text-foreground">
+                  Release hold
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-2 py-1">
+            <span class="h-px flex-1 bg-border"></span>
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-tint-coral px-2.5 py-1 font-mono text-[10px] font-medium text-chip-coral-ink">
+              <i data-lucide="hand" class="h-2.5 w-2.5"></i> Handed to a person: patient asked about records
+            </span>
+            <span class="h-px flex-1 bg-border"></span>
+          </div>
+
+          <div class="flex max-w-[82%] flex-col gap-1">
+            <div class="rounded-[18px] rounded-tl-[6px] border border-border bg-background px-4 py-2.5 text-[13px] leading-relaxed text-foreground">
+              Also, can I bring my son's records from our old clinic?
+            </div>
+            <span class="pl-1 font-mono text-[10px] tabular-nums text-muted-foreground">09:16</span>
+          </div>
+        </div>
+
+        <!-- composer -->
+        <div class="border-t border-border bg-background px-4 py-3">
+          <div class="scrollbar-hide mb-2.5 flex gap-1.5 overflow-x-auto">
+            <button type="button" class="quick shrink-0 rounded-full border border-border bg-surface-1 px-3 py-1.5 text-[11px] font-medium text-foreground/85 transition-colors hover:border-primary/30">Yes, bring them along</button>
+            <button type="button" class="quick shrink-0 rounded-full border border-border bg-surface-1 px-3 py-1.5 text-[11px] font-medium text-foreground/85 transition-colors hover:border-primary/30">Send our address</button>
+            <button type="button" class="quick shrink-0 rounded-full border border-border bg-surface-1 px-3 py-1.5 text-[11px] font-medium text-foreground/85 transition-colors hover:border-primary/30">Opening hours</button>
+          </div>
+          <form id="composer" class="flex items-end gap-2">
+            <label for="reply" class="sr-only">Write a reply</label>
+            <textarea id="reply" rows="1" placeholder="Write a reply, logistics only"
+              class="min-h-[44px] flex-1 resize-none rounded-[12px] border border-border bg-surface-2/60 px-4 py-3 text-[13px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-1 focus:ring-primary/30"></textarea>
+            <button type="submit" class="tap inline-flex h-[44px] shrink-0 items-center gap-2 rounded-full bg-cta px-5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[0.98]">
+              Send <i data-lucide="send-horizontal" class="h-3.5 w-3.5"></i>
+            </button>
+          </form>
+          <p class="mt-2 flex items-center gap-1.5 font-mono text-[10px] text-muted-foreground">
+            <i data-lucide="shield-check" class="h-3 w-3 text-chip-emerald"></i> Clinical detail stays off this channel
+          </p>
+        </div>
+      </section>
+
+      <!-- patient rail -->
+      <aside class="hidden w-[300px] shrink-0 flex-col gap-3 border-l border-border p-4 2xl:flex" aria-label="Patient details">
+        <div class="rounded-[24px] border border-border bg-surface-1 p-4">
+          <div class="flex items-center gap-3">
+            <span class="flex h-11 w-11 items-center justify-center rounded-full bg-tint-emerald font-mono text-sm font-semibold text-chip-emerald-ink">AM</span>
+            <div class="min-w-0">
+              <p class="truncate text-sm font-semibold text-foreground">Aarav Mehta</p>
+              <p class="truncate font-mono text-[10px] tabular-nums text-muted-foreground">+64 21 •••• 418</p>
+            </div>
+          </div>
+          <dl class="mt-4 space-y-2.5 border-t border-border pt-3.5 text-[12px]">
+            <div class="flex items-center justify-between gap-3"><dt class="text-muted-foreground">Patient since</dt><dd class="font-mono tabular-nums text-foreground">Mar 2023</dd></div>
+            <div class="flex items-center justify-between gap-3"><dt class="text-muted-foreground">Last visit</dt><dd class="font-mono tabular-nums text-foreground">12 Jun 2026</dd></div>
+            <div class="flex items-center justify-between gap-3"><dt class="text-muted-foreground">Lifetime visits</dt><dd class="font-mono tabular-nums text-foreground">7</dd></div>
+            <div class="flex items-center justify-between gap-3"><dt class="text-muted-foreground">No shows</dt><dd class="font-mono tabular-nums text-foreground">0</dd></div>
+          </dl>
+        </div>
+
+        <div class="rounded-[24px] border border-border bg-surface-1 p-4">
+          <p class="mb-2.5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Linked identities</p>
+          <div class="space-y-2">
+            <div class="flex items-center gap-2.5 rounded-[14px] bg-surface-2 px-3 py-2">
+              <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="message-circle" class="h-3 w-3 text-chip-emerald"></i></span>
+              <span class="font-mono text-[11px] tabular-nums text-foreground">+64 21 •••• 418</span>
+            </div>
+            <div class="flex items-center gap-2.5 rounded-[14px] bg-surface-2 px-3 py-2">
+              <span class="flex h-6 w-6 items-center justify-center rounded-full bg-chip-coral/10"><i data-lucide="instagram" class="h-3 w-3 text-chip-coral"></i></span>
+              <span class="font-mono text-[11px] text-foreground">aarav.m</span>
+            </div>
+          </div>
+          <p class="mt-2.5 text-[11px] leading-relaxed text-muted-foreground">Matched on phone number at first contact. One patient, one history.</p>
+        </div>
+
+        <div class="rounded-[24px] bg-tint-emerald p-4">
+          <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-emerald-ink">Consent</p>
+          <p class="mt-1.5 text-[13px] font-semibold leading-snug text-foreground">Messaging consent given</p>
+          <p class="mt-1 font-mono text-[11px] tabular-nums text-foreground/70">14 Mar 2026, 09:41</p>
+          <button type="button" class="tap mt-3 inline-flex items-center gap-1.5 rounded-full on-tint-strong px-3 py-1.5 text-[11px] font-semibold text-foreground">
+            View audit trail <i data-lucide="arrow-up-right" class="h-3 w-3"></i>
+          </button>
+        </div>
+      </aside>
+    </main>
+
+    <!-- ============ SCREEN: OVERVIEW ============ -->
+    <main id="screen-dashboard" hidden class="min-h-0 flex-1 overflow-y-auto py-6"
+          style="padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <div class="mx-auto max-w-6xl">
+
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <span class="mb-2 inline-block rounded-full bg-tint-blue px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-chip-blue-ink">Today</span>
+            <h2 class="text-2xl font-semibold tracking-tight text-foreground">What the front desk handled</h2>
+            <p class="mt-1 text-sm text-muted-foreground">Wednesday 22 October, updated a moment ago</p>
+          </div>
+          <button type="button" class="tap inline-flex items-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[0.98]">
+            Send a broadcast <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+          </button>
+        </div>
+
+        <!-- KPI row -->
+        <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div class="group rounded-[22px] bg-tint-blue p-1.5 card-hover">
+            <div class="h-full rounded-[17px] bg-background/60 p-4 shadow-[inset_0_1px_0_hsl(var(--foreground)/0.06)]">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-blue transition-transform duration-300 group-hover:scale-110"><i data-lucide="messages-square" class="h-4 w-4 text-chip-blue"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-blue-ink" data-count="182">0</span>
+              <h3 class="mt-1 text-sm font-semibold leading-tight text-foreground">Conversations</h3>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">Across three channels</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-emerald p-1.5 card-hover">
+            <div class="h-full rounded-[17px] bg-background/60 p-4 shadow-[inset_0_1px_0_hsl(var(--foreground)/0.06)]">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-emerald transition-transform duration-300 group-hover:scale-110"><i data-lucide="timer" class="h-4 w-4 text-chip-emerald"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-emerald-ink"><span data-count="1">0</span>m <span data-count="48">0</span>s</span>
+              <h3 class="mt-1 text-sm font-semibold leading-tight text-foreground">Median first reply</h3>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">Target is under 5 minutes</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-violet p-1.5 card-hover">
+            <div class="h-full rounded-[17px] bg-background/60 p-4 shadow-[inset_0_1px_0_hsl(var(--foreground)/0.06)]">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-violet transition-transform duration-300 group-hover:scale-110"><i data-lucide="bot" class="h-4 w-4 text-chip-violet"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-violet-ink"><span data-count="71">0</span>%</span>
+              <h3 class="mt-1 text-sm font-semibold leading-tight text-foreground">Handled by the agent</h3>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">No person needed</p>
+            </div>
+          </div>
+          <div class="group rounded-[22px] bg-tint-amber p-1.5 card-hover">
+            <div class="h-full rounded-[17px] bg-background/60 p-4 shadow-[inset_0_1px_0_hsl(var(--foreground)/0.06)]">
+              <div class="mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-tint-amber transition-transform duration-300 group-hover:scale-110"><i data-lucide="calendar-check" class="h-4 w-4 text-chip-amber"></i></div>
+              <span class="tabular-nums block text-3xl font-semibold tracking-tight text-chip-amber-ink" data-count="46">0</span>
+              <h3 class="mt-1 text-sm font-semibold leading-tight text-foreground">Bookings from chat</h3>
+              <p class="mt-1 text-[11px] leading-snug text-foreground/60">Written into Cliniko</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="mt-4 grid gap-4 lg:grid-cols-3">
+          <!-- volume chart -->
+          <div class="rounded-[24px] border border-border bg-surface-1 p-5 lg:col-span-2">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <h3 class="text-sm font-semibold text-foreground">When the messages arrive</h3>
+                <p class="mt-0.5 text-xs text-muted-foreground">Conversations opened per hour, today</p>
+              </div>
+              <span class="rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Peak 12:00 to 14:00</span>
+            </div>
+            <div class="mt-5 flex h-[168px] items-end gap-1.5" role="img" aria-label="Bar chart of conversations per hour. Peak of 31 conversations at 13:00, lowest of 4 at 08:00.">
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="4"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">8</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="9"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">9</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="14"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">10</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="17"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">11</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="27"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">12</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="31"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue" style="height:0"></span><span class="text-center font-mono text-[9px] font-semibold tabular-nums text-chip-blue-ink">13</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="22"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">14</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="13"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">15</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="11"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">16</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="19"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">17</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="24"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">18</span></div>
+              <div class="flex h-full flex-1 flex-col justify-end gap-1.5" data-bar="12"><span class="bar-grow w-full rounded-t-[6px] bg-chip-blue/25" style="height:0"></span><span class="text-center font-mono text-[9px] tabular-nums text-muted-foreground">19</span></div>
+            </div>
+            <p class="mt-4 border-t border-border pt-3 text-xs leading-relaxed text-muted-foreground">
+              Two thirds of the day's volume lands in three hours. That is the shift the agent is covering.
+            </p>
+          </div>
+
+          <!-- live queue -->
+          <div class="rounded-[24px] border border-border bg-surface-1 p-5">
+            <div class="flex items-center gap-2">
+              <span class="live-dot h-2 w-2 rounded-full bg-chip-coral"></span>
+              <h3 class="text-sm font-semibold text-foreground">Waiting now</h3>
+              <span class="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">3 people</span>
+            </div>
+            <ul class="mt-4 space-y-2">
+              <li class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-tint-emerald font-mono text-[10px] font-semibold text-chip-emerald-ink">AM</span>
+                <div class="min-w-0 flex-1"><p class="truncate text-[13px] font-semibold text-foreground">Aarav Mehta</p><p class="truncate text-[11px] text-muted-foreground">Asked about records</p></div>
+                <span class="shrink-0 rounded-full bg-chip-amber/15 px-2 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-chip-amber-ink">4m</span>
+              </li>
+              <li class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-tint-coral font-mono text-[10px] font-semibold text-chip-coral-ink">LR</span>
+                <div class="min-w-0 flex-1"><p class="truncate text-[13px] font-semibold text-foreground">Lucia Romano</p><p class="truncate text-[11px] text-muted-foreground">Escalated by the agent</p></div>
+                <span class="shrink-0 rounded-full bg-chip-coral/15 px-2 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-chip-coral-ink">11m</span>
+              </li>
+              <li class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3">
+                <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-tint-blue font-mono text-[10px] font-semibold text-chip-blue-ink">DO</span>
+                <div class="min-w-0 flex-1"><p class="truncate text-[13px] font-semibold text-foreground">Daniel Okafor</p><p class="truncate text-[11px] text-muted-foreground">Reschedule request</p></div>
+                <span class="shrink-0 rounded-full bg-chip-amber/15 px-2 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-chip-amber-ink">2m</span>
+              </li>
+            </ul>
+
+            <p class="mb-2.5 mt-5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Channel split</p>
+            <div class="space-y-2.5">
+              <div>
+                <div class="flex items-center justify-between text-[11px]"><span class="text-foreground">WhatsApp</span><span class="font-mono tabular-nums text-muted-foreground">64%</span></div>
+                <div class="mt-1 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-emerald" data-meter="64" style="width:0"></span></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-[11px]"><span class="text-foreground">Instagram</span><span class="font-mono tabular-nums text-muted-foreground">24%</span></div>
+                <div class="mt-1 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-coral" data-meter="24" style="width:0"></span></div>
+              </div>
+              <div>
+                <div class="flex items-center justify-between text-[11px]"><span class="text-foreground">Messenger</span><span class="font-mono tabular-nums text-muted-foreground">12%</span></div>
+                <div class="mt-1 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-blue" data-meter="12" style="width:0"></span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- team load, minimal family -->
+        <div class="mt-4 rounded-[24px] border border-border bg-surface-1 p-5">
+          <h3 class="text-sm font-semibold text-foreground">Who carried the load</h3>
+          <div class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3.5">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-violet font-mono text-[11px] font-semibold text-chip-violet-ink">AI</span>
+              <div class="min-w-0"><p class="text-[13px] font-semibold text-foreground">Pulse agent</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">129 handled</p></div>
+            </div>
+            <div class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3.5">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-teal font-mono text-[11px] font-semibold text-chip-teal-ink">MK</span>
+              <div class="min-w-0"><p class="text-[13px] font-semibold text-foreground">Maya K.</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">24 handled</p></div>
+            </div>
+            <div class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3.5">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-amber font-mono text-[11px] font-semibold text-chip-amber-ink">JP</span>
+              <div class="min-w-0"><p class="text-[13px] font-semibold text-foreground">Jordan P.</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">18 handled</p></div>
+            </div>
+            <div class="flex items-center gap-3 rounded-[18px] border border-border bg-background p-3.5">
+              <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-tint-coral font-mono text-[11px] font-semibold text-chip-coral-ink">SN</span>
+              <div class="min-w-0"><p class="text-[13px] font-semibold text-foreground">Sana N.</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">11 handled</p></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="h-6"></div>
+      </div>
+    </main>
+
+    <!-- ============ SCREEN: AI AGENT ============ -->
+    <main id="screen-agent" hidden class="min-h-0 flex-1 overflow-y-auto py-6"
+          style="padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <div class="mx-auto max-w-6xl">
+
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <span class="mb-2 inline-block rounded-full bg-tint-violet px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-chip-violet-ink">Agent</span>
+            <h2 class="text-2xl font-semibold tracking-tight text-foreground">What the agent is allowed to do</h2>
+            <p class="mt-1 text-sm text-muted-foreground">Changes go live on the next message, not retroactively</p>
+          </div>
+          <button type="button" class="tap inline-flex items-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[0.98]">
+            Publish changes <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+          </button>
+        </div>
+
+        <div class="mt-6 grid gap-4 lg:grid-cols-5">
+
+          <div class="space-y-4 lg:col-span-3">
+            <!-- handles -->
+            <div class="rounded-[24px] border border-border bg-surface-1 p-5">
+              <div class="flex items-center gap-2">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="circle-check" class="h-4 w-4 text-chip-emerald"></i></span>
+                <h3 class="text-sm font-semibold text-foreground">Answers on its own</h3>
+                <span class="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">7 on</span>
+              </div>
+              <ul class="mt-4 grid gap-2 sm:grid-cols-2">
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="clock" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Hours and location</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="receipt" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Services and prices</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="shield" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Insurance and payment</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="calendar-plus" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Book an appointment</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="calendar-sync" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Reschedule or cancel</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+                <li class="flex items-center gap-2.5 rounded-[18px] border border-border bg-background p-3"><i data-lucide="clipboard-list" class="h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="flex-1 text-[13px] text-foreground">Visit preparation</span><span class="h-4 w-7 shrink-0 rounded-full bg-chip-emerald/90 p-0.5"><span class="block h-3 w-3 translate-x-3 rounded-full bg-background"></span></span></li>
+              </ul>
+            </div>
+
+            <!-- escalates -->
+            <div class="relative overflow-hidden rounded-[24px] bg-tint-coral p-5">
+              <i data-lucide="siren" stroke-width="1" class="pointer-events-none absolute -bottom-6 -right-6 h-36 w-36 text-foreground/[0.06]"></i>
+              <div class="relative flex items-center gap-2">
+                <span class="flex h-8 w-8 items-center justify-center rounded-full on-tint"><i data-lucide="hand" class="h-4 w-4 text-chip-coral"></i></span>
+                <h3 class="text-sm font-semibold text-foreground">Always hands to a person</h3>
+              </div>
+              <p class="relative mt-2 max-w-[90%] text-[13px] leading-relaxed text-foreground/70">These are hard rules in code, not suggestions in a prompt. The agent cannot override them.</p>
+              <div class="relative mt-4 flex flex-wrap gap-1.5">
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">symptoms or diagnosis</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">medication</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">test results</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">complaints</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">emergency words</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">asks for a human</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">two failed turns</span>
+                <span class="rounded-full on-tint px-2.5 py-1 font-mono text-[11px] font-medium text-foreground/85">low confidence</span>
+              </div>
+            </div>
+
+            <!-- tools -->
+            <div class="rounded-[24px] border border-border bg-surface-1 p-5">
+              <h3 class="text-sm font-semibold text-foreground">Tools it can call</h3>
+              <p class="mt-0.5 text-xs text-muted-foreground">Every write goes to Cliniko with an idempotency key</p>
+              <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-blue/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-blue/10"><i data-lucide="search" class="h-3.5 w-3.5 text-chip-blue"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">get_availability</p><p class="mt-0.5 text-[11px] text-muted-foreground">Open slots by service and clinician</p></div>
+                </div>
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-amber/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-amber/10"><i data-lucide="lock" class="h-3.5 w-3.5 text-chip-amber"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">hold_slot</p><p class="mt-0.5 text-[11px] text-muted-foreground">Ten minute hold, never optimistic</p></div>
+                </div>
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-emerald/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="check-check" class="h-3.5 w-3.5 text-chip-emerald"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">confirm_booking</p><p class="mt-0.5 text-[11px] text-muted-foreground">Writes the appointment and confirms</p></div>
+                </div>
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-violet/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-violet/10"><i data-lucide="user-search" class="h-3.5 w-3.5 text-chip-violet"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">lookup_patient</p><p class="mt-0.5 text-[11px] text-muted-foreground">Matches phone or handle to a record</p></div>
+                </div>
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-teal/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-teal/10"><i data-lucide="calendar-x" class="h-3.5 w-3.5 text-chip-teal"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">cancel_booking</p><p class="mt-0.5 text-[11px] text-muted-foreground">Releases the slot and offers the waitlist</p></div>
+                </div>
+                <div class="flex items-start gap-3 rounded-[18px] border border-border bg-background p-3.5 transition-colors hover:border-chip-coral/35">
+                  <span class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-chip-coral/10"><i data-lucide="hand" class="h-3.5 w-3.5 text-chip-coral"></i></span>
+                  <div class="min-w-0"><p class="font-mono text-[12px] font-semibold text-foreground">escalate_to_human</p><p class="mt-0.5 text-[11px] text-muted-foreground">Passes the full transcript across</p></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- preview rail -->
+          <div class="space-y-4 lg:col-span-2">
+            <div class="rounded-[24px] border border-border bg-surface-1 p-5">
+              <div class="flex items-center gap-2">
+                <span class="live-dot h-2 w-2 rounded-full bg-chip-violet"></span>
+                <h3 class="text-sm font-semibold text-foreground">Try it</h3>
+                <span class="ml-auto font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Sandbox</span>
+              </div>
+
+              <div id="sandbox" class="mt-4 space-y-2.5">
+                <div class="ml-auto max-w-[85%] rounded-[16px] rounded-tr-[6px] border border-border bg-background px-3.5 py-2 text-[12px] leading-relaxed text-foreground">How much is a whitening?</div>
+                <div class="max-w-[90%] rounded-[16px] rounded-tl-[6px] bg-tint-violet px-3.5 py-2 text-[12px] leading-relaxed text-foreground">In chair whitening is 650 dollars and takes about 90 minutes. Take home trays are 390 dollars. Would you like a consultation first?</div>
+                <div class="ml-auto max-w-[85%] rounded-[16px] rounded-tr-[6px] border border-border bg-background px-3.5 py-2 text-[12px] leading-relaxed text-foreground">My gum has been bleeding for a week, is that serious?</div>
+                <div class="max-w-[90%] rounded-[16px] rounded-tl-[6px] bg-tint-coral px-3.5 py-2 text-[12px] leading-relaxed text-foreground">
+                  <span class="mb-1.5 inline-flex items-center gap-1 rounded-full on-tint px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-chip-coral-ink"><i data-lucide="hand" class="h-2.5 w-2.5"></i> Escalated</span>
+                  <p>That is something our team should look at properly. I am passing you to one of our nurses now, and they will reply here shortly.</p>
+                </div>
+              </div>
+
+              <div class="mt-3 flex gap-2">
+                <label for="sandboxInput" class="sr-only">Ask the agent something</label>
+                <input id="sandboxInput" type="text" placeholder="Ask it something"
+                  class="min-w-0 flex-1 rounded-[10px] border border-border bg-surface-2/60 px-3.5 py-2.5 text-[12px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary/50 focus:ring-1 focus:ring-primary/30">
+                <button id="sandboxSend" type="button" aria-label="Send to sandbox" class="tap flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-background text-foreground transition-colors hover:border-primary/30">
+                  <i data-lucide="corner-down-left" class="h-3.5 w-3.5"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="flex gap-3.5 rounded-[20px] border border-warning/20 bg-warning/[0.06] p-4">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-warning/20 bg-warning/10"><i data-lucide="triangle-alert" class="h-3.5 w-3.5 text-warning"></i></span>
+              <div>
+                <span class="mb-1 block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-warning-ink">Scope boundary</span>
+                <p class="text-[12px] leading-relaxed text-foreground/80">Meta does not sign a business associate agreement, so no clinical content goes out on these channels. The agent handles logistics and hands everything else to a person.</p>
+              </div>
+            </div>
+
+            <div class="rounded-[20px] border border-border bg-surface-1 p-4">
+              <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Safety check</p>
+              <p class="mt-2 text-[13px] leading-relaxed text-foreground">Last evaluation run on 104 real messages</p>
+              <div class="mt-3 space-y-2">
+                <div class="flex items-center justify-between text-[11px]"><span class="text-muted-foreground">Intent accuracy</span><span class="font-mono tabular-nums text-chip-emerald-ink">96%</span></div>
+                <div class="flex items-center justify-between text-[11px]"><span class="text-muted-foreground">Escalation recall</span><span class="font-mono tabular-nums text-chip-emerald-ink">100%</span></div>
+                <div class="flex items-center justify-between text-[11px]"><span class="text-muted-foreground">Clinical advice leaked</span><span class="font-mono tabular-nums text-chip-emerald-ink">0</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-6"></div>
+      </div>
+    </main>
+
+    <!-- ============ SCREEN: REMINDERS ============ -->
+    <main id="screen-reminders" hidden class="min-h-0 flex-1 overflow-y-auto py-6"
+          style="padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <div class="mx-auto max-w-6xl">
+
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <span class="mb-2 inline-block rounded-full bg-tint-amber px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-chip-amber-ink">Outbound</span>
+            <h2 class="text-2xl font-semibold tracking-tight text-foreground">Reminders that come back to this inbox</h2>
+            <p class="mt-1 text-sm text-muted-foreground">Replies land in the same thread, never a dead number</p>
+          </div>
+          <button type="button" class="tap inline-flex items-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[0.98]">
+            New template <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+          </button>
+        </div>
+
+        <!-- timeline -->
+        <div class="mt-6 rounded-[24px] border border-border bg-surface-1 p-5">
+          <h3 class="text-sm font-semibold text-foreground">The sequence around one appointment</h3>
+          <div class="mt-5 grid gap-3 md:grid-cols-3">
+            <div class="relative rounded-[20px] border border-border bg-background p-4">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-blue-ink">On booking</span>
+              <p class="mt-2 text-[13px] font-semibold text-foreground">Confirmation</p>
+              <p class="mt-1 text-[11px] leading-relaxed text-muted-foreground">Date, time, clinician, address. Adds the visit to their calendar.</p>
+              <span class="mt-3 inline-flex items-center gap-1 rounded-full bg-chip-emerald/10 px-2 py-0.5 font-mono text-[10px] font-medium text-chip-emerald-ink"><i data-lucide="check" class="h-2.5 w-2.5"></i> Approved</span>
+            </div>
+            <div class="relative rounded-[20px] border border-border bg-background p-4">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-amber-ink">24 hours before</span>
+              <p class="mt-2 text-[13px] font-semibold text-foreground">Confirm or move</p>
+              <p class="mt-1 text-[11px] leading-relaxed text-muted-foreground">Three buttons. A move releases the slot to the waitlist straight away.</p>
+              <span class="mt-3 inline-flex items-center gap-1 rounded-full bg-chip-emerald/10 px-2 py-0.5 font-mono text-[10px] font-medium text-chip-emerald-ink"><i data-lucide="check" class="h-2.5 w-2.5"></i> Approved</span>
+            </div>
+            <div class="relative rounded-[20px] border border-border bg-background p-4">
+              <span class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-teal-ink">2 hours before</span>
+              <p class="mt-2 text-[13px] font-semibold text-foreground">Last nudge</p>
+              <p class="mt-1 text-[11px] leading-relaxed text-muted-foreground">Only to patients who have not confirmed yet. Skipped otherwise.</p>
+              <span class="mt-3 inline-flex items-center gap-1 rounded-full bg-chip-amber/10 px-2 py-0.5 font-mono text-[10px] font-medium text-chip-amber-ink"><i data-lucide="clock" class="h-2.5 w-2.5"></i> In review with Meta</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- featured template + list -->
+        <div class="mt-4 grid gap-4 lg:grid-cols-3">
+          <div class="relative flex min-h-[300px] flex-col justify-between overflow-hidden rounded-[28px] bg-tint-amber p-5 card-hover">
+            <div class="inline-flex w-fit items-center gap-2 rounded-full on-tint px-3 py-2">
+              <i data-lucide="bell-ring" class="h-4 w-4 text-foreground"></i>
+              <span class="text-[13px] font-semibold text-foreground">Confirm or move</span>
+            </div>
+            <i data-lucide="bell-ring" stroke-width="1" class="pointer-events-none absolute -bottom-6 -right-6 h-40 w-40 text-foreground/[0.06]"></i>
+            <div class="relative mt-4 rounded-[16px] on-tint p-3.5">
+              <p class="text-[12px] leading-relaxed text-foreground/85">Hi Aarav, your appointment at Ridgeview Dental is tomorrow at 7:00pm with Dr Nadia Haq. See you then?</p>
+              <div class="mt-2.5 flex flex-wrap gap-1.5">
+                <span class="rounded-full border border-foreground/10 px-2.5 py-1 text-[10px] font-medium text-foreground/70">Confirm</span>
+                <span class="rounded-full border border-foreground/10 px-2.5 py-1 text-[10px] font-medium text-foreground/70">Reschedule</span>
+                <span class="rounded-full border border-foreground/10 px-2.5 py-1 text-[10px] font-medium text-foreground/70">Cancel</span>
+              </div>
+            </div>
+            <div class="relative mt-4 flex items-center gap-3 border-t border-foreground/10 pt-3.5 font-mono text-[11px] tabular-nums text-foreground/60">
+              <span>1,204 sent</span><span>•</span><span>83% confirmed</span>
+            </div>
+          </div>
+
+          <div class="space-y-3 lg:col-span-2">
+            <div class="grid gap-3 sm:grid-cols-2">
+              <div class="flex items-start gap-3.5 rounded-[18px] border border-border bg-surface-1 p-4 transition-colors hover:border-chip-blue/35">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-blue/10"><i data-lucide="calendar-check" class="h-4 w-4 text-chip-blue"></i></span>
+                <div class="min-w-0">
+                  <h4 class="text-sm font-semibold leading-snug text-foreground">Booking confirmation</h4>
+                  <p class="mt-1 text-xs leading-relaxed text-muted-foreground">Utility template, sent on write to Cliniko</p>
+                  <p class="mt-2 font-mono text-[10px] tabular-nums text-muted-foreground">1,418 sent, 99.1% delivered</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3.5 rounded-[18px] border border-border bg-surface-1 p-4 transition-colors hover:border-chip-teal/35">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-teal/10"><i data-lucide="clipboard-list" class="h-4 w-4 text-chip-teal"></i></span>
+                <div class="min-w-0">
+                  <h4 class="text-sm font-semibold leading-snug text-foreground">Visit preparation</h4>
+                  <p class="mt-1 text-xs leading-relaxed text-muted-foreground">Sent only for procedures that need it</p>
+                  <p class="mt-2 font-mono text-[10px] tabular-nums text-muted-foreground">212 sent, 98.6% delivered</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3.5 rounded-[18px] border border-border bg-surface-1 p-4 transition-colors hover:border-chip-emerald/35">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-emerald/10"><i data-lucide="repeat" class="h-4 w-4 text-chip-emerald"></i></span>
+                <div class="min-w-0">
+                  <h4 class="text-sm font-semibold leading-snug text-foreground">Six month recall</h4>
+                  <p class="mt-1 text-xs leading-relaxed text-muted-foreground">Marketing template, needs opt in</p>
+                  <p class="mt-2 font-mono text-[10px] tabular-nums text-muted-foreground">640 sent, 71 booked</p>
+                </div>
+              </div>
+              <div class="flex items-start gap-3.5 rounded-[18px] border border-border bg-surface-1 p-4 transition-colors hover:border-chip-violet/35">
+                <span class="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-chip-violet/10"><i data-lucide="hourglass" class="h-4 w-4 text-chip-violet"></i></span>
+                <div class="min-w-0">
+                  <h4 class="text-sm font-semibold leading-snug text-foreground">Waitlist offer</h4>
+                  <p class="mt-1 text-xs leading-relaxed text-muted-foreground">Fires when a slot is released</p>
+                  <p class="mt-2 font-mono text-[10px] tabular-nums text-muted-foreground">96 sent, 54 filled</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex gap-3.5 rounded-[20px] border border-primary/20 bg-primary/[0.05] p-4">
+              <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10"><i data-lucide="info" class="h-3.5 w-3.5 text-primary"></i></span>
+              <div>
+                <span class="mb-1 block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">Channel rule</span>
+                <p class="text-[12px] leading-relaxed text-foreground/80">Instagram cannot carry a reminder. Outside a 24 hour window only WhatsApp templates reach the patient, so new Instagram enquiries are offered a move to WhatsApp before anything is scheduled.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="h-6"></div>
+      </div>
+    </main>
+
+    <!-- ============ SCREEN: BILLING ============ -->
+    <main id="screen-billing" hidden class="min-h-0 flex-1 overflow-y-auto py-6"
+          style="padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));">
+      <div class="mx-auto max-w-6xl">
+
+        <div>
+          <span class="mb-2 inline-block rounded-full bg-tint-teal px-3 py-1 font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-chip-teal-ink">Plan</span>
+          <h2 class="text-2xl font-semibold tracking-tight text-foreground">Priced per location, never per seat</h2>
+          <p class="mt-1 max-w-2xl text-sm text-muted-foreground">Put the whole front desk in the inbox without the bill moving</p>
+        </div>
+
+        <!-- usage -->
+        <div class="mt-6 grid gap-3 sm:grid-cols-3">
+          <div class="rounded-[20px] border border-border bg-surface-1 p-4">
+            <div class="flex items-baseline justify-between"><p class="text-[13px] font-semibold text-foreground">Agent replies</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">3,240 of 5,000</p></div>
+            <div class="mt-2.5 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-violet" data-meter="65" style="width:0"></span></div>
+          </div>
+          <div class="rounded-[20px] border border-border bg-surface-1 p-4">
+            <div class="flex items-baseline justify-between"><p class="text-[13px] font-semibold text-foreground">Locations</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">1 of 1</p></div>
+            <div class="mt-2.5 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-teal" data-meter="100" style="width:0"></span></div>
+          </div>
+          <div class="rounded-[20px] border border-border bg-surface-1 p-4">
+            <div class="flex items-baseline justify-between"><p class="text-[13px] font-semibold text-foreground">Staff accounts</p><p class="font-mono text-[11px] tabular-nums text-muted-foreground">6, unlimited</p></div>
+            <div class="mt-2.5 h-1.5 w-full rounded-full bg-surface-3"><span class="meter-grow block h-full rounded-full bg-chip-emerald" data-meter="18" style="width:0"></span></div>
+          </div>
+        </div>
+
+        <!-- plans -->
+        <div class="mt-4 grid gap-4 lg:grid-cols-3">
+          <div class="flex flex-col rounded-[24px] border border-border bg-surface-1 p-6">
+            <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Starter</p>
+            <p class="mt-3 font-mono text-3xl font-semibold tabular-nums tracking-tight text-foreground">$49<span class="text-sm font-medium text-muted-foreground"> per month</span></p>
+            <p class="mt-2 text-xs leading-relaxed text-muted-foreground">One location getting its messages into one place</p>
+            <ul class="mt-5 flex-1 space-y-2.5 border-t border-border pt-5 text-[13px]">
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">WhatsApp, Instagram, Messenger</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">Unlimited staff accounts</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">Reminders and templates</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">1,000 agent replies</span></li>
+            </ul>
+            <button type="button" class="tap mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-2">Choose Starter</button>
+          </div>
+
+          <div class="relative flex flex-col overflow-hidden rounded-[28px] bg-tint-blue p-6">
+            <i data-lucide="activity" stroke-width="1" class="pointer-events-none absolute -bottom-8 -right-8 h-44 w-44 text-foreground/[0.06]"></i>
+            <div class="relative flex items-center gap-2">
+              <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-chip-blue-ink">Pro</p>
+              <span class="rounded-full on-tint px-2 py-0.5 font-mono text-[10px] font-medium text-foreground/85">Most clinics</span>
+            </div>
+            <p class="relative mt-3 font-mono text-3xl font-semibold tabular-nums tracking-tight text-foreground">$99<span class="text-sm font-medium text-foreground/60"> per month</span></p>
+            <p class="relative mt-2 text-xs leading-relaxed text-foreground/70">Everything in Starter, and the agent books into your calendar</p>
+            <ul class="relative mt-5 flex-1 space-y-2.5 border-t border-foreground/10 pt-5 text-[13px]">
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-blue"></i><span class="text-foreground/85">AI booking with slot holds</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-blue"></i><span class="text-foreground/85">One practice system connected</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-blue"></i><span class="text-foreground/85">Manager dashboard and audit log</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-blue"></i><span class="text-foreground/85">5,000 agent replies</span></li>
+            </ul>
+            <button type="button" class="tap relative mt-5 inline-flex items-center justify-center gap-2 rounded-full bg-cta px-5 py-2.5 text-sm font-semibold text-cta-foreground transition-colors hover:bg-cta/90 active:scale-[0.98]">
+              Stay on Pro <i data-lucide="arrow-right" class="h-3.5 w-3.5"></i>
+            </button>
+          </div>
+
+          <div class="flex flex-col rounded-[24px] border border-border bg-surface-1 p-6">
+            <p class="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Clinic group</p>
+            <p class="mt-3 font-mono text-3xl font-semibold tabular-nums tracking-tight text-foreground">$249<span class="text-sm font-medium text-muted-foreground"> per location</span></p>
+            <p class="mt-2 text-xs leading-relaxed text-muted-foreground">Several sites under one roll up view</p>
+            <ul class="mt-5 flex-1 space-y-2.5 border-t border-border pt-5 text-[13px]">
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">Unlimited practice systems</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">Multi site reporting</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">Single sign on and roles</span></li>
+              <li class="flex gap-2"><i data-lucide="check" class="mt-0.5 h-3.5 w-3.5 shrink-0 text-chip-emerald"></i><span class="text-foreground/85">20,000 agent replies</span></li>
+            </ul>
+            <button type="button" class="tap mt-5 inline-flex items-center justify-center gap-2 rounded-full border border-border px-5 py-2.5 text-sm font-semibold text-foreground transition-colors hover:border-primary/30 hover:bg-surface-2">Talk to us</button>
+          </div>
+        </div>
+
+        <div class="mt-4 flex gap-3.5 rounded-[20px] border border-border bg-surface-1 p-4">
+          <span class="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-border bg-surface-2"><i data-lucide="wallet" class="h-3.5 w-3.5 text-muted-foreground"></i></span>
+          <div>
+            <span class="mb-1 block font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Message fees</span>
+            <p class="text-[12px] leading-relaxed text-foreground/80">Meta bills your clinic directly for each template it delivers, at its published rate for your country. Nothing is added on top, and the amount appears on your own Meta invoice.</p>
+          </div>
+        </div>
+
+        <div class="h-6"></div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/lucide@0.544.0/dist/umd/lucide.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function icons() {
+    if (window.lucide && window.lucide.createIcons) {
+      window.lucide.createIcons({ attrs: { 'stroke-width': 1.75 } });
+    }
+  }
+
+  /* ---------- theme ---------- */
+  var root = document.documentElement;
+  function storedTheme() {
+    try { return localStorage.getItem('pulsedesk-theme'); } catch (e) { return null; }
+  }
+  function isDark() {
+    var t = root.getAttribute('data-theme');
+    if (t === 'dark') return true;
+    if (t === 'light') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  function paintThemeIcon() {
+    var el = document.getElementById('themeIcon');
+    if (!el) return;
+    var next = document.createElement('i');
+    next.id = 'themeIcon';
+    next.setAttribute('data-lucide', isDark() ? 'sun' : 'moon');
+    next.className = 'h-[17px] w-[17px]';
+    el.replaceWith(next);
+    icons();
+  }
+  var saved = storedTheme();
+  if (saved === 'dark' || saved === 'light') root.setAttribute('data-theme', saved);
+
+  document.getElementById('themeToggle').addEventListener('click', function () {
+    var next = isDark() ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    try { localStorage.setItem('pulsedesk-theme', next); } catch (e) {}
+    paintThemeIcon();
+  });
+
+  /* ---------- conversations ---------- */
+  var CHANNELS = {
+    whatsapp:  { tint: 'bg-tint-emerald', chip: 'text-chip-emerald', ink: 'text-chip-emerald-ink', icon: 'message-circle', label: 'WhatsApp' },
+    instagram: { tint: 'bg-tint-coral',   chip: 'text-chip-coral', ink: 'text-chip-coral-ink',   icon: 'instagram',      label: 'Instagram' },
+    messenger: { tint: 'bg-tint-blue',    chip: 'text-chip-blue', ink: 'text-chip-blue-ink',    icon: 'facebook',       label: 'Messenger' }
+  };
+
+  var CONVERSATIONS = [
+    { id: 1, name: 'Aarav Mehta',   initials: 'AM', channel: 'whatsapp',  snippet: "Also, can I bring my son's records?", time: '2m',  unread: 2, state: 'waiting', wait: '4m',  owner: 'mine' },
+    { id: 2, name: 'Lucia Romano',  initials: 'LR', channel: 'whatsapp',  snippet: 'I have had pain since yesterday',     time: '11m', unread: 1, state: 'escalated', wait: '11m', owner: 'unassigned' },
+    { id: 3, name: 'Priya Sharma',  initials: 'PS', channel: 'instagram', snippet: 'Hi, how much is a cleaning?',          time: '14m', unread: 0, state: 'ai',      wait: '',    owner: 'ai' },
+    { id: 4, name: 'Daniel Okafor', initials: 'DO', channel: 'messenger', snippet: 'Need to move Thursday please',         time: '26m', unread: 1, state: 'waiting', wait: '2m',  owner: 'unassigned' },
+    { id: 5, name: 'Chen Wei',      initials: 'CW', channel: 'whatsapp',  snippet: 'Is there parking at the clinic?',      time: '1h',  unread: 0, state: 'ai',      wait: '',    owner: 'ai' },
+    { id: 6, name: 'Sofia Garza',   initials: 'SG', channel: 'instagram', snippet: 'Do you take Allianz cover?',           time: '2h',  unread: 0, state: 'ai',      wait: '',    owner: 'ai' },
+    { id: 7, name: 'Tom Baker',     initials: 'TB', channel: 'whatsapp',  snippet: 'Confirmed, thanks',                    time: '3h',  unread: 0, state: 'done',    wait: '',    owner: 'mine' }
+  ];
+
+  var activeSeg = 'all';
+  var activeConv = 1;
+
+  function badge(c) {
+    if (c.state === 'escalated') return '<span class="shrink-0 rounded-full bg-chip-coral/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-chip-coral-ink">escalated</span>';
+    if (c.state === 'waiting')   return '<span class="shrink-0 rounded-full bg-chip-amber/15 px-2 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-chip-amber-ink">' + c.wait + '</span>';
+    if (c.state === 'ai')        return '<span class="shrink-0 rounded-full bg-chip-violet/15 px-2 py-0.5 font-mono text-[10px] font-semibold text-chip-violet-ink">agent</span>';
+    return '<span class="shrink-0 rounded-full bg-surface-3 px-2 py-0.5 font-mono text-[10px] font-medium text-muted-foreground">done</span>';
+  }
+
+  function matches(c) {
+    if (activeSeg === 'waiting') return c.state === 'waiting' || c.state === 'escalated';
+    if (activeSeg === 'mine')    return c.owner === 'mine';
+    if (activeSeg === 'ai')      return c.owner === 'ai';
+    return true;
+  }
+
+  function renderList() {
+    var list = document.getElementById('convList');
+    var q = (document.getElementById('convSearch').value || '').toLowerCase().trim();
+    var rows = CONVERSATIONS.filter(function (c) {
+      if (!matches(c)) return false;
+      if (!q) return true;
+      return (c.name + ' ' + c.snippet).toLowerCase().indexOf(q) !== -1;
+    });
+
+    document.getElementById('convCount').textContent = rows.length;
+
+    if (!rows.length) {
+      list.innerHTML =
+        '<li class="flex flex-col items-center gap-3 px-6 py-14 text-center">' +
+          '<span class="flex h-14 w-14 items-center justify-center rounded-full bg-surface-2"><i data-lucide="inbox" class="h-6 w-6 text-muted-foreground"></i></span>' +
+          '<p class="text-sm font-semibold text-foreground">Nothing in this view</p>' +
+          '<p class="max-w-[220px] text-xs leading-relaxed text-muted-foreground">Clear the search or switch back to All to see the rest of the queue.</p>' +
+        '</li>';
+      icons();
+      return;
+    }
+
+    list.innerHTML = rows.map(function (c, i) {
+      var ch = CHANNELS[c.channel];
+      var on = c.id === activeConv;
+      return '' +
+      '<li>' +
+        '<button type="button" data-conv="' + c.id + '" class="conv tap group flex w-full items-start gap-3 rounded-[18px] border p-3 text-left transition-colors duration-200 ' +
+          (on ? 'border-border bg-background' : 'border-transparent hover:bg-surface-2/70') + '"' +
+          (reduceMotion ? '' : ' style="animation: rise .4s cubic-bezier(.22,1,.36,1) both; animation-delay:' + (i * 0.04) + 's"') + '>' +
+          '<span class="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full ' + ch.tint + ' font-mono text-[11px] font-semibold ' + ch.ink + '">' + c.initials +
+            '<span class="absolute -bottom-0.5 -right-0.5 flex h-4 w-4 items-center justify-center rounded-full border-2 border-background bg-surface-1">' +
+              '<i data-lucide="' + ch.icon + '" class="h-2 w-2 ' + ch.chip + '"></i>' +
+            '</span>' +
+          '</span>' +
+          '<span class="min-w-0 flex-1">' +
+            '<span class="flex items-center gap-2">' +
+              '<span class="truncate text-[13px] font-semibold text-foreground">' + c.name + '</span>' +
+              '<span class="ml-auto shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">' + c.time + '</span>' +
+            '</span>' +
+            '<span class="mt-0.5 block truncate text-[12px] ' + (c.unread ? 'font-medium text-foreground/80' : 'text-muted-foreground') + '">' + c.snippet + '</span>' +
+            '<span class="mt-2 flex items-center gap-1.5">' + badge(c) +
+              (c.unread ? '<span class="shrink-0 rounded-full bg-cta px-1.5 py-0.5 font-mono text-[10px] font-semibold tabular-nums text-cta-foreground">' + c.unread + '</span>' : '') +
+            '</span>' +
+          '</span>' +
+        '</button>' +
+      '</li>';
+    }).join('');
+
+    icons();
+
+    Array.prototype.forEach.call(list.querySelectorAll('.conv'), function (b) {
+      b.addEventListener('click', function () {
+        activeConv = parseInt(b.getAttribute('data-conv'), 10);
+        renderList();
+      });
+    });
+  }
+
+  document.getElementById('convSearch').addEventListener('input', renderList);
+  document.getElementById('clearFilter').addEventListener('click', function () {
+    document.getElementById('filterChips').firstElementChild.remove();
+  });
+
+  /* segmented switcher */
+  var segs = Array.prototype.slice.call(document.querySelectorAll('.seg'));
+  var segInd = document.getElementById('segInd');
+  function paintSeg(btn) {
+    segs.forEach(function (s) {
+      var on = s === btn;
+      s.className = 'seg tap relative z-10 flex-1 rounded-full px-2 py-1.5 text-[12px] font-medium transition-colors ' +
+        (on ? 'text-chip-blue-ink' : 'text-muted-foreground hover:text-foreground');
+      s.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+    segInd.style.width = btn.offsetWidth + 'px';
+    segInd.style.transform = 'translateX(' + (btn.offsetLeft - 2) + 'px)';
+  }
+  segs.forEach(function (s) {
+    s.addEventListener('click', function () {
+      activeSeg = s.getAttribute('data-seg');
+      paintSeg(s);
+      renderList();
+    });
+  });
+
+  /* ---------- screens ---------- */
+  var SCREENS = {
+    inbox:      { title: 'Inbox',          meta: 'Ridgeview Dental, Auckland' },
+    dashboard:  { title: 'Overview',       meta: 'Wednesday 22 October' },
+    agent:      { title: 'AI agent',       meta: 'Version 14, live' },
+    reminders:  { title: 'Reminders',      meta: '4 templates approved' },
+    billing:    { title: 'Plan and usage', meta: 'Pro, trial ends 31 October' }
+  };
+  var ORDER = ['inbox', 'dashboard', 'agent', 'reminders', 'billing'];
+  var navItems = Array.prototype.slice.call(document.querySelectorAll('.nav-item'));
+  var navItemsM = Array.prototype.slice.call(document.querySelectorAll('.nav-item-m'));
+  var indicator = document.getElementById('navIndicator');
+  var current = 'inbox';
+  var counted = {};
+
+  function moveIndicator(btn) {
+    if (!btn || !btn.offsetParent) return;
+    indicator.style.height = btn.offsetHeight + 'px';
+    indicator.style.transform = 'translateY(' + btn.offsetTop + 'px)';
+  }
+
+  function countUp(scope) {
+    if (counted[scope.id]) return;
+    counted[scope.id] = true;
+    Array.prototype.forEach.call(scope.querySelectorAll('[data-count]'), function (el) {
+      var target = parseInt(el.getAttribute('data-count'), 10);
+      if (reduceMotion) { el.textContent = target; return; }
+      var start = performance.now(), dur = 900;
+      function tick(now) {
+        var p = Math.min(1, (now - start) / dur);
+        var eased = 1 - Math.pow(1 - p, 3);
+        el.textContent = Math.round(target * eased);
+        if (p < 1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    });
+  }
+
+  function growBars(scope) {
+    var bars = scope.querySelectorAll('[data-bar]');
+    var max = 0;
+    Array.prototype.forEach.call(bars, function (b) { max = Math.max(max, parseInt(b.getAttribute('data-bar'), 10)); });
+    Array.prototype.forEach.call(bars, function (b) {
+      var v = parseInt(b.getAttribute('data-bar'), 10);
+      b.firstElementChild.style.height = Math.max(4, Math.round((v / max) * 140)) + 'px';
+    });
+    Array.prototype.forEach.call(scope.querySelectorAll('[data-meter]'), function (m) {
+      m.style.width = m.getAttribute('data-meter') + '%';
+    });
+  }
+
+  function show(name) {
+    current = name;
+    ORDER.forEach(function (n) {
+      document.getElementById('screen-' + n).hidden = (n !== name);
+    });
+
+    navItems.forEach(function (b) {
+      var on = b.getAttribute('data-screen') === name;
+      b.className = 'nav-item tap flex w-full items-center gap-2.5 rounded-full px-3.5 py-2.5 text-left text-sm font-medium transition-colors duration-200 ' +
+        (on ? 'text-chip-blue-ink' : 'text-muted-foreground hover:text-foreground');
+      b.setAttribute('aria-current', on ? 'page' : 'false');
+      if (on) moveIndicator(b);
+    });
+
+    navItemsM.forEach(function (b) {
+      var on = b.getAttribute('data-screen') === name;
+      b.className = 'nav-item-m tap shrink-0 rounded-full px-3.5 py-2 text-[13px] font-medium transition-colors ' +
+        (on ? 'bg-tint-blue text-chip-blue-ink' : 'border border-border text-muted-foreground');
+    });
+
+    document.getElementById('screenTitle').textContent = SCREENS[name].title;
+    document.getElementById('screenMeta').textContent = SCREENS[name].meta;
+
+    var scope = document.getElementById('screen-' + name);
+    requestAnimationFrame(function () { countUp(scope); growBars(scope); });
+  }
+
+  navItems.concat(navItemsM).forEach(function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-screen')); });
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.nav-jump'), function (b) {
+    b.addEventListener('click', function () { show(b.getAttribute('data-screen')); });
+  });
+
+  /* ---------- composer ---------- */
+  var composer = document.getElementById('composer');
+  var reply = document.getElementById('reply');
+  composer.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = reply.value.trim();
+    if (!text) { reply.focus(); return; }
+    var stream = reply.closest('section').querySelector('.overflow-y-auto');
+    var wrap = document.createElement('div');
+    wrap.className = 'ml-auto flex max-w-[82%] flex-col items-end gap-1';
+    wrap.innerHTML =
+      '<div class="rounded-[18px] rounded-tr-[6px] bg-tint-teal px-4 py-2.5 text-[13px] leading-relaxed text-foreground"></div>' +
+      '<span class="pr-1 font-mono text-[10px] tabular-nums text-muted-foreground">now, Maya K.</span>';
+    wrap.firstElementChild.textContent = text;
+    if (!reduceMotion) wrap.classList.add('rise');
+    stream.appendChild(wrap);
+    stream.scrollTop = stream.scrollHeight;
+    reply.value = '';
+  });
+  Array.prototype.forEach.call(document.querySelectorAll('.quick'), function (q) {
+    q.addEventListener('click', function () { reply.value = q.textContent.trim(); reply.focus(); });
+  });
+
+  /* ---------- sandbox ---------- */
+  var sandbox = document.getElementById('sandbox');
+  var sandboxInput = document.getElementById('sandboxInput');
+  function askSandbox() {
+    var text = sandboxInput.value.trim();
+    if (!text) return;
+    var mine = document.createElement('div');
+    mine.className = 'ml-auto max-w-[85%] rounded-[16px] rounded-tr-[6px] border border-border bg-background px-3.5 py-2 text-[12px] leading-relaxed text-foreground';
+    mine.textContent = text;
+    sandbox.appendChild(mine);
+
+    var clinical = /(pain|bleed|symptom|medicat|result|infect|swell|fever|hurt)/i.test(text);
+    var ans = document.createElement('div');
+    ans.className = 'max-w-[90%] rounded-[16px] rounded-tl-[6px] px-3.5 py-2 text-[12px] leading-relaxed text-foreground ' + (clinical ? 'bg-tint-coral' : 'bg-tint-violet');
+    ans.innerHTML = clinical
+      ? '<span class="mb-1.5 inline-flex items-center gap-1 rounded-full on-tint px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-chip-coral-ink"><i data-lucide="hand" class="h-2.5 w-2.5"></i> Escalated</span><p>That needs one of our clinicians. I am passing this to the team now and someone will reply here.</p>'
+      : '<span class="mb-1.5 inline-flex items-center gap-1 rounded-full on-tint px-2 py-0.5 font-mono text-[9px] font-semibold uppercase tracking-[0.14em] text-chip-violet-ink"><i data-lucide="bot" class="h-2.5 w-2.5"></i> AI agent</span><p>In the prototype the reply comes from a scripted answer. In the product this is the model with the clinic knowledge base and the booking tools attached.</p>';
+    sandbox.appendChild(ans);
+    sandboxInput.value = '';
+    icons();
+    sandbox.scrollTop = sandbox.scrollHeight;
+  }
+  document.getElementById('sandboxSend').addEventListener('click', askSandbox);
+  sandboxInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') askSandbox(); });
+
+  /* ---------- hold countdown ---------- */
+  var holdEl = document.getElementById('holdTimer');
+  var left = 9 * 60 + 42;
+  setInterval(function () {
+    if (left <= 0) return;
+    left -= 1;
+    var m = Math.floor(left / 60), s = left % 60;
+    holdEl.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }, 1000);
+
+  /* ---------- boot ---------- */
+  icons();
+  paintThemeIcon();
+  renderList();
+  paintSeg(segs[0]);
+  show('inbox');
+  window.addEventListener('resize', function () {
+    var on = navItems.filter(function (b) { return b.getAttribute('data-screen') === current; })[0];
+    moveIndicator(on);
+    var onSeg = segs.filter(function (s) { return s.getAttribute('aria-pressed') === 'true'; })[0];
+    if (onSeg) paintSeg(onSeg);
+  });
+})();
+</script>

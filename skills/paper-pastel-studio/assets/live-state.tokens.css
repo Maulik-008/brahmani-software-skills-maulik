@@ -1,0 +1,101 @@
+/* =============================================================================
+   LIVE-STATE MODULE (optional) — token addition (ground truth)
+   Paste AFTER the base tokens.css block (its :root / .dark layers), into
+   globals.css. Only for products with something live (timer, call, recording,
+   streaming AI). Rename session-* to fit your domain.
+   The two --primary/--ring lines are an OPT-IN indigo override (DECISIONS.md
+   #2): keep them if you want indigo as the product accent, delete them to stay
+   on base cobalt. Everything else is additive new custom properties only.
+   ============================================================================= */
+
+@layer base {
+  :root {
+    /* ---- OPTIONAL indigo accent (DECISIONS.md #2) --------------------------
+       Matched to --session-focus below so links/focus and "running" read as
+       one colour family. Delete these two lines (and the two in .dark) to keep
+       base cobalt. */
+    --primary: 232 56% 52%;
+    --ring: 232 56% 52%;
+
+    /* ---- Session-state axis — chrome (flips with light/dark) ------------ */
+    --session-focus: 232 56% 52%;
+    --session-focus-wash: 232 60% 95%;
+    --session-break: 156 54% 34%;
+    --session-break-wash: 156 46% 93%;
+    --session-longbreak: 186 58% 32%;
+    --session-longbreak-wash: 186 46% 93%;
+    --session-paused: 30 90% 39%;
+    --session-paused-wash: 34 80% 93%;
+    --session-overtime: 351 64% 47%;
+    --session-overtime-wash: 351 66% 95%;
+
+    /* ---- Focus Canvas — theme-independent, never redeclared under .dark - */
+    --canvas-bg: 230 24% 7%;
+    --canvas-surface: 230 19% 11%;
+    --canvas-line: 230 15% 20%;
+    --canvas-fg: 220 18% 91%;
+    --canvas-muted: 224 11% 56%;
+    --canvas-focus: 232 84% 72%;
+    --canvas-break: 156 58% 56%;
+    --canvas-longbreak: 186 60% 54%;
+    --canvas-paused: 36 92% 62%;
+    --canvas-overtime: 351 82% 70%;
+  }
+
+  .dark {
+    --primary: 232 78% 72%;
+    --ring: 232 78% 72%;
+
+    --session-focus: 232 78% 72%;
+    --session-focus-wash: 232 38% 18%;
+    --session-break: 156 50% 52%;
+    --session-break-wash: 156 28% 15%;
+    --session-longbreak: 186 52% 50%;
+    --session-longbreak-wash: 186 28% 15%;
+    --session-paused: 34 88% 60%;
+    --session-paused-wash: 34 44% 17%;
+    --session-overtime: 351 78% 68%;
+    --session-overtime-wash: 351 40% 18%;
+
+    /* --canvas-* intentionally NOT redeclared here — the Focus Canvas does
+       not participate in the light/dark toggle. Same values in both. */
+  }
+}
+
+/* =============================================================================
+   Components — Focus Canvas motion vocabulary
+   ============================================================================= */
+@layer components {
+  /* Soft radial bloom behind the ring; the session colour is the only light
+     source on the canvas. Pass the hue via inline style or a session-*
+     variant class in your component. */
+  .canvas-bloom {
+    animation: canvas-bloom 5s ease-in-out infinite;
+  }
+
+  /* Running/live indicator dot, used on the ring, room cards, mini-player. */
+  .live-dot {
+    animation: live-dot-pulse 2.2s ease-in-out infinite;
+  }
+
+  /* Ring progress transition — pair with stroke-dasharray/offset in JS/React. */
+  .ring-progress {
+    transition: stroke-dashoffset 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+@keyframes canvas-bloom {
+  0%, 100% { opacity: 0.5; }
+  50%      { opacity: 0.85; }
+}
+@keyframes live-dot-pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.5; transform: scale(0.8); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .canvas-bloom, .live-dot, .ring-progress {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
